@@ -193,15 +193,16 @@ Required readings:
 
 Required readings:
 
-- Lecture slides: Potential Outcomes Continued: Selection Bias and Randomisation.
+- Lecture slides: [Potential Outcomes Continued and Regression Analysis](https://raw.githack.com/danilofreire/qtm385/main/lectures/lecture-04/04-selection-bias.html).
 - Angrist, J. D., & Pischke, J. S. (2014). [Mastering 'Metrics: The Path from Cause to Effect](https://assets.press.princeton.edu/chapters/s10363.pdf). Princeton University Press. Chapter 01: Randomized Trials. The appendix is worth reading as well.
-- Hernán, M. A., Hernández-Díaz, S., & Robins, J. M. (2004). [A Structural Approach to Selection Bias](https://journals.lww.com/epidem/fulltext/2004/09000/Causation_of_Bias__The_Episcope.00020.aspx). Epidemiology, 15(5), 615-625.
 - Problem Set 01 due.
 - Problem Set 02 assigned.
 
 Weekly suggested readings:
 
 - Imbens, G. W., & Rubin, D. B. (2015). [Causal Inference for Statistics, Social, and Biomedical Sciences: An Introduction](https://www.cambridge.org/core/books/causal-inference-for-statistics-social-and-biomedical-sciences/71126BE90C58F1A431FE9B2DD07938AB). Cambridge University Press. Part I - Introduction.
+- Elwert, F., & Winship, C. (2014). [Endogenous Selection Bias: The Problem of Conditioning on a Collider Variable](https://www.jstor.org/stable/24571264). Annual Review of Sociology, 40, 31-53.
+- Hernán, M. A., Hernández-Díaz, S., & Robins, J. M. (2004). [A Structural Approach to Selection Bias](https://journals.lww.com/epidem/fulltext/2004/09000/Causation_of_Bias__The_Episcope.00020.aspx). Epidemiology, 15(5), 615-625.
 - Hernán M.A. & Robins J.M. (2020). [Causal Inference: What If](https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/). Boca Raton: Chapman & Hall/CRC. Chapters 6-10. Maths-heavy but very insightful.
 - Morgan, S. L., & Winship, C. (2015). [Counterfactuals and Causal Inference: Methods and Principles for Social Research](https://www.cambridge.org/core/books/counterfactuals-and-causal-inference/5CC81E6DF63C5E5A8B88F79D45E1D1B7). Cambridge University Press. Chapter 02: Counterfactuals and Potential Outcomes Model.
 - Holland, P. W. (1986). [Statistics and Causal Inference](https://www.jstor.org/stable/2289064). Journal of the American Statistical Association, 81(396), 945-960.

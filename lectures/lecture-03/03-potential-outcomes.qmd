@@ -23,11 +23,12 @@ editor:
 
 # Hello, everyone! 👋 <br> Hope you're all doing well! 😉 {background-color="#2d4563"}
 
-# Brief recap {background-color="#2d4563"}
+# Brief recap 📚 {background-color="#2d4563"}
 
 ## Last time, we saw that...
 
 :::{style="margin-top: 30px; font-size: 19px;"}
+:::{.incremental}
 :::{.columns}
 :::{.column width=50%}
 
@@ -54,6 +55,7 @@ editor:
 
 - [Alignment]{.alert} between research design and theoretical frameworks is necessary for generating credible and actionable results, even when experiments are not feasible
 
+:::
 :::
 :::
 :::
@@ -85,7 +87,7 @@ editor:
 
 :::{style="margin-top: 30px; font-size: 24px;"}
 - ... and you want to know whether the government should invest in building more hospitals
-- You measure the sample's health status: excellent, very good, good, fair, or poor?
+- You measure the sample's health status: poor, fair, good, very good, or excellent? (the higher, the better)
 - And you find this:
 
 |              | Hospital | No Hospital | Difference |
@@ -251,22 +253,13 @@ Even in a large sample:
 ![](figures/tab03.png){width=90%}
 :::
 
-## Selection bias
-
-:::{style="margin-top: 30px; font-size: 28px;"}
-- Comparing treated/untreated (or participants/non-participants) doesn’t normally provide an unbiased estimate of causal impact
-  - Treated, untreated likely different in absence of program
-  - Difference in means ($\bar{Y}_T − \bar{Y}_C$) could be biased up or down (relative to true average causal effect of treatment)
-  - Doesn’t matter if treatment effect is constant
-  - [Bias does not disappear in large samples]{.alert}
-:::
-
 ## Mathematically speaking...
 
-:::{style="margin-top: 30px; font-size: 23px;"}
+:::{style="margin-top: 30px; font-size: 22px;"}
 - The [mathematical expectation]{.alert} of $Y_i$ is $E[Y_i]$
 - Equivalent to sample average in an infinite population
   - Example: probability coin flipped lands heads = 0.5
+  - A six-sided die rolled = 3.5 (although no side has 3.5 dots)
   - Equivalent to fraction heads after a (very) large number of flips ("long-run average")
   - $E[Y_i] = \sum_{i=1}^{N} Y_i/N$
 
@@ -277,6 +270,20 @@ Even in a large sample:
 - Average of $Y_i$ gets very close to $E[Y_i]$ as number of observations (that we are averaging over) gets large
 - [Bias]{.alert} = difference between expected value of an estimator and the true value of the parameter being estimated
   - $Bias = E[\hat{\theta}] - \theta$
+:::
+
+## The Central Limit Theorem visualised
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- Imagine we simulate a uniform distribution of numbers from 0 to 9
+- The expected value of this distribution is 4.5
+- As we increase the number of simulations, you'll see that the average of the numbers converges to 4.5
+
+:::{style="margin-top: 20px; text-align: center;"}
+![](figures/clt.mp4){width=90%}
+
+Source: [r/dataisbeautiful](https://www.reddit.com/r/dataisbeautiful/comments/bfpw5f/demonstrating_the_central_limit_theorem_oc/)
+:::
 :::
 
 ## Conditional expectations

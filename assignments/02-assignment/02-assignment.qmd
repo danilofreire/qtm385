@@ -1,0 +1,39 @@
+---
+title: "QTM 385 - Experimental Methods"
+subtitle: Assignment 02
+---
+
+# Instructions
+
+This assignment covers lectures 3 and 4 of the course. It consists of 10 questions, each worth one point, about the potential outcomes framework, selection bias, and the use of regression in experimental research. You can answer the questions in any format you prefer, but I recommend using either Jupyter Notebook or PDF, as they are easier to read on Canvas. Please write at least two paragraphs for each written question.
+
+If you have any questions about the assignment, feel free to email me at <danilo.freire@emory.edu>.
+
+Good luck!
+
+# Questions 
+
+1.  What is the fundamental problem of causal inference, and how does the potential outcomes framework help us understand it? 
+
+2. Explain the following notation:
+    - $Y_i(1)$
+    - $Y_i(0)$
+    - $Y_i(0) | T = 1$
+    - $Y_i(1) | T = 0$
+    - Is $E[Y_i(1)]$ the same as $E[Y_i(1) | T = 1]$? Why or why not?
+
+3.  Explain the concept of selection bias. How does it affect our ability to estimate causal effects? 
+
+4.  What is the Stable Unit Treatment Value Assumption (SUTVA), and why is it important for causal inference? Give an example of a situation where SUTVA might be violated (not included in the slides).
+
+5.  What is a "balance test" (or "randomisation check")? What is its purpose and its limitations?
+
+6. What is post-treatment bias (or overcontrol), and why is it a problem?
+
+7. A study examines the impact of a new teaching method on student test scores. Students are randomly assigned to either the new method or a traditional one. However, students in the new method group are more likely to withdraw from the study. What type of selection bias is this, and how might it affect the results?
+
+8. Consider a new educational program and its effect on student test scores. Students are randomly assigned to either the program or a control group. However, the program's effect varies depending on students' prior knowledge. What is this phenomenon called, and how might it affect the interpretation of the results?
+
+9. Suppose a new drug's effect on blood pressure is being investigated. Participants are randomly assigned to either the drug or a placebo. However, some participants in the drug group do not adhere to the prescribed dosage. What is this issue called, and how might it affect the results?
+
+10.  Explain how to estimate the average treatment effect using regression analysis, and why it is a good idea to include covariates in the analysis.
