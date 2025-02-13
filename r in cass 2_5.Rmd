@@ -1,0 +1,39 @@
+---
+title: "r in class 2.5"
+output: html_document
+date: "2025-02-05"
+---
+
+```{r setup, include=FALSE}
+library(fabricatr)
+
+voters <- fabricate(
+  N = 1000,
+  group_id = rep(1:10, 100),
+  ideology = draw_normal_icc(mean = 0, N = N, clusters = group_id, ICC = 0.7),
+  ideological_label = draw_ordered(
+    x = ideology,
+    break_labels = c("Very Conservative", "Conservative", "Liberal", "Very Liberal")
+  ),
+  Q1_immigration = draw_likert(x = ideology, min = -5, max = 5, bins = 7),
+  Q2_defence = draw_likert(x = ideology + 0.5, min = -5, max = 5, bins = 7),
+  treatment = draw_binary(0.5, N = N),
+  proposition_vote = draw_binary(latent = ideology + 1.2 * treatment, link = "probit")
+)
+
+head(voters)
+```
+
+
+
+```{r cars}
+summary(cars)
+```
+
+
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+

@@ -1,0 +1,53 @@
+---
+title: '385'
+output: html_document
+date: "2025-01-29"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+install.packages(c("DeclareDesign", "rdddr"))
+```
+
+
+```{r lecture 5}
+# Load the required packages
+library(fabricatr)
+library(estimatr)
+library(randomizr)
+
+# Set the seed for reproducibility
+set.seed(385)
+
+data2 <- fabricate(
+  N = 1000,
+  treat = complete_ra(N, m = 500),
+  age = round(rnorm(N, mean = 30, sd = 5)),
+  education = round(rnorm(N, mean = 12, sd = 2)),
+  interviews = round(rnorm(N, mean = 10, sd = 2) + 5 * treat)
+)
+
+head(data2)
+```
+
+```{r}
+model2 <- lm_lin(interviews ~ treat,
+                covariates = ~ age + education,
+                data = data2)
+summary(model2)
+```
+
+```{r pressure, echo=FALSE}
+# Create a binary subgroup (e.g., "high" vs. "low" education)
+data2$high_edu <- ifelse(data2$education > median(data2$education), 1, 0)
+
+# Fit an interaction model with covariates
+model_interaction <- lm_robust(
+  interviews ~ treat * high_edu + age + education,
+  data = data2)
+
+# Summarize results
+summary(model_interaction)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
