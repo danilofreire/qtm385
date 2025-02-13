@@ -1,0 +1,826 @@
+---
+title: QTM 385 - Experimental Methods
+subtitle: Lecture 08 - Blocking and Clustering (cont.), and Statistical Power
+author:
+  - name: Danilo Freire
+    email: danilo.freire@emory.edu
+    affiliations: Emory University
+format:
+  clean-revealjs:
+    self-contained: true
+    code-overflow: wrap
+    footer: "[Power](https://raw.githack.com/danilofreire/qtm385/main/lectures/lecture-08/08-power.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: knitr
+revealjs-plugins:
+  - multimodal
+editor:
+  render-on-save: true
+---
+
+# Hi, there! <br> Nice to see you again! 😉{background-color="#2d4563"}
+
+# Group work 👥 {background-color="#2d4563"}
+
+## Group 1
+### Pre-formed
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+
+| Name                  | Login ID | SIS ID  | Email              |
+|-----------------------|----------|---------|--------------------|
+| Elizabeth Shin        | EJSHIN6  | 2520422 | elizabeth.shin@emory.edu  |
+| Emily Choi            | ECHOI73  | 2492522 | emily.choi@emory.edu |
+| Esther Yang           | QYANG68  | 2487073 | esther.yang2@emory.edu  |
+| Zhiyi Li (Yolanda Li) | ZLIT23   | 2513881 | zhiyi.li@emory.edu   |
+| Angela Xie            | JXIE82   | 2515217 | angela.xie@emory.edu   |
+
+:::
+
+## Group 2
+### Originally Anushka Basu & Annie Cao, now topped up to 4
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+
+| Name                  | Login ID | SIS ID  | Email             |
+|-----------------------|----------|---------|-------------------|
+| Anushka Basu          | ABASU9   | 2551669 | anushka.basu@emory.edu  |
+| Annie Cao             | JCAO66   | 2599315 | annie.cao@emory.edu  |
+| Courtney Fitzgerald   | CFITZG4  | 2484240 | courtney.fitzgerald@emory.edu |
+| Adam Pastor            | AMPASTO  | 2565464 | adam.pastor@emory.edu         |
+
+:::
+
+## Group 3
+### Pre-formed
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+
+| Name           | Login ID | SIS ID  | Email              |
+|----------------|----------|---------|--------------------|
+| Maura Dianno   | MDIANNO  | 2481848 | maura.dianno@emory.edu  |
+| Kush Bhatia    | KBHATI7  | 2492303 | kush.bhatia@emory.edu  |
+| Shriya Iyer    | SAIYER4  | 2493146 | shriya.iyer@emory.edu  |
+
+:::
+
+## Group 4
+### Pre-formed
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+
+| Name        | Login ID | SIS ID  | Email            |
+|-------------|----------|---------|------------------|
+| Sylvia Xing | JXING8   | 2549831 | sylvia.xing@emory.edu |
+| Lucy Liu    | CLIU452  | 2561533 | lucy.liu@emory.edu|
+| Jessie Hao  | JHAO23   | 2513298 | jessie.hao@emory.edu |
+| Zoe Liu     | SLIU547  | 2583239 | zoe.liu@emory.edu|
+
+:::
+
+## Group 5
+### Dhwani + Anita, Harris + Xinyi
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+
+| Name                   | Login ID | SIS ID  | Email                        |
+|------------------------|----------|---------|------------------------------|
+| Dhwani Venkatarangan   | DAVENKA  | 2554493 | dhwani.venkatarangan@emory.edu |
+| Anita Osuri            | AOSURI2  | 2557540 | anita.osuri@emory.edu         |
+| Xinyi Wang   | XWAN878  | 2549813 | xinyi.wang@emory.edu          |
+| Harris Wang           | MWAN467  | 2551003 | harris.wang@emory.edu |
+
+:::
+
+## Group 6
+### Pre-formed
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+
+| Name         | Login ID | SIS ID  | Email                         |
+|--------------|----------|---------|-------------------------------|
+| Shuyang Yu   | SYU1025  | 2610436 | shuyang.yu@emory.edu          |
+| Phoebe Pan   | ZPAN66   | 2630423 | ziwen.pan@emory.edu           |
+| Zihan Liang     | ZLIAN57  | 2609381 | zihan.liang@emory.edu         |
+| Evelyn Shi     | CSHI59   | 2609525 | evelyn.shi2@emory.edu         |
+
+:::
+
+## Group 7
+### Miracle + Ahshar, now topped up to 4
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+
+| Name            | Login ID | SIS ID  | Email                         |
+|-----------------|----------|---------|-------------------------------|
+| Davis Boor      | DBOOR    | 2556176 | davis.boor@emory.edu          |
+| Xipu Wang       | XWAN884  | 2551008 | xipu.wang@emory.edu           |
+| Miracle Ephraim | MEPHRAI  | 2492732 | miracle.ephraim@emory.edu     |
+| Ahshar Brown           | AOBROW2  | 2575182 | ahshar.brown@emory.edu        |
+
+:::
+
+## Group 8
+### Daniel + Howie, now topped up to 3
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+
+| Name           | Login ID | SIS ID  | Email                         |
+|----------------|----------|---------|-------------------------------|
+| Howie Brown    | HJBROW5  | 2585210 | howie.brown@emory.edu         |
+| Maxwell Troilo | MTROILO  | 2520874 | max.troilo@emory.edu          |
+| Daniel Nickas| DNICKAS  | 2549711 | daniel.nickas@emory.edu       |
+
+:::
+
+
+# Brief recap 📚 {background-color="#2d4563"}
+
+## Blocking recap
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+:::{.columns}
+:::{.column width="50%"}
+- **Blocking** involves [grouping experimental units based on certain characteristics]{.alert} to ensure comparability between treatment and control groups
+- Blocks are formed based on variables expected to affect the outcome, and [within each block, units are randomly assigned]{.alert} to treatment or control
+- Blocking [reduces variance]{.alert} and [increases precision]{.alert} by ensuring balanced groups within each block
+- Key benefits:
+  - Ensures [equal representation]{.alert} of important subgroups in treatment and control
+  - Reduces the risk of confounding variables affecting results
+  - Particularly useful for [small sample sizes]{.alert} or when heterogeneity is expected
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/blocking.png){width=100%}
+
+Source: [Bobbit (2020)](https://www.statology.org/blocking-statistics/)
+:::
+:::
+:::
+:::
+
+## Clustering recap
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+:::{.columns}
+:::{.column width="50%"}
+- **Clustering** involves assigning [whole groups of units to treatment and control]{.alert}, often due to practical constraints
+- Common in experiments where individual randomisation is impossible (e.g., classrooms, villages)
+- Clustering introduces [intra-cluster correlation (ICC)]{.alert}, which measures how similar individuals within the same cluster are
+- Challenges:
+  - [Higher variance]{.alert} compared to individual randomisation
+  - Requires [robust clustered standard errors]{.alert} to avoid underestimating uncertainty
+- Blocking can be used within clusters to further [reduce variance]{.alert} and improve precision
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/clustering.png){width=100%}
+
+Source: [Zhai and Gutman (2018)](https://dcricollab.dcri.duke.edu/sites/NIHKR/KR/Poster_PROVEN_JSM_2018_c.pdf)
+:::
+:::
+:::
+:::
+
+# Blocking (cont.) {background-color="#2d4563"}
+
+## Let's declare the design of a hypothetical experiment!
+### Community gardening programme
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- Imagine that we are evaluating a "Community Gardening Programme" (treatment) that is designed to increase social cohesion within a city
+- We believe that different neighbourhoods start with varying levels of social cohesion
+- So we will block by "Neighbourhood Type" (i.e. established versus new development) to improve the precision of our estimated programme effect
+:::
+
+## Community gardening programme
+### Declare Model
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- Simulating our experiment using `DeclareDesign`:
+
+```{r}
+#| echo: true
+#| eval: true
+# Load packages
+library(DeclareDesign)
+library(tidyverse) 
+
+# Set seed for reproducibility
+set.seed(385)
+
+# Simulate our data
+N = 100 # Total individuals
+
+# Declare Model: what we think about the world
+model_blocks <- declare_model(
+  N = N,
+  # Two neighbourhood types
+  neighbourhood_type = sample(rep(c("Established", "New Development"), each = N/2)), 
+  # Use neighbourhood type as blocks
+  blocks = neighbourhood_type, 
+
+  # Established neighbourhoods start with slightly higher cohesion
+  baseline_cohesion_effect = ifelse(neighbourhood_type == "Established", 0.5, 0), 
+  u = rnorm(N), # Random noise
+
+  potential_outcomes(
+    social_cohesion ~ Z * 1.5 + # Treatment effect = 1.5 units
+      baseline_cohesion_effect + # Baseline cohesion varies by neighbourhood type
+      u/10 # Random noise
+  )
+)
+```
+:::
+
+## Community gardening programme
+### Declare Inquiry
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+```{r}
+#| echo: true
+#| eval: true
+# Declare Inquiry: what we want to learn
+
+# Average Treatment Effect (ATE)
+inquiry_blocks <- declare_inquiry(ATE = mean(social_cohesion_Z_1 - social_cohesion_Z_0))
+```
+:::
+
+## Community gardening programme
+### Declare Assignment
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+```{r}
+#| echo: true
+#| eval: true
+# Declare Assignment: how we assign treatment
+
+# Blocked RA by neighbourhood type
+assignment_blocks  <- declare_assignment(Z = block_ra(blocks = blocks)) 
+```
+:::
+
+## Community gardening programme
+### Declare Measurement
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+```{r}
+#| echo: true
+#| eval: true
+
+# Declare Measurement: how we measure outcomes
+measurement_blocks <- declare_measurement(social_cohesion = reveal_outcomes(social_cohesion ~ Z))
+```
+:::
+
+## Community gardening programme
+### Declare Estimator
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+```{r}
+#| echo: true
+#| eval: true
+# Declare Estimator: how we estimate treatment effects
+estimator_blocks <- declare_estimator(social_cohesion ~ Z) 
+```
+
+:::{style="margin-top: 20px; font-size: 26px;"}
+:::
+- Now we have all the components of our design
+- Let's put them together!
+
+```{r}
+#| echo: true
+#| eval: true
+design_blocks <- model_blocks + inquiry_blocks +
+                 assignment_blocks + measurement_blocks + estimator_blocks
+```
+:::
+
+## Community gardening programme
+### Model without blocking
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+```{r}
+#| echo: true
+#| eval: true
+# Re-use the same model and inquiry for a fair comparison
+model_no_blocks <- model_blocks
+inquiry_no_blocks <- inquiry_blocks
+assignment_no_blocks <- declare_assignment(Z = complete_ra(N = N, m = 50)) # No blocks
+measurement_no_blocks <- measurement_blocks # Re-use measurement
+estimator_no_blocks <- estimator_blocks     # Re-use estimator
+
+design_no_blocks <- model_no_blocks + inquiry_no_blocks +
+                    assignment_no_blocks + measurement_no_blocks + estimator_no_blocks 
+```
+:::
+
+## Community gardening programme
+### Simulate and compare
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+```{r}
+#| echo: true
+#| eval: true
+# Simulate the designs
+simulations <- simulate_design(design_blocks, design_no_blocks, sims = 1000) 
+```
+
+```{r}
+#| echo: true
+#| eval: false
+# Plot the results
+ggplot(simulations, aes(estimate)) +
+  geom_histogram(bins = 30) +
+  facet_wrap( ~ design) +
+  theme_bw() +
+  theme(strip.background = element_blank()) +
+  labs(
+    title = "Distribution of Estimated Community Gardening Programme Effect",
+    x = "Estimated Treatment Effect (Social Cohesion)",
+    y = "Frequency"
+  )
+```
+:::
+
+## Community gardening programme
+### Simulate and compare
+
+:::{style="margin-top: 30px; font-size: 26px; text-align: center;"}
+```{r}
+#| echo: false
+#| eval: true
+ggplot(simulations, aes(estimate)) +
+  geom_histogram(bins = 30) +
+  facet_wrap( ~ design) +
+  theme_bw() +
+  theme(strip.background = element_blank()) +
+  labs(
+    title = "Distribution of Estimated Community Gardening Programme Effect",
+    x = "Estimated Treatment Effect (Social Cohesion)",
+    y = "Frequency"
+  )
+```
+::: 
+
+
+# Cool, isn't it? 🤓 {background-color="#2d4563"}
+
+# Clustering (cont.) {background-color="#2d4563"}
+
+## Clustering (cont.)
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- Last class, we discussed the concept of clustering in experiments
+- Clustering is often used when [random assignment is not feasible]{.alert}, such as in:
+  - Education (e.g., classrooms)
+  - Healthcare (e.g., hospitals)
+  - Community interventions (e.g., neighbourhoods)
+- Clustering can be beneficial, but it also [comes with challenges]{.alert}, such as the need for robust statistical methods to account for intra-cluster correlation
+- We also discussed the importance of considering [the design effect]{.alert} when planning a clustered experiment
+  - We unfortunately [lose statistical power]{.alert} when we cluster
+- Clustering is [more of a necessity than a choice]{.alert}
+:::
+
+## Intra-cluster correlation (ICC)
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+- The [intra-cluster correlation (ICC)]{.alert} is a measure of the similarity of individuals within the same cluster, compared to individuals in different clusters
+- The ICC is defined as:
+  - $ICC = \frac{\sigma^2_{between}}{\sigma^2_{between} + \sigma^2_{within}}$
+- The measure goes from 0 to 1. When it is closer to 0, it means that clusters have [no influence]{.alert} on the outcome, so we can treat individuals as independent
+  - This is the ideal situation!
+- When it is closer to 1, it means that all units within the same cluster have [the same outcome]{.alert}
+  - This is not good because it implies that units are so similar that the [effective sample size is equal to the number of clusters]{.alert}
+- In social sciences, education, or public health, [ICC values often range from 0.05 to 0.20]{.alert}
+- Even seemingly "small" ICC values can have a noticeable impact, especially with large clusters!
+:::
+
+## Effective sample size
+### Loss of power due to clustering
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- The [effective sample size]{.alert} is a concept that helps us understand the impact of clustering on our statistical power ([Kish (1965)](https://www.jstor.org/stable/2091346))
+- It is defined as:
+
+$$n_{ESS} = \frac{n}{1 + (k - 1) \cdot ICC}$$
+
+- Where:
+  - $n$ = total sample size
+  - $k$ = average cluster size
+  - $ICC$ = intra-cluster correlation
+
+- Let's see what each step means
+:::
+
+## Effective sample size (cont.)
+### Explanation
+
+:::{style="margin-top: 20px; font-size: 21px;"}
+:::{.columns}
+:::{.column width="30%"}
+:::{style="margin-top: 80px;"}
+$$n_{ESS} = \frac{n}{1 + (k - 1) \cdot ICC}$$
+:::
+:::
+
+:::{.column width="70%"}
+:::{style="margin-top: 30px;"}
+:::
+- Numerator ($n$): Sample size. If there were no clustering effect ($ICC = 0$), the denominator would be 1, and ESS would equal $n$
+- Denominator: [$1 + (k - 1) * ICC$] - The "variance inflation factor": This is the key part that adjusts for clustering
+- Let's look at it piece by piece:
+  - $(k - 1)$: This reflects the fact that the "loss" of information increases with cluster size ($k$). If $k=1$ (clusters of size 1, i.e., no clustering), then $(k-1) = 0$, and the denominator becomes 1. As $k$ increases, more redundancy is introduced, and the denominator increases 
+  - $(k - 1) \cdot ICC$: Total amount of correlation effect within a cluster. ICC multiplied by approximately $k-1$ because each individual is correlated with $k-1$ other individuals in their cluster 
+  - Dividing by the denominator: By dividing the nominal sample size $n$ by this variance inflation factor, we indicate that our clustered sample provides less independent information
+:::
+:::
+:::
+
+## Effective sample size (cont.)
+### Example
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- Let's say we have a sample of 1000 individuals, with an average cluster size of 20 ($k=20$) and an ICC of 0.2:
+
+$$n_{ESS} = \frac{1000}{1 + (20 - 1) \cdot 0.2} = \frac{1000}{1 + 3.8} = \frac{1000}{4.8} \approx 208.33$$
+
+- This means that, despite having 1000 individuals, [we lose about 80% of our sample size]{.alert} due to clustering! 
+- And since the effective sample size is what we use to calculate power, we need to [adjust our calculations accordingly]{.alert}
+- This is why we need to be careful when designing clustered experiments! 😅
+:::
+
+## What to do in such situations?
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- As we've seen, cluster randomised trials entail a series of [specific challenges]{.alert} for standard estimation and testing methods
+- If randomisation is conducted at [the cluster level]{.alert}, the uncertainty arising from this process is also at [the cluster level]{.alert}
+- When we have a sufficient number of clusters, [cluster robust standard errors]{.alert} can help us produce confidence intervals with the correct coverage. However, these require a [large number of clusters]{.alert}
+- If the cluster size (or any related characteristic) is linked to the effect magnitude, then the estimation may be [biased]{.alert} (and adjustments are required)
+- So, what can we do? 🤷🏻‍♂️
+:::
+
+## What to do in such situations?
+### Increase sample size
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+- One option is to [increase the sample size]{.alert} to account for the loss of power due to clustering
+- This can be done by:
+  - [Adding more clusters]{.alert}
+  - [Increasing the number of units within each cluster]{.alert}
+- However, this can be challenging in practice, as it may not always be feasible to add more clusters or units
+:::
+
+## What to do in such situations?
+### Pair matching
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- [Imai et al (2009)](https://projecteuclid.org/journals/statistical-science/volume-24/issue-1/The-Essential-Role-of-Pair-Matching-in-Cluster-Randomized-Experiments/10.1214/08-STS274.pdf) proposed a design suggestion to improve the efficiency of cluster randomised trials
+- The strategy has three steps:
+  - First, choose the causal quantity of interest (usually, individual difference in means)
+  - Then, [identify available pre-treatment covariates]{.alert} likely to affect the outcome variable ([blocks]{.alert}), and, if possible, [pair clusters based on the similarity of these covariates and cluster sizes]{.alert}
+  - They show that this step is usually overlooked and can yield many additional observations
+  - Finally, researchers should randomly choose [one treated and one control cluster within each pair]{.alert}
+- This design is particularly useful when the number of clusters is small, and is an extreme example of blocking. [Use `blockTools`](https://www.ryantmoore.org/html/software.blockTools.html) to implement it!
+- Again, [block what you can!]{.alert}
+:::
+
+## Example
+### Clustered randomised trial with and without blocking
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- Let’s declare a design with heterogeneous cluster sizes
+- There are 300 units in 12 clusters
+- Two bigger clusters are of size 100 and 10 smaller clusters are of size 10
+- The 200 units in clusters of size 100 have a 0 treatment effect, the other 100 in clusters of size 10 have an effect of 3. This means that the average treatment effect is 1
+- Example adapted from [DeclareDesign](https://declaredesign.org/blog/posts/bias-cluster-randomized-trials.html#ref-imai2009essential)
+:::
+
+## Clustered randomised trial with and without blocking
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+```{r}
+#| echo: true
+#| eval: true
+# Load packages
+library(DeclareDesign)
+library(tidyverse)
+
+# Set seed for reproducibility
+set.seed(385)
+
+# Design
+N_clusters <- 12
+
+cluster_design <- 
+  # M: Model
+  declare_model(clusters = add_level(N = N_clusters, 
+                                          cl_size = rep(c(100, 10), c(N/6, N - N/6)),
+                                          effect = ifelse(cl_size == 100, 0, 3)),
+                     units    = add_level(N = cl_size, u = rnorm(N, sd = .2),
+                                          Y_Z_0 = u, Y_Z_1 = u + effect)) +
+  
+  # I: Inquiry
+  declare_inquiry(ATE_i = mean(Y_Z_1 - Y_Z_0)) +
+
+  # D: Data Strategy
+  declare_assignment(Z = cluster_ra(clusters = clusters)) +
+  
+  declare_measurement(Y = reveal_outcomes(Y ~ Z)) +
+
+  # A: Answer Strategy
+  declare_estimator(Y ~ Z, inquiry = "ATE_i", clusters = clusters,
+                    model = lm_robust, label = "Clustered")
+```
+:::
+
+## Clustered randomised trial with and without blocking
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+```{r}
+#| echo: true
+#| eval: true
+# Block on cluster size and simulate
+# Re-use the same model and inquiry for a fair comparison
+# Modified cluster design with blocking
+matched_cluster_design <- 
+  # M: Model
+  declare_model(clusters = add_level(N = N_clusters, 
+                                     cl_size = rep(c(100, 10), c(N/6, N - N/6)),
+                                     # ATE = 1
+                                     effect = ifelse(cl_size == 100, 0, 3)),
+                units    = add_level(N = cl_size, 
+                                     u = rnorm(N, sd = .2),
+                                     Y_Z_0 = u, 
+                                     Y_Z_1 = u + effect)) +
+  
+  # I: Inquiry
+  declare_inquiry(ATE_i = mean(Y_Z_1 - Y_Z_0)) +
+  
+  # D: Data Strategy (modified assignment)
+  declare_assignment(Z = block_and_cluster_ra(clusters = clusters, blocks = cl_size)) +
+  
+  declare_measurement(Y = reveal_outcomes(Y ~ Z)) +
+  
+  # A: Answer Strategy (modified estimator with blocks)
+  declare_estimator(Y ~ Z, inquiry = "ATE_i", clusters = clusters, label = "Blocks")
+
+simulations <- simulate_design(cluster_design, matched_cluster_design, sims = 1000)
+```
+:::
+
+## Plot the results
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+```{r}
+#| echo: false
+#| eval: true
+# Plot the results
+ggplot(simulations, aes(estimate)) +
+  geom_histogram(bins = 30) +
+  facet_wrap( ~ estimator) +
+  theme_bw() +
+  theme(strip.background = element_blank()) +
+  labs(
+    title = "Distribution of Estimated Effects",
+    x = "Estimated Treatment Effect",
+    y = "Frequency"
+  )
+```
+:::
+
+# Statistical power 💪 {background-color="#2d4563"}
+
+## Statistical power
+### What is it?
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+- [Statistical power]{.alert} is the probability of correctly rejecting the null hypothesis when it is false
+- In other words, it is the probability of [detecting an effect when there is one]{.alert}
+- Statistical power is influenced by several factors, including:
+  - Sample size
+  - Effect size
+  - Significance level (alpha)
+  - Variability in the data
+- Power calculations used to be overlooked in the past, but they are now considered an essential part of the research design process
+- They [must be included in any pre-analysis plan]{.alert} (PAP), and they are often required by journals and funding agencies
+- So let's see what they are all about! 😅
+- (Based on [Coppock (2019)](https://egap.org/resource/10-things-to-know-about-statistical-power/))
+:::
+
+## Statistical power
+### Why you should care
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- Experimenters often guard against [false positives with statistical significance tests]{.alert}
+- Power analysis is the opposite: they are designed to guard against [false negatives]{.alert}
+- [Answering this question always requires some guesswork]{.alert}
+- You’ll have to supply guesses as to [how big your treatment effect]{.alert} can be, [how many subjects will answer your survey]{.alert}, and [how many subjects you can afford to treat]{.alert}
+- Where do these guesses come from? As we saw before:
+  - [Previous studies]{.alert}
+  - [Pilot studies]{.alert}
+  - [Subject-matter expertise]{.alert}
+- A rule of thumb is that a [power of 0.80 (or 80%) is generally considered acceptable]{.alert}
+- There is [no one-size-fits-all answer]{.alert}, and the acceptable level of power may vary depending on the context and consequences of Type I and Type II errors
+- So if you're running a study on a very sensitive topic, you might want to aim for a higher power level (e.g., 90% or 95%)
+:::
+
+## How to calculate power
+### The three steps
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- There are [three things]{.alert} that determine how highly powered your experiment will be 
+- The [first two you can’t really control]{.alert} – these are the realities of your experimental environment
+- The last, [the experimental design, is the only thing that you have power over]{.alert} – use it!
+  - [Strength of the treatment effect]{.alert}: This is the size of the effect you expect to observe in your experiment. The larger the effect, the easier it is to detect, and the higher the power
+  - [Variability in the data]{.alert}: The more variability there is in your data, the harder it is to detect an effect, and the lower the power. To the extent that it is possible, try to select [outcome variables that have low variability]{.alert}
+  - [Sample size]{.alert}: The larger the sample size, the more likely you are to detect an effect if it exists. Increasing the sample size generally increases power
+:::
+
+## How to calculate power
+### Formula
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+- Here is a common formula used to calculate power:
+
+$$ \beta = \Phi \left( \frac{|\mu_t - \mu_c|\sqrt{N}}{2\sigma} - \Phi^{-1} \left( 1 - \frac{\alpha}{2} \right) \right) $$
+
+- $\beta$ (Beta): Power. A value between 0 and 1, usually set to 0.80
+- $\Phi$ (Phi): Cumulative distribution function of a standard normal distribution. $\Phi^{-1}$ is its inverse function
+- $\mu_t - \mu_c$: Assumed ATE
+- $\sigma$: Standard Deviation of Outcomes. This represents the assumed variability or "noisiness" of the outcome measurements. Assumed to be the same for both treatment and control
+- $\alpha$: Significance level. Commonly set to 0.05 in many fields
+- $N$: Sample size, the only factor directly controlled by the researcher in this formula. The formula assumes a 50/50 chance of being in control
+:::
+
+## Calculate power using `DeclareDesign`
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+```{r}
+#| echo: true
+#| eval: true
+# N
+sample_size <- 100
+
+# Declare a two-arm trial in code
+two_arm_trial <-
+  declare_model(N = sample_size,
+                U = rnorm(N),
+                potential_outcomes(Y ~ 0.2 * Z + U)) +
+  declare_inquiry(ATE = mean(Y_Z_1 - Y_Z_0)) +
+  declare_assignment(Z = complete_ra(N, prob = 0.5)) +
+  declare_measurement(Y = reveal_outcomes(Y ~ Z)) +
+  declare_estimator(Y ~ Z, inquiry = "ATE")
+
+diagnose_design(two_arm_trial)
+```
+:::
+
+## Calculate power using `DeclareDesign`
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+```{r}
+#| echo: true
+#| eval: false
+# Redesign over sample size and calculate power
+diagnosis <-
+  two_arm_trial |>
+  redesign(sample_size = c(250, 500, 750, 1000, 1250)) |>
+  diagnose_designs() |>
+  tidy() |>
+  filter(diagnosand == "power")
+
+# Visualize power curve over sample sizes
+ggplot(diagnosis, aes(sample_size, estimate)) + 
+  geom_point() +
+  geom_line()
+```
+:::
+
+## Calculate power using `DeclareDesign`
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+```{r}
+#| echo: false
+#| eval: true
+# Redesign over sample size and calculate power
+diagnosis <-
+  two_arm_trial |>
+  redesign(sample_size = c(250, 500, 750, 1000, 1250)) |>
+  diagnose_designs() |>
+  tidy() |>
+  filter(diagnosand == "power")
+
+# Visualize power curve over sample sizes
+ggplot(diagnosis, aes(sample_size, estimate)) + 
+  geom_point() +
+  geom_line()
+```
+:::
+
+## Using different models
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+- Now we will test many estimations at the same time!
+- We start with two-arm trial with 40 units in which 20 units are assigned to treatment, blocking on a binary pre-treatment covariate $W$
+- We’ll let the treatment effects vary according to $W$, but the true average treatment effect (our estimand in this case) is equal to 1.
+
+```{r}
+#| echo: true
+#| eval: true
+N = 40
+
+# Model
+model <- declare_model(N, W = rep(0:1, N / 2), u = rnorm(N), potential_outcomes(Y ~ 2 * Z * W + u))  
+
+# Inquiry
+inquiry     <- declare_inquiry(ate = 1)  
+
+# Data strategy
+assignment   <- declare_assignment(Z = block_ra(blocks = W))
+measurement  <- declare_measurement(Y = reveal_outcomes(Y ~ Z))
+
+# Answer strategy
+estimator  <- declare_estimator(Y ~ Z, estimand = "ate", label = "Simple D-I-M")
+
+# Declare the design
+design <- model + inquiry + assignment + measurement + estimator
+
+diagnose_design(design)
+```
+:::
+
+## Using different models
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- Let’s consider two additional estimation strategies
+- The first controls for the pre-treatment covariate $W$ in an OLS  
+- An alternative is the "Lin estimator", which centres and interacts the variables
+
+```{r}
+#| echo: true
+#| eval: true
+new_design <- design +
+              declare_estimator(Y ~ Z + W,  model = lm_robust,
+                                inquiry = "ate", label = "OLS: Control for W") +
+              declare_estimator(Y ~ Z, covariates = ~ W, model = lm_lin,
+                                inquiry = "ate", label = "Lin: Control + Interaction")
+
+diagnose_design(new_design)
+```
+:::
+
+## Using different models
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- To figure out how these gains in power from switching up estimation strategies compare with gains from increasing $N$, we declare a sequence of designs, differing only in values for $N$
+
+```{r}
+#| echo: true
+#| eval: true
+designs   <- redesign(new_design, N = seq(30, 80, 10))
+diagnoses <- diagnose_design(designs)
+```
+
+```{r}
+#| echo: true
+#| eval: false
+diagnoses$diagnosands_df %>%
+  ggplot(aes(N, power)) +
+  geom_line(aes(color = estimator))
+```
+:::
+
+## Using different models
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+```{r}
+#| echo: false
+#| eval: true
+diagnoses$diagnosands_df %>%
+  ggplot(aes(N, power)) +
+  geom_line(aes(color = estimator))
+```
+:::
+
+# Final thoughts 💭 {background-color="#2d4563"}
+
+## Final thoughts
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- We saw how to use blocking to improve the precision of our estimates, including those of clustered experiments
+  - Pair matching is a great way to do this!
+- We also (briefly) introduced `DeclareDesign` and how to use it to calculate power
+  - We will cover this in more detail in a dedicated class!
+- We saw how to calculate power using `DeclareDesign` and how to use it to compare different designs
+- And that's all for today! 🎉
+:::
+
+# Have a great day! 👋 {background-color="#2d4563"}
+

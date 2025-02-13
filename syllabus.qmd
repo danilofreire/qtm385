@@ -196,7 +196,7 @@ Required readings:
 - Lecture slides: [Potential Outcomes Continued and Regression Analysis](https://raw.githack.com/danilofreire/qtm385/main/lectures/lecture-04/04-selection-bias.html).
 - Angrist, J. D., & Pischke, J. S. (2014). [Mastering 'Metrics: The Path from Cause to Effect](https://assets.press.princeton.edu/chapters/s10363.pdf). Princeton University Press. Chapter 01: Randomized Trials. The appendix is worth reading as well.
 - Problem Set 01 due.
-- Problem Set 02 assigned.
+- [Problem Set 02 assigned](https://github.com/danilofreire/qtm385/blob/main/assignments/02-assignment).
 
 Weekly suggested readings:
 
@@ -211,16 +211,19 @@ Weekly suggested readings:
 
 ### Lecture 05: Statistical Inference for Randomised Experiments (February 03)
 
+- Lecture slides: [Sampling Distributions, Statistical Inference, and Hypothesis Testing](https://raw.githack.com/danilofreire/qtm385/main/lectures/lecture-05/05-hypothesis-testing.html).
 - FEDAI: Chapter 03: Sampling Distributions, Statistical Inference, and Hypothesis Testing.
 - EGAP Methods Guides: [Hypothesis Testing](https://egap.org/resource/10-things-to-know-about-hypothesis-testing/), [Randomisation Inference](https://egap.org/resource/10-things-to-know-about-randomization-inference/), and [Cluster Randomisation](https://egap.org/resource/10-things-to-know-about-cluster-randomization/). These short guides provide a good overview of the topics we will cover in class, as well as example code in `R`.
-
+- [Kahoot Quiz](https://play.kahoot.it/v2/?quizId=2ff88efc-8164-446d-a088-bcd4d4fe5313&hostId=05eb977d-4f8a-440e-9e45-95212b29d103).
+ 
 ### Lecture 06: Texts for discussion (February 05)
 
+- Lecture slides: [Texts for Discussion](https://raw.githack.com/danilofreire/qtm385/main/lectures/lecture-06/06-discussion.html).
 - Kalla, J. & D. Broockman. 2016. [Campaign Contributions Facilitate Access to Congressional Officials: A Randomized Field Experiment](https://onlinelibrary.wiley.com/doi/full/10.1111/ajps.12180). American Journal of Political Science, 60(3): 545–558
+- Bertrand, M., & Mullainathan, S. (2004). [Are Emily and Greg more employable than Lakisha and Jamal? A field experiment on labor market discrimination](https://www.aeaweb.org/articles?id=10.1257%2F0002828042002561&ref=exo-insight). American economic review, 94(4), 991-1013.
 - Chattopadhyay, R., & Duflo, E. (2004). [Women as policy makers: Evidence from a randomized policy experiment in India](https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1468-0262.2004.00539.x). Econometrica, 72(5), 1409-1443.
-- Shrout, P. E., & Rodgers, J. L. (2018). [Psychology, science, and knowledge construction: Broadening perspectives from the replication crisis](https://www.annualreviews.org/content/journals/10.1146/annurev-psych-122216-011845). Annual Review of Psychology, 69(1), 487-510.
 - Problem Set 02 due.
-- Problem Set 03 assigned.
+- [Problem Set 03 assigned](https://github.com/danilofreire/qtm385/tree/main/assignments/03-assignment).
 
 Weekly suggested readings:
 

@@ -1,0 +1,747 @@
+---
+title: QTM 385 - Experimental Methods
+subtitle: Lecture 05 - Sampling Distributions, Statistical Inference, and Hypothesis Testing
+author:
+  - name: Danilo Freire
+    email: danilo.freire@emory.edu
+    affiliations: Emory University
+format:
+  clean-revealjs:
+    self-contained: true
+    code-overflow: wrap
+    footer: "[Hypothesis Testing](https://raw.githack.com/danilofreire/qtm385/main/lectures/lecture-05/05-hypothesis-testing.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: knitr
+revealjs-plugins:
+  - multimodal
+editor:
+  render-on-save: true
+---
+
+# Hello, everyone! 👋 <br> How are you doing today? 😁 {background-color="#2d4563"}
+
+# Brief recap 📚 {background-color="#2d4563"}
+
+## Last time, we saw that...
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- Selection bias arises when treatment groups differ initially
+- [Balance tests]{.alert} assess pre-treatment group comparability
+  - Are they useful? Sometimes. Do they solve the problem? No. 😂
+- [Causal diagrams (DAGs)]{.alert} illustrate variable relationships and biases
+  - Useful for identifying confounders and mediators
+- [Loss to follow-up]{.alert} can introduce bias in treatment effects
+- [Survivorship bias]{.alert} focuses on successful outcomes, ignoring failures
+- [Post-treatment bias]{.alert} occurs when controlling for variables affected by treatment
+:::
+
+:::{.column width=50%}
+- [Standard deviation]{.alert} quantifies the spread of data
+- [Standard error]{.alert} measures the precision of sample means (or other test statistics)
+- Regression analysis are the most convenient way to estimate treatment effects
+  - They can handle multiple covariates and interactions
+- [DeclareDesign](https://declaredesign.org/) is a package for designing and analysing experiments
+  - It helps you through the entire process! 😎
+:::
+:::
+:::
+
+## Today, we will discuss...
+
+:::{style="margin-top: 50px; font-size: 22px;"}
+:::{.columns}
+:::{.column width=50%}
+- Regression analysis in `R` (from last week)
+- Sampling distributions of experimental estimates
+- The importance of randomisation inference 
+  - [`ri2` package](https://alexandercoppock.com/ri2/)
+- Hypothesis testing
+  - Sharp null hypothesis
+  - Null hypothesis of no average treatment effect
+  - Confidence intervals
+- But first... interesting experiment of the day! 🎉
+- And a few ideas about your pre-analysis plans and final project 😊
+:::
+
+:::{.column width=50%}
+:::{style="text-align: center;"}
+![](figures/ri.png)
+
+Source: [Alex Coppock](https://alexandercoppock.com/ri2/)
+:::
+:::
+:::
+:::
+
+## Interesting experiment of the day! 🎉
+
+:::{style="margin-top: 50px; font-size: 24px; text-align: center;"}
+![](figures/paper.jpg){width=85%}
+
+Source: [Knittel et al (2024)](https://www.nber.org/papers/w33118)
+:::
+
+## Pre-analysis plan and final project 😊
+
+:::{style="margin-top: 50px; font-size: 24px;"}
+- Now we have the final list of students enrolled in the course!  
+- So we can start thinking about your project 🤓
+- It will be a group project, with 3-4 students per group
+- You will have to submit a pre-analysis plan, I will create a dataset for you to work on, and you will have to write a report
+- [and I have a few questions for you]{.alert} (don't worry, they're easy! 😂)
+:::
+
+# Regression analysis in R (recap) 📊 {background-color="#2d4563"}
+
+## Loading the packages and simulating the data
+
+:::{style="margin-top: 50px; font-size: 22px;"}
+```{r}
+#| echo: true
+#| eval: true
+
+# Load the required packages
+library(fabricatr)
+library(estimatr)
+library(randomizr)
+
+# Set the seed for reproducibility
+set.seed(385)
+
+data2 <- fabricate(
+  N = 1000,
+  treat = complete_ra(N, m = 500),
+  age = round(rnorm(N, mean = 30, sd = 5)),
+  education = round(rnorm(N, mean = 12, sd = 2)),
+  interviews = round(rnorm(N, mean = 10, sd = 2) + 5 * treat)
+)
+
+head(data2)
+```
+:::
+
+
+## Adding covariates
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+- We can add covariates to experimental models to increase precision
+- The same way we do in any regression:
+  - $Y_i = \alpha + \beta \text{T}_i + \gamma \text{X}_i + \epsilon_i$
+- [Freedman (2008)](https://doi.org/10.1214/07-AOAS143) demonstrated that pre-treatment covariate adjustment may bias estimates of average treatment effects, mainly in small samples
+- [Lin (2013)](https://doi.org/10.1214/12-AOAS583) proposed that if covariate correlations differ between treatment and control groups, centering and interacting covariates with the treatment variable will balance the groups
+- This adjusts for covariates separately in each group, which is equivalent to including treatment-by-covariate interactions
+  - $Y_i = \alpha + \beta \text{T}_i + \gamma \text{W}_i + \delta \text{T}_i \times \text{W}_i + \epsilon_i$
+  - Where $W_i = \text{X}_i - \bar{\text{X}}$ and $\bar{\text{X}}$ is the mean of $\text{X}_i$
+  - For ease of interpretation, we can centre the covariates to have a mean of zero
+- Anyway, worry not! 😅 Our friends at [DeclareDesign](https://declaredesign.org/r/estimatr/articles/getting-started.html#lm_lin) have done all the work for us and created a function called `lm_lin()` that does everything automatically!
+:::
+
+## Estimating the second model
+
+:::{style="margin-top: 30px; font-size: 20px;"}
+
+:::{.columns}
+:::{.column width=65%}
+```{r}
+#| echo: true
+#| eval: true
+model2 <- lm_lin(interviews ~ treat,
+                covariates = ~ age + education,
+                data = data2)
+summary(model2)
+```
+:::
+
+:::{.column width=35%}
+- The `lm_lin()` function is similar to the `lm_robust()` function, but it includes the `covariates` argument
+- As you can see, the results are pretty similar to the previous model
+- The treatment effect is slightly higher, and the standard error is slightly smaller
+- The `_c` part of the variable names indicates that the variables are centred
+:::
+:::
+:::
+
+## Sub-group analysis
+
+:::{style="margin-top: 30px; font-size: 20px;"}
+:::{.columns}
+:::{.column width=35%}
+- We can also estimate the treatment effect for sub-groups of the population
+- This is useful when we suspect that the treatment effect may vary across known dimensions
+- For instance, we can estimate the treatment effect for people with high and low levels of education
+- We can do this by [including an interaction term between the treatment variable and the covariate of interest]{.alert}
+- [Interpretation]{.alert}: The treatment effect for the high-education subgroup (`high_edu = 1`) is 0.097 larger than for the low-education subgroup 
+- Total treatment effect for `high_edu = 1: 5.101 + 0.097 = 5.198` 
+:::
+
+:::{.column width=65%}
+```{r}
+#| echo: true
+#| eval: true
+# Create a binary subgroup (e.g., "high" vs. "low" education)
+data2$high_edu <- ifelse(data2$education > median(data2$education), 1, 0)
+
+# Fit an interaction model with covariates
+model_interaction <- lm_robust(
+  interviews ~ treat * high_edu + age + education,
+  data = data2)
+
+# Summarize results
+summary(model_interaction)
+```
+:::
+:::
+:::
+
+# Hypothesis Testing 👩🏻‍🔬 {background-color="#2d4563"}
+
+## What is a hypothesis test? 🤔
+
+:::{style="margin-top: 50px; font-size: 22px;"}
+:::{.columns}
+:::{.column width=50%}
+- A [hypothesis test]{.alert} is an evaluation of a particular hypothesis about the population distribution
+- Statistical thought experiments: 
+  - Assume we know (part of) the true DGP
+  - Use tools of probability to see what types of data we should see under this assumption 
+  - Compare our observed data to this thought experiment.
+- Statistical [proof by contradiction]{.alert}: 
+  - We assume the null hypothesis is true
+  - We calculate the probability of observing our data under this assumption
+  - If this probability is very low, we reject the null hypothesis
+:::
+
+:::{.column width=50%}
+- [Null hypothesis]{.alert} ($H_0$): A proposed value for a population parameter
+  - This is usually "no effect/difference/relationship"
+  - We denote this as $H_0: \theta = \theta_0$
+  - For instance, information about user ratings does not affect cancellation rates: $H_0: \mu_y - \mu_n = 0$
+- [Alternative hypothesis]{.alert} ($H_1$): A different value for the population parameter, which we are interested in
+  - This is usually "there is an effect"
+  - $H_1: \theta \neq \theta_0$
+  - For instance, information about user ratings does affect cancellation rates: $H_1: \mu_y - \mu_n \neq 0$
+- [Always mutually exclusive]{.alert}
+:::
+:::
+:::
+
+## General framework for hypothesis testing
+
+:::{style="margin-top: 50px; font-size: 23px;"}
+- A [hypothesis test]{.alert} chooses whether or not to reject the null hypothesis based on the data we observe.
+- Rejection based on a [test statistic]{.alert}, $T_n = T(Y_1, ..., Y_n)$
+    - Will help us adjudicate between the null and the alternative
+    - Typically: larger values of $T_n  → null$ less plausible
+
+- The [rejection region]{.alert}, $R$, contains the values of $T_n$ for which we reject the null.
+    - These are the areas that indicate that there is evidence against the null.
+- Two-sided alternative (our focus):
+    - $H_0 : \mu_y - \mu_x = 0$ and $H_a : \mu_y - \mu_x \neq 0$
+    - Implies that $T_n >> 0$ or $T_n << 0$ will be evidence against the null
+    - Rejection regions: $|T_n| > c$ for some value $c$
+- How to determine these regions?
+:::
+
+## Type I and Type II errors
+
+:::{style="margin-top: 50px; font-size: 20px;"}
+:::{.columns}
+:::{.column width=50%}
+- A [Type I]{.alert} error is when we reject the null hypothesis when it is in fact true 
+  - We say that information has no effect when it does
+  - A false discovery (very bad, thus type I)
+
+- A [Type II]{.alert} error is when we fail to reject the null hypothesis when it is false
+  - We say that information has an effect when it does not
+  - A missed opportunity (not as bad, thus type II)
+- The probability of a Type I error is denoted by $\alpha$
+- Choose a level of significance $\alpha$ 
+  - Convention in social sciences is $\alpha = 0.05$, but nothing magical there
+  - Particle physicists at CERN use $\alpha \approx \frac{1}{1,750,000}$
+  - Lower values of $\alpha$ guard against "flukes" but increase barriers to discovery
+:::
+
+:::{.column width=50%}
+:::{style="text-align: center; margin-top: -40px;"}
+![](figures/type-i-and-ii-error-2.png){width=90%}
+
+Source: [Scribbr](https://www.scribbr.com/statistics/type-i-and-type-ii-errors/)
+:::
+:::
+:::
+:::
+
+## Type I and Type II errors 😂
+
+:::{style="margin-top: 50px; font-size: 26px; text-align: center;"}
+![](figures/errors.jpg){width=70%}
+:::
+
+## Hypothesis testing steps
+
+:::{style="margin-top: 50px; font-size: 26px;"}
+1. Choose null and alternative hypotheses (e.g., $H_0 : \mu_y - \mu_x = 0$ vs. $H_a : \mu_y - \mu_x \neq 0$).
+2. Choose a test statistic (e.g., $T_n = \frac{\hat{D}_n}{se[\hat{D}_n]}$).
+3. Choose a significance level, $\alpha$ (e.g., $\alpha = 0.05$).
+4. Determine the rejection region (e.g., $|T_n| > 1.96$).
+5. Reject the null hypothesis if the test statistic falls within the rejection region; otherwise, fail to reject.
+:::
+
+## Rejection regions
+
+:::{style="margin-top: 50px; font-size: 22px;"}
+- The rejection region is determined by the critical values, $c$, which are defined by the significance level, $\alpha$
+
+:::{style="text-align: center;"}
+![](figures/region.png){width=70%}
+
+Source: [Blackwell (2016)](https://www.mattblackwell.org/files/teaching/gov2000/s06-hypothesis-tests-slides-print.pdf)
+:::
+:::
+
+## Average treatment effect (ATE) hypothesis testing
+
+:::{style="margin-top: 50px; font-size: 22px;"}
+:::{.columns}
+:::{.column width=50%}
+- We have already seen one way to test hypotheses using the potential outcomes framework
+  - We estimate the [average treatment effect (ATE)]{.alert} and see if the confidence interval includes zero
+- This is known as the [Jerzy Neyman approach]{.alert} to hypothesis testing
+- As potential outcomes are unobservable, we use the observed data to estimate the ATE after randomisation
+- Neyman had such a huge impact of experimental methods that many scholars call the potential outcomes framework [the Neyman-Rubin model]{.alert}. 
+  - See [here](https://doi.org/10.1093/oxfordhb/9780199286546.003.0011) for more details, and [here](https://projecteuclid.org/journals/statistical-science/volume-5/issue-4/On-the-Application-of-Probability-Theory-to-Agricultural-Experiments-Essay/10.1214/ss/1177012032.full) for a paper by Rubin on the importance of Neyman's work
+:::
+
+:::{.column width=50%}
+:::{style="text-align: center; margin-top: -40px;"}
+![](figures/neyman.jpeg){width=90%}
+:::
+:::
+:::
+:::
+
+## Sharp null hypothesis 🧐
+
+:::{style="margin-top: 50px; font-size: 22px;"}
+:::{.columns}
+:::{.column width=50%}
+- But there is another interesting way to test hypotheses!
+- The [sharp null hypothesis]{.alert} is a hypothesis that is true for all units in the population
+  - For instance, "everyone in the population has the same potential outcome under treatment and control"
+  - This is a very strong assumption, but it is useful for testing the average treatment effect
+  - It is also known as the [Ronald Fisher approach]{.alert} to hypothesis testing
+- It is based on $p$-values and sampling distributions
+- For a comprehensive discussion of the sharp null hypothesis, see [Imbens and Rubin (2015)](https://www.cambridge.org/core/books/abs/causal-inference-for-statistics-social-and-biomedical-sciences/fishers-exact-pvalues-for-completely-randomized-experiments/23AF990D2EF9C90D0A424D555FACE578)
+- Let's see how it works! 😊
+:::
+
+:::{.column width=50%}
+:::{style="text-align: center; margin-top: -40px;"}
+![](figures/fisher.jpg){width=70%}
+:::
+:::
+:::
+:::
+
+## Hypothesis testing with the sharp null hypothesis
+### Randomisation inference
+
+:::{style="margin-top: 50px; font-size: 22px;"}
+:::{.columns}
+:::{.column width=50%}
+- [Sampling variability]{.alert} is a crucial topic in experimental design and analysis
+- A single experiment provides just [one of many possible datasets]{.alert} generated by random assignment
+- The estimate of the average treatment effect can vary [substantially]{.alert} depending on the random assignment
+- The [sampling distribution]{.alert} (or [randomisation distribution]{.alert}) refers to the collection of estimates from every possible random assignment
+- This hypothesis testing approach is [broadly applicable]{.alert}, not limited by sample size or outcome distribution, and can be used with counts, durations, or ranks
+:::
+
+:::{.column width=50%}
+- In theory, this calculation can be done for any experiment size, but the number of possible random assignments becomes very large as $N$ increases
+- For example, an experiment with $N = 50$ and half assigned to treatment has more than [126 trillion randomisations]{.alert} 😮
+  - $\frac{50!}{25! \times 25!} = 126,410,606,437,752$
+- But we can approximate the sampling distribution by sampling from all possible random assignments
+- Calculating p-values based on an inventory of possible randomisations is called [randomisation inference]{.alert}
+:::
+:::
+:::
+
+## Randomisation inference in R
+
+:::{style="margin-top: 50px; font-size: 26px;"}
+- [There is an R package for that!]{.alert} 😊
+- The `ri2` package provides tools for randomisation inference, and it was made by the same people who created the `estimatr` package
+- You can find more information about the package [here](https://alexandercoppock.com/ri2/)
+- Just install it with `install.packages("ri2")` and load it with `library(ri2)`
+- The package supports all the randomisation procedures that can be described by the `randomizr` package
+- Let's see how it works!
+- Another package that I found useful (and broadly similar to `ri2`) is the `ritest` package, available on GitHub: <https://github.com/grantmcdermott/ritest>
+:::
+
+## Example 
+### Do female council heads allocate more resources to water sanitation?
+
+:::{style="margin-top: 50px; font-size: 22px;"}
+- Gerber and Green (2012) describe a hypothetical experiment in which 2 of 7 villages are assigned a female council head and the outcome is the share of the local budget allocated to water sanitation
+- Their table 2.2 describes one way the experiment could have come out
+
+```{r}
+#| echo: true
+#| eval: true
+library(ri2)
+library(estimatr)
+
+# Create the data
+table_2_2 <- data.frame(T = c(1, 0, 0, 0, 0, 0, 1),
+                        Y = c(15, 15, 20, 20, 10, 15, 30))
+
+summary(lm_robust(Y ~ T, data = table_2_2))
+```
+:::
+
+## Randomisation inference
+
+:::{style="margin-top: 50px; font-size: 22px;"}
+:::{.columns}
+:::{.column width=45%}
+```{r}
+#| echo: true
+#| eval: true
+# Declare randomisation procedure
+declaration <- declare_ra(N = 7, m = 2)
+
+# Conduct Randomisation Inference
+ri2_out <- conduct_ri(
+  formula = Y ~ T,
+  assignment = "T",
+  declaration = declaration,
+  sharp_hypothesis = 0,
+  data = table_2_2,
+  sims = 1000
+)
+
+summary(ri2_out)
+```
+:::
+
+:::{.column width=55%}
+```{r}
+#| echo: true
+#| eval: true
+plot(ri2_out)
+```
+:::
+:::
+:::
+
+## Another example!
+### Effect of not having a runoff in sub-Sarahan Africa
+
+:::{style="margin-top: 50px; font-size: 21px;"}
+:::{.columns}
+:::{.column width=45%}
+- The data to the right, from [Glynn and Ichino (2015)](https://onlinelibrary.wiley.com/doi/abs/10.1111/ajps.12154), examines the relationship between the absence of a runoff election ($A_i = 1$) and harassment of opposition parties ($Y_i$).
+- Data was collected from 10 sub-Saharan African countries
+- The study suggests that without runoff elections, incumbents can win with a simple plurality, reducing their need to court smaller parties
+- This creates incentives to suppress turnout through intimidation
+- Conversely, with a runoff ($A_i = 0$), incumbents need broader support and are more likely to engage smaller parties rather than intimidate them
+:::
+
+:::{.column width=55%}
+:::{style="text-align: center; font-size: 23px;"}
+
+| Unit                     | $Y_i(0)$ | $Y_i(1)$ | $A_i$ | $Y_i$ |
+|--------------------------|----------|----------|-------|-------|
+| Cameroon                 | ?        | 1        | 1     | 1     |
+| Kenya                    | ?        | 1        | 1     | 1     |
+| Malawi                   | ?        | 1        | 1     | 1     |
+| Nigeria                  | ?        | 1        | 1     | 1     |
+| Tanzania                 | ?        | 0        | 1     | 0     |
+| Congo                    | 0        | ?        | 0     | 0     |
+| Madagascar               | 0        | ?        | 0     | 0     |
+| Central African Republic | 0        | ?        | 0     | 0     |
+| Ghana                    | 0        | ?        | 0     | 0     |
+| Guinea-Bissau            | 0        | ?        | 0     | 0     |
+
+Source: [Blackwell (2013)](https://www.mattblackwell.org/files/teaching/s05-fisher.pdf)
+:::
+:::
+:::
+:::
+
+## Sharp null hypothesis
+
+:::{style="margin-top: 50px; font-size: 22px;"}
+:::{.columns}
+:::{.column width=40%}
+
+| Unit                     | $Y_i(0)$ | $Y_i(1)$ | $A_i$ | $Y_i$ |
+|--------------------------|----------|----------|-------|-------|
+| Cameroon                 | 1        | 1        | 1     | 1     |
+| Kenya                    | 1        | 1        | 1     | 1     |
+| Malawi                   | 1        | 1        | 1     | 1     |
+| Nigeria                  | 1        | 1        | 1     | 1     |
+| Tanzania                 | 0        | 0        | 1     | 0     |
+| Congo                    | 0        | 0        | 0     | 0     |
+| Madagascar               | 0        | 0        | 0     | 0     |
+| Central African Republic | 0        | 0        | 0     | 0     |
+| Ghana                    | 0        | 0        | 0     | 0     |
+| Guinea-Bissau            | 0        | 0        | 0     | 0     |
+:::
+
+:::{.column width=60%}
+```{r}
+#| echo: true
+#| eval: true
+gi_data <- data.frame(Y = c(1, 1, 1, 1, 0, 0, 0, 0, 0, 0),
+                      A = c(1, 1, 1, 1, 1, 0, 0, 0, 0, 0))
+
+declaration <- declare_ra(N = 10, m = 5) 
+
+ri2_out <- conduct_ri(
+  formula = Y ~ A,
+  assignment = "A",
+  declaration = declaration,
+  sharp_hypothesis = 0,
+  data = gi_data,
+  sims = 1000
+)
+
+summary(ri2_out)
+```
+:::
+:::
+:::
+
+# So far, so good? 😃 {background-color="#2d4563"}
+
+# Let's discuss a real experiment! 🤓 {background-color="#2d4563"}
+
+## Bottom-up accountability and public service provision: Evidence from a field experiment in Brazil
+### By yours truly! 😊 <https://doi.org/10.1177/2053168020914444>
+
+:::{style="margin-top: 50px; font-size: 22px; text-align: center;"}
+![](figures/paper.png){width=85%}
+:::
+
+## Outline of the paper: Introduction
+### Based on the [EGAP Research Design Form](https://danilofreire.github.io/qtm385/design-form.html)
+
+:::{style="margin-top: 50px; font-size: 19px;"}
+:::{.columns}
+:::{.column width=50%}
+- [Researcher name]{.alert}: Danilo Freire, Manoel Galdino, and Umberto Mignozzetti
+- [Research project title]{.alert}: Bottom-up accountability and public service provision: Evidence from a field experiment in Brazil
+- [One sentence summary of your specific research question]{.alert}: Does a mobile phone application that enables citizen monitoring of school construction projects improve public service delivery?
+- [General motivation]{.alert}: Accountability systems are crucial for efficient public service provision, and there is a belief that bottom-up monitoring can help with the principal-agent dilemma
+- [Why should someone who is not an academic care about the results of this research?]{.alert}: How technology can help citizens ensure government accountability in young democracies
+:::
+
+:::{.column width=50%}
+- [Theoretical motivation]{.alert}: Debate between studies showing the positive impacts of information-based interventions and those that find little evidence
+- [Primary hypotheses]{.alert}:
+    - [Key parameter/estimands]{.alert}: The key parameters/estimands are the impacts of the TDP app on: (1) percentage of project completed; (2) difference in completion before and after intervention; (3) if the construction is finished; (4) if the construction is canceled; and (5) number of updated dates.
+    - [Predicted sign/magnitude]{.alert}: The primary hypothesis is that the TDP app will have a positive effect on (1), (2), (3), and (5) leading to higher completion rates. Conversely, the app will have a negative effect on (4) leading to less cancelations.
+    - [Logic or theory of change]{.alert}: Providing citizens with information about school construction projects empowers them to pressure officials, leading to faster and better completion.
+:::
+:::
+:::
+
+## Outline of the paper: Introduction
+### Based on the [EGAP Research Design Form](https://danilofreire.github.io/qtm385/design-form.html)
+
+:::{style="margin-top: 50px; font-size: 23px;"}
+- [Alternative explanations if results are consistent with hypotheses]{.alert}:
+  - [Alternative theories]{.alert}: Increased community engagement and public awareness, that generates other forms of engagement and pressuring. Increased media coverage of school construction could coincide with the programme
+
+- [Hypothesis for alternative outcome]{.alert}: With an increase in media attention regarding public works, we would expect an overall improvement in public services, not a change that is specific to the treatment group.
+
+- [Alternative explanations if results are inconsistent with hypotheses]{.alert}:
+  - [Alternative theories]{.alert}: Difficulties in differentiating political corruption from budget issues; the lack of political pressure; the lack of trust in representatives
+  - [Hypothesis for alternative outcome]{.alert}: Citizens may not trust their representatives and think the problems are related to austerity instead of corruption
+:::
+
+## Section 2: Population and Sample
+
+:::{style="margin-top: 50px; font-size: 20px;"}
+-   [Population of interest]{.alert}: Brazilian municipalities & citizens; school construction projects.
+-   [Where and when]{.alert}: Brazil; Intervention 1: Aug 2017-July 2018; Intervention 2: Aug 2018-July 2019.
+-   [Context match?]{.alert}: Matches, but economic crisis & electoral cycle are specific conditions.
+-   [Sample size]{.alert}:
+    -   Intervention 1: 344 control, 2642 treatment municipalities.
+    -   Intervention 2: 659 control, 3717 treatment schools.
+-   [Sample selection]{.alert}:
+    -   Intervention 1: Random assignment of municipalities.
+    -   Intervention 2: Random assignment of schools, stratified by state, construction status, spending.
+-  [Consent]{.alert}
+     - [Obtained?]{.alert}: No. App use was voluntary, data focused on public works.
+     - [Vulnerable population?]{.alert}: No coercion risk; participation was voluntary.
+-  [Ethics]{.alert}:
+     -  [Power sufficient?]{.alert}: Yes. Sample size provides power to detect plausible effects.
+     -  [Size necessary?]{.alert}: Yes. Sample was determined by power analysis, not unnecessarily large.
+     - [Risk of targeting?]{.alert}: No. Results inform general policy, not targeted at individuals.
+:::
+
+## Section 3: Intervention
+
+:::{style="margin-top: 50px; font-size: 19px;"}
+:::{.columns}
+:::{.column width=50%}
+-   [Status Quo]{.alert}:
+    -   School construction projects in Brazil often face delays.
+    -   No prior system for citizens to directly report problems and pressure authorities in this way.
+-   [Intervention]{.alert}:
+    -   Mobile app (Tá de Pé - TDP) enabling citizens to monitor school construction sites.
+    -   Features: submit photos, check status, send requests to mayor's offices.
+-   [Control]{.alert}:
+    -   Intervention 1: No access to TDP app in control municipalities.
+    -   Intervention 2: No access to TDP app at control schools.
+    -   Pure control (no intervention); controls for external factors and placebo effects associated to knowing about the existance of the app.
+:::
+
+:::{.column width=50%}
+-   [Units]{.alert}:
+    -   Intervention 1: Municipality level.
+    -   Intervention 2: School level.
+    -   Outcomes measured at the same level (municipality and school, respectively).
+-   [Compliance]{.alert}:
+    -   "Taking" the intervention means the municipality/school had access to the app.
+    -   Compliance is whether the app was accessible, not level of engagement.
+-   [Non-Compliance]{.alert}:
+    -   Potential for users in control group to download the app, but data analysis accounts for this.
+    -   No concern about those in treatment group not using the app as participation is voluntary.
+-   [Ethics]{.alert}:
+    -   Control is status quo, so no worse than current conditions.
+    -   No coercion as app is voluntary.
+:::
+:::
+:::
+
+## Section 3: Intervention
+
+:::{style="margin-top: 50px; font-size: 19px; text-align: center;"}
+![](figures/tdp.png){width=85%}
+:::
+
+## Section 3: Intervention
+
+:::{style="margin-top: 50px; font-size: 19px; text-align: center;"}
+![](figures/manipulation.png){width=85%}
+:::
+
+## Section 4: Outcomes and Covariates
+
+:::{style="margin-top: 50px; font-size: 19px;"}
+:::{.columns}
+:::{.column width=50%}
+-   [Primary Outcome]{.alert}: Completion status of school construction projects.
+-   [Measurement]{.alert}:
+    -   Percentage of project completed (continuous).
+    -   Difference in completion before/after intervention (continuous).
+    -   Finished construction (binary).
+    -   Cancelled construction (binary).
+    -   Number of updated completion dates by firms (count).
+    -   Data comes from the Ministry of Education's SIMEC platform, and was accessed via their API.
+-   [Priors]{.alert}: Prior studies showed variation in project completion rates, with delays common.
+:::
+
+:::{.column width=50%}
+-   [Validity and measurement error]{.alert}:
+    -   Data is based on official government records, reducing untruthful reporting concerns.
+    -   Potential for time lags in updating information, but not a major concern for the study design.
+-   [Covariates]{.alert}:
+    -   Municipal population, poverty, federal transfers, primary and secondary school quality.
+    -   Data is from the Brazilian Ministry of Education and the Brazilian Census.
+    -   No additional outcomes or covariates collected to distinguish between explanations and alternatives; however, the randomization at the municipality/school level is designed to account for these biases.
+-   [Ethics]{.alert}:
+    -   Data collection from SIMEC data is minimal in burden and has clear benefits for public policy and accountability.
+:::
+:::
+:::
+
+## Section 5: Randomisation
+
+:::{style="margin-top: 50px; font-size: 23px;"}
+-   [Randomisation strategy]{.alert}:
+    -   Intervention 1: Cluster randomisation at the municipal level.
+    -   Intervention 2: Blocked randomisation at the school level.
+-   [Blocks]{.alert}:
+    -   Intervention 1: No blocks.
+    -   Intervention 2: Blocks created based on the strata (Brazilian states, construction status, and municipal spending median).
+-   [Clusters]{.alert}:
+    -   Intervention 1: Clusters are municipalities. 344 control clusters and 2642 treatment clusters.
+    -   Intervention 2: Not clustered.
+    -   Randomising at the individual level was not feasible.
+:::
+
+
+## Section 6: Analysis
+
+:::{style="margin-top: 50px; font-size: 21px;"}
+-   [Estimator]{.alert}:
+    -   Linear Regression Model with a treatment indicator and control variables.
+-   [Standard Errors]{.alert}:
+    -   Cluster-robust standard errors at the municipality level for intervention 1.
+    -   Cluster-robust standard errors at the school level for intervention 2.
+-   [Test]{.alert}:
+    -   Randomisation Inference tests are employed in addition to standard t-tests for p-values
+-   [Missing Data]{.alert}:
+    -   Missing data is not a significant concern.
+-   [Effect size]{.alert}:
+    -   Expected effect size is based on prior studies and theoretical expectations.
+    -   Minimum effect sizes are not determined a priori.
+     - Similar studies had mixed effect sizes.
+- [Power]{.alert}:
+    - Sample sizes were chosen to detect effect sizes that are likely to have practical implications on policy.
+:::
+
+
+## Section 6: Analysis
+
+:::{style="margin-top: 50px; font-size: 19px; text-align: center;"}
+![](figures/models.png){width=85%}
+:::
+
+## Section 7: Implementation
+
+:::{style="margin-top: 50px; font-size: 21px;"}
+-   [Randomisation]{.alert}:
+    -   Randomisation was conducted on a computer.
+-   [Implementation]{.alert}:
+    -   Transparência Brasil implemented the intervention by creating the app and by making it available in a subset of municipalities/schools.
+    -   No direct dangers to the research team or enumerators, as all data was collected through APIs and public databases.
+    -   Implementation was tracked via app downloads and user sessions.
+-  [Compliance]{.alert}:
+     - Compliance measured by analysing whether the app was available for use in a given location.
+     - All compliance data came from the app store and from usage logs.
+-   [Data management]{.alert}:
+    -   Data was stored securely on cloud servers.
+    -   Data was anonymised by using city/school identification and not user's information.
+    -   Publicly available data was collected directly via APIs or downloaded directly from the ministry's site.
+:::
+
+## Results
+
+:::{style="margin-top: 50px; font-size: 21px; text-align: center;"}
+![](figures/results01.png){width=85%}
+:::
+
+## Results
+
+:::{style="margin-top: 50px; font-size: 21px; text-align: center;"}
+![](figures/results02.png){width=85%}
+:::
+
+## Randomisation inference! 🤓
+
+:::{style="margin-top: 50px; font-size: 21px; text-align: center;"}
+![](figures/results03.png){width=85%}
+:::
+
+# ...and that's it! 😊 {background-color="#2d4563"}
+
+# Thank you, and see you soon! 🙏🏼 {background-color="#2d4563"}
