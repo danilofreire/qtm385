@@ -61,6 +61,7 @@ editor:
 - Different types of selection bias, e.g.:
   - Inappropriate controls
   - Loss to follow-up
+  - Attrition bias
   - Survivorship bias
   - Post-treatment bias
 - How to use `R` and `DeclareDesign` to estimate regression models
@@ -104,7 +105,7 @@ Source: [xkcd](https://xkcd.com/2618/) (where else? 😄)
 :::{style="margin-top: 30px; font-size: 21px;"}
 :::{.columns}
 :::{.column width=50%}
-- [Selection bias]{.alert} occurs when the groups are different even without treatment
+- [Selection bias]{.alert} occurs when the groups are systematically difference, often before the treatment (but not exclusively!)
 - Using an example from Angrist and Pischke (2021), let's say we have a student called [Khuzdar]{.alert} from Kazakhstan, who is considering studying in the US and is worried about the cold weather
 - Should he get health insurance? 🤔
 - Let's imagine that, without insurance, Khuzdar has a potential outcome of $Y_{0,i} = 3$ and, with insurance, $Y_{1,i} = 4$. So the treatment effect is $\tau_i = 1$, that is, he gains 1 "health point" by getting insurance
@@ -247,31 +248,44 @@ Angrist and Pischke (2021), pp. 20 (selected parts)
 :::
 :::
 
+## Attrition bias
+### Closely related to losses to follow-up
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- [Attrition bias]{.alert} is a type of selection bias that occurs when individuals drop out of a study in a way that is related to the treatment or outcome
+- It is [more systematic]{.alert} than losses to follow-up, which can happen by chance (e.g., disengagement, relocation, or other factors, leading to incomplete data)
+- For example, in a clinical trial, if participants experiencing side effects disproportionately drop out of the treatment group compared to the placebo group, this difference introduces attrition bias
+- In short, attrition bias specifically addresses the bias that arises when these [departures are non-random]{.alert}
+- As with losses to follow-up, this is a type of selection bias [than can be caused by the experiment itself]{.alert}, not only by pre-existing differences between groups
+:::
+
 ## Survivorship bias
 
-:::{style="margin-top: 30px; font-size: 26px;"}
+:::{style="margin-top: 30px; font-size: 24px;"}
 - In my view, one of the coolest examples of selection bias
 - [Survivorship bias]{.alert} is the logical error of concentrating on the people or things that made it past some selection process and overlooking those that did not
-- It is a type of [selection bias]{.alert} that can lead to [false conclusions]{.alert} in several different ways
+- It is also [closely related to attrition bias and follow up bias]{.alertt} (more mentioned in observational data)
+  - Attrition bias emphasises [the process of losing data]{.alert}, while survivorship bias highlights [the exclusion of failures in analysis]{.alert}
 - For instance, imagine that you are studying the [effect of education on income]{.alert}
 - If you only look at people who have completed college, you are ignoring those who dropped out
 - This can lead to an [overestimation]{.alert} of the effect of education on income
 - Why? Because those who dropped out may have done so because they were not good students, which can affect their income
-- And there are many other examples of survivorship bias, such as in [historical studies]{.alert} and [finance]{.alert}
-- Have a look at this one!
+- Have a look at this example (you may have seen it before!)
 :::
-
 ## Survivorship bias in World War II aircraft
-
-:::{style="margin-top: 30px; font-size: 26px;"}
+:::{style="margin-top: 30px; font-size: 23px;"}
 :::{.columns}
 :::{.column width=50%}
 - During World War II, the US military wanted to [improve the armour on its aircraft]{.alert}
 - They analysed the [bullet holes]{.alert} on returning aircraft and decided to add more armour to the areas with the most bullet holes
 - Considering the picture you see here, where would you add the armour?
 - More [here](https://en.wikipedia.org/wiki/Survivorship_bias#Military)
-:::
 
+:::{style="text-align: margin-top: 10px;"}
+:::
+- Another example: Imagine you are studying mutual fund performance, and you only look at funds that are still in operation. You see that they beat the S&P 500 by 2% per year
+- What's the problem here?
+:::
 :::{.column width=50%}
 :::{style="text-align: center;"}
 ![](figures/aircraft.png){width=80%}
@@ -625,12 +639,16 @@ head(data2)
 
 ## Estimating the second model
 
-:::{style="margin-top: 30px; font-size: 26px;"}
-- While it is common to add covariates to the model, [Freedman (2008)](https://doi.org/10.1214/07-AOAS143) demonstrated that pre-treatment covariate adjustment may bias estimates of average treatment effects in small samples
-- Why? To put it simply, he claims that [experiments simply do not need covariates]{.alert}
-- This is because OLS models assume linear effects and normal distributions, while experiments do not
-- [Lin (2013)](https://doi.org/10.1214/12-AOAS583) came up with a solution that involves a series of data transformations to make the covariates orthogonal to the treatment variable
-- He also argues that this bias is pretty much negligible in large samples
+:::{style="margin-top: 30px; font-size: 23px;"}
+- We can add covariates to experimental models to increase precision
+- The same way we do in any regression:
+  - $Y_i = \alpha + \beta \text{T}_i + \gamma \text{X}_i + \epsilon_i$
+- [Freedman (2008)](https://doi.org/10.1214/07-AOAS143) demonstrated that pre-treatment covariate adjustment may bias estimates of average treatment effects, mainly in small samples
+- [Lin (2013)](https://doi.org/10.1214/12-AOAS583) proposed that if covariate correlations differ between treatment and control groups, centering and interacting covariates with the treatment variable will balance the groups
+- This adjusts for covariates separately in each group, which is equivalent to including treatment-by-covariate interactions
+  - $Y_i = \alpha + \beta \text{T}_i + \gamma \text{W}_i + \delta \text{T}_i \times \text{W}_i + \epsilon_i$
+  - Where $W_i = \text{X}_i - \bar{\text{X}}$ and $\bar{\text{X}}$ is the mean of $\text{X}_i$
+  - For ease of interpretation, we can centre the covariates to have a mean of zero
 - Anyway, worry not! 😅 Our friends at [DeclareDesign](https://declaredesign.org/r/estimatr/articles/getting-started.html#lm_lin) have done all the work for us and created a function called `lm_lin()` that does everything automatically!
 :::
 
@@ -655,8 +673,8 @@ summary(model2)
 - We pass a simple `R` formula to it
 - As you can see, the results are pretty similar to the previous model
 - The treatment effect is slightly higher, and the standard error is slightly lower
-- The `_c` part of the variable names indicates that the variables are centred, which is recommended by Lin (2013)
-- He proposed centring all pre-treatment covariates, interacting them with the treatment variable, and regressing the outcome on the treatment, the centred pre-treatment covariates, and all of the interaction terms (😅)
+- The `_c` part of the variable names indicates that the variables are centred, as recommended by Lin (2013).
+- Lin's method addresses covariate imbalance by adjusting for covariates separately within each treatment group, which is equivalent to including all treatment-by-covariate interactions.
 :::
 :::
 :::
@@ -735,7 +753,7 @@ summary(model_interaction)
 :::{.columns}
 :::{.column width=60%}
 - We discussed the potential outcomes framework in further detail, focusing on issues of selection bias
-- We talked about different types of selection bias, such as inappropriate controls, loss to follow-up, survivorship bias, and counfounders
+- We talked about different types of selection bias, such as inappropriate controls, loss to follow-up, attrition bias, survivorship bias, and counfounders
 - We also discussed how to measure variability using the standard deviation and standard error
 - Then, we talked about regression analysis of experiments, including how to simulate data, randomise treatment assignment, estimate the treatment effect, and include pre-treatment covariates in the model
 - We also introduced the `fabricatr`, `estimatr`, and `randomizr` packages, which are part of the `DeclareDesign` suite

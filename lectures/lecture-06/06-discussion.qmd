@@ -1,0 +1,718 @@
+---
+title: QTM 385 - Experimental Methods
+subtitle: Lecture 06 - Texts for Discussion and More
+author:
+  - name: Danilo Freire
+    email: danilo.freire@emory.edu
+    affiliations: Emory University
+format:
+  clean-revealjs:
+    self-contained: true
+    code-overflow: wrap
+    footer: "[Discussion](https://raw.githack.com/danilofreire/qtm385/main/lectures/lecture-06/06-discussion.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: knitr
+revealjs-plugins:
+  - multimodal
+editor:
+  render-on-save: true
+---
+
+# Hi, there! 👋 <br> Tudo bem? 😄🇧🇷 {background-color="#2d4563"}
+
+# Brief recap 📚 {background-color="#2d4563"}
+
+## Last time, we...
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- Covered adding [covariates]{.alert} with `lm_lin()`, [centring]{.alert}, and sub-group analysis with [interaction terms]{.alert} using `lm_robust`.
+- Compared the [Neyman-Rubin model]{.alert} (ATE) with the Fisherian model (sharp null hypothesis)
+- Talked about [type I and type II errors]{.alert} 
+- Discussed [sampling variability]{.alert}, how it relates to sampling distributions, and how it affects the interpretation of experimental estimates
+- Introduced [randomisation inference]{.alert} with the `ri2` package, which uses the `randomizr` package
+- Demonstrated RI with two examples, including one about [female council heads]{.alert} and the other about [runoff elections]{.alert}
+- [Real Experiment]{.alert}: Analysed a paper using linear regression models as well as Randomisation Inference
+:::
+
+## Today, we will...
+:::{style="margin-top: 50px; font-size: 24px;"}
+- Talk a bit about `R` and the packages we have seen so far
+- Discuss the next steps of your pre-analysis plan and the final project
+- Discuss three papers 
+  - Kalla, J. & Broockman, D. (2015). [Campaign Contributions Facilitate Access to Congressional Officials: A Randomized Field Experiment](https://onlinelibrary.wiley.com/doi/full/10.1111/ajps.12180). American Journal of Political Science, 60(3): 545–558
+  - Bertrand, M., & Mullainathan, S. (2004). [Are Emily and Greg more employable than Lakisha and Jamal? A field experiment on labor market discrimination](https://www.aeaweb.org/articles?id=10.1257%2F0002828042002561&ref=exo-insight). American economic review, 94(4), 991-1013.
+  - Chattopadhyay, R., & Duflo, E. (2004). [Women as policy makers: Evidence from a randomized policy experiment in India](https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1468-0262.2004.00539.x). Econometrica, 72(5), 1409-1443.
+- [But first...]{.alert}, let's talk about your group work
+:::
+
+## Group Work 🤝
+### What I have in mind...
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- Now that you have your groups, I'd like you to start working on your pre-analysis plan
+- I'll give you some time to discuss your ideas and start writing your plan
+- My plan is that you should slowly think about your final project, one step at a time
+- What do you think about having two weeks to write the following:
+  - Submit at most 2 paragraphs summarising an experiment that you want to develop in this course. At minimum, your summary should include a research question, why the question is important, and a rough sketch of how you plan to answer the question.
+- In three weeks:
+  - Write a title and abstract for a paper you imagine writing based on your proposed experiment. Assume that your findings align with your theoretical predictions. Remember to establish why the findings matter for your intended audience.
+- In four weeks:
+  - Outline your pre-analysis plan. Your outline should include sections on the research question, the experimental design, the data you will collect, and the analysis you will conduct. 
+:::
+
+## What I have in mind...
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+- In five weeks:
+  - Use `Quarto` and `DeclareDesign` to write your report and simulate your experiment
+- In six weeks:
+  - Revised outline, now including a new section titled "Potential Threats." In this section, diagnose threats and briefly describe potential countermeasures. This new section should discuss false positives, statistical power, demand effects, noncompliance, spillover, and attrition.
+- In seven weeks:
+  - Revised outline, now included a new section on "Heterogeneous Treatment Effects." In this section, discuss how you might explore heterogeneity in treatment effects. This section should include a discussion of how you might use covariates to explore heterogeneity.
+- In eight weeks:
+  - I will give you feedback on your outline and provide you with the simulated data for your experiment.
+  - You will have two weeks to write your final report.
+- Last week of class:
+  - You will present your findings to the class.
+:::
+
+# R packages 📦 {background-color="#2d4563"}
+
+## `fabricatr`: Simulating data for experiments
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- `fabricatr` is a very useful package!
+- You guys have no idea how much time (and money) it has saved me 😅
+- It is straightforward to use and has _a bunch_ of functions
+- They even have a tutorial showing how to [create common social science data structures](https://declaredesign.org/r/fabricatr/articles/common_social.html)
+- So I recommend you to check it out and play around with it 😉
+- The source code is available at <https://github.com/DeclareDesign/fabricatr>
+:::
+
+## `fabricatr`: Simulating data for experiments
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+```{r}
+#| echo: TRUE
+#| eval: TRUE 
+library(fabricatr)
+
+voters <- fabricate(
+  N = 1000,
+  group_id = rep(1:10, 100),
+  ideology = draw_normal_icc(mean = 0, N = N, clusters = group_id, ICC = 0.7),
+  ideological_label = draw_ordered(
+    x = ideology,
+    break_labels = c("Very Conservative", "Conservative", "Liberal", "Very Liberal")
+  ),
+  Q1_immigration = draw_likert(x = ideology, min = -5, max = 5, bins = 7),
+  Q2_defence = draw_likert(x = ideology + 0.5, min = -5, max = 5, bins = 7),
+  treatment = draw_binary(0.5, N = N),
+  proposition_vote = draw_binary(latent = ideology + 1.2 * treatment, link = "probit")
+)
+
+head(voters)
+```
+:::
+
+## `randomizr`: Randomisation for experiments
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- `randomizr` is another package that I use a lot
+- It is the easiest way to randomise your treatment assignment
+- It also has all types of randomisation we use in experiments
+  - [Simple randomisation]{.alert} with `simple_ra()`
+  - [Complete randomisation]{.alert} with `complete_ra()`
+  - [Block randomisation]{.alert} with `block_ra()`
+  - [Cluster randomisation]{.alert} with `cluster_ra()`
+  - [Block and cluster randomisation]{.alert} with `block_and_cluster_ra()`
+- The source code is available at <https://github.com/DeclareDesign/randomizr/>
+:::
+
+## `randomizr`: Randomisation for experiments
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+:::{.columns}
+:::{.column width="40%"}
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+library(randomizr)
+
+N <- 100
+Z <- complete_ra(N = N, num_arms = 2)
+head(Z)
+```
+:::
+
+:::{.column width="60%"}
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+# This makes a cluster variable: one unit in cluster "a", two in "b"...
+clust_var <- rep(letters[1:15], times = 1:15)
+
+Z <- cluster_ra(
+  clusters = clust_var,
+  m_each = c(4, 4, 7),
+  conditions = c("control", "placebo", "treatment")
+  )
+table(Z, clust_var)
+```
+:::
+:::
+:::
+
+## `estimatr`: Estimating treatment effects
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- We have already seen `estimatr` in action
+- The package is particularly useful to estimate linear models with robust standard errors
+  - Economists use OLS for _everything_ 😅
+- But you can also use it to estimate instrumental variables models, difference-in-differences, and more
+- `estimatr` integrates well with the [tidyverse](https://www.tidyverse.org/), so you can use it with `dplyr`, `ggplot2`, and other packages
+- Source code: <https://github.com/DeclareDesign/estimatr>
+:::
+
+## `estimatr`: Estimating treatment effects
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+library(estimatr)
+fit <- lm_robust(Fertility ~ Agriculture + Catholic, data = swiss)
+tidy(fit)
+```
+:::
+
+## `estimatr`: `ggplot2` integration
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+:::{.columns}
+:::{.column width="50%"}
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+library(ggplot2)
+ggplot(swiss, aes(x = Agriculture, y = Fertility)) +
+  geom_point() +
+  geom_smooth(method = "lm_robust") +
+  theme_bw()
+```
+:::
+
+:::{.column width="50%"}
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+library(dplyr)
+fit %>% 
+  tidy %>% 
+  filter(term != "(Intercept)") %>%
+  ggplot(aes(y = term, x = estimate)) + 
+  geom_vline(xintercept = 0, linetype = 2) + 
+  geom_point() + 
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high, height = 0.1)) + 
+  theme_bw()
+```
+:::
+:::
+:::
+
+## `ri2`: Randomisation inference
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+:::{.columns}
+:::{.column width="50%"}
+- The last package we have seen is `ri2`
+- Easy way to estimate sharp null hypothesis tests
+- Source code: <https://github.com/acoppock/ri2>
+
+```{r}
+#| echo: TRUE
+#| eval: FALSE
+library(ri2)
+N <- 100
+declaration <- declare_ra(N = N, m = 50)
+
+Z <- conduct_ra(declaration)
+X <- rnorm(N)
+Y <- .9 * X + .2 * Z + rnorm(N)
+dat <- data.frame(Y, X, Z)
+
+ri_out <-
+  conduct_ri(
+    formula = Y ~ Z,
+    declaration = declaration,
+    assignment = "Z",
+    sharp_hypothesis = 0,
+    data = dat
+  )
+summary(ri_out)
+plot(ri_out)
+```
+:::
+
+:::{.column width="50%"}
+```{r}
+#| echo: FALSE
+#| eval: TRUE
+library(ri2)
+N <- 100
+declaration <- declare_ra(N = N, m = 50)
+
+Z <- conduct_ra(declaration)
+X <- rnorm(N)
+Y <- .9 * X + .2 * Z + rnorm(N)
+dat <- data.frame(Y, X, Z)
+
+ri_out <-
+  conduct_ri(
+    formula = Y ~ Z,
+    declaration = declaration,
+    assignment = "Z",
+    sharp_hypothesis = 0,
+    data = dat
+  )
+
+summary(ri_out)
+plot(ri_out)
+```
+:::
+:::
+:::
+
+# Questions? 😉 {background-color="#2d4563"}
+
+# Papers for Discussion 📚 {background-color="#2d4563"}
+
+## Kalla, J. & D. Broockman. 2015 
+### [Campaign Contributions Facilitate Access to Congressional Officials: A Randomized Field Experiment](https://onlinelibrary.wiley.com/doi/full/10.1111/ajps.12180)
+
+:::{style="margin-top: 30px; font-size: 22px; text-align: center;"}
+![](figures/abstract-kalla.png){width=60%}
+
+
+[Article link](https://doi.org/10.1111/ajps.12180) and [replication data](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/28582)
+:::
+
+## Overview
+
+:::{style="margin-top: 30px; font-size: 20px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Overview]{.alert}
+  - Do campaign donations secure preferential treatment from policy makers?
+  - Challenge: It is hard to isolate the effect of donations on policymakers' behaviour
+  - First randomised field experiment on campaign contributions and access
+  - Do donations *facilitate access* to influential policy makers?
+
+- [The Experiment]{.alert}
+  - A political organisation tried to schedule meetings between congressional offices and their members (who were donors)
+  - The organisation randomly revealed to offices if attendees were donors
+  - Key finding: When informed attendees were donors, policymakers were available 3-4 times more often
+  - Underscores concerns about campaign finance deregulation
+:::
+
+:::{.column width="50%"}
+- [Why Should We Care?]{.alert}
+  - Political Inequality: Campaign donations may amplify the voices of the wealthy
+  - Policy Decisions: Understanding who has access informs how policies are made
+  - Democracy: This research is crucial for a more equitable political system
+
+- [Policy Relevance]{.alert}
+  - Campaign finance reform: Findings can inform debates about the necessity of these reforms
+  - Regulation: This study helps to clarify the relationship between campaign donations and access to power
+  - Supreme Court decisions: Results bear on recent deregulation (at the time)
+:::
+:::
+:::
+
+## Key Debates
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Key Questions]{.alert}
+  - Are campaign contributions a form of speech, or a form of exchange/contract?
+  - Does the 'marketplace of ideas' become skewed when one side is better funded?
+
+- [Primary Hypotheses]{.alert}
+  - The Core Idea: Revealing that prospective attendees are donors will increase the likelihood of meetings with senior officials.
+  - H1: Senior policy makers will make themselves available more often when they know that prospective attendees are political donors.
+  - H2: That knowing about donations matters more when scheduling meetings with higher level officials.
+:::
+
+:::{.column width="50%"}
+- [The Logic]{.alert}
+  - Access is a Resource: Policymakers' time is a finite and scarce resource
+  - Donors Signal Value: Donations can be perceived as signals of shared interests, expertise, or future support
+  - Potential for Reciprocity: Policymakers may see potential gains in meeting with those who have demonstrated political activity
+  - Conditional effects: The effect may be stronger when meetings are requested with the most senior staff
+  - More senior staff means more important political power
+:::
+:::
+:::
+
+## Intervention
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Intervention]{.alert}
+  - A grassroots political organisation attempts to schedule meetings with congressional offices
+  - Whether congressional offices are informed that attendees are political donors
+  - Control Condition: Offices are informed the meeting attendees are “local constituents"
+
+- [Outcome Measurement]{.alert}
+  - Primary Outcome: The seniority/level of the official who agreed to attend the meeting
+  - Rank Order: The access level was ranked from 1 (most desirable: member of Congress) to 6 (least desirable: no meeting)
+  - Data Collection:  The level of staff that agreed to the meeting was collected
+  - Meeting:  Attendees confirmed that the promised staffer attended the meeting
+:::
+
+:::{.column width="50%"}
+- [Random Assignment]{.alert}
+  - Blocking: The researchers blocked congressional offices into triplets based on factors that could be associated with legislative access (prior voting record, cosponsorship of the bill, years of service, ideology, local population)
+  - Randomisation: within the blocks, offices were randomly assigned to the 'donor revealed' condition.
+  - 191 congressional offices were contacted, 96 in the treatment group and 95 in the control group
+:::
+:::
+:::
+
+## Treatment
+
+:::{style="margin-top: 30px; font-size: 21px; text-align: center;"}
+![](figures/intervention-kalla.png){width=65%}
+:::
+
+## Follow-up
+
+:::{style="margin-top: 30px; font-size: 21px; text-align: center;"}
+![](figures/follow-up-kalla.png){width=65%}
+:::
+
+## Results
+
+:::{style="margin-top: 30px; font-size: 21px; text-align: center;"}
+![](figures/results-kalla.png){width=55%}
+:::
+
+## Results (cont.)
+
+:::{style="margin-top: 30px; font-size: 21px; text-align: center;"}
+![](figures/results-kalla2.png){width=65%}
+:::
+
+## Results (cont.)
+
+:::{style="margin-top: 30px; font-size: 21px; text-align: center;"}
+![](figures/results-kalla3.png){width=65%}
+:::
+
+## Discussion
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+- [Implications]{.alert}
+  - The study provides evidence that campaign donations can facilitate access to policymakers
+  - The findings underscore concerns about the influence of money in politics
+  - The results suggest that campaign finance reform may be necessary to ensure a more equitable political system
+- [Limitations]{.alert}
+  - Mechanisms: The exact reasons why legislators reacted to donations needs further study
+  - Causal Chain: The link between access and influence requires further investigation
+  - Generalisability: More studies with different actors, organisations and contexts are required
+:::
+
+# Bertrand and Mullainathan (2004) 🇺🇸 {background-color="#2d4563"}
+
+## Bertrand, M., & Mullainathan, S. (2004)
+### Are Emily and Greg More Employable than Lakisha and Jamal? A Field Experiment on Labor Market Discrimination
+
+:::{style="margin-top: 30px; font-size: 22px; text-align: center;"}
+![](figures/abstract-bertrand.png){width=100%}
+
+[Article link](https://www.aeaweb.org/articles?id=10.1257%2F0002828042002561&ref=exo-insight) and [replication data](http://doi.org/10.3886/E116023V1)
+:::
+
+## Overview
+
+:::{style="margin-top: 30px; font-size: 20px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Overview]{.alert}
+  - Research Question: Is there racial bias in callback rates for job interviews?
+  - Challenge: Difficult to isolate racial discrimination from other factors
+  - Method: A field experiment using fictitious resumes
+  - Manipulation: Randomly assigned names to signal race (White vs. African-American)
+
+- [The Experiment]{.alert}
+  - Fictitious Resumes: Sent to real job ads in Boston and Chicago
+  - Name Manipulation: Resumes randomly assigned White-sounding or African-American-sounding names
+  - Callback Rate: Measured the rate at which resumes received interview requests
+  - Resume Quality: Varied to test if bias differs by qualification
+:::
+
+:::{.column width="50%"}
+- [Why Should We Care?]{.alert}
+  - Racial Inequality: Persistent racial disparities in the labour market
+  - Discrimination: Understanding the mechanisms of racial discrimination
+  - Policy Implications: Informative for policies aimed at promoting equal opportunity
+
+- [Policy Relevance]{.alert}
+  - Affirmative Action:  Assessing the effectiveness of current policies
+  - Anti-discrimination Law:  Evidence for the continued relevance of anti-discrimination efforts
+  - Social Justice:  Highlighting ongoing challenges to racial equality
+:::
+:::
+:::
+
+## Key Debates
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Key Questions]{.alert}
+    - Do employers treat observably similar applicants from different races differently?
+    - Is differential treatment due to employer prejudice or statistical discrimination?
+    - Are affirmative action programs effective in eliminating racial bias?
+
+- [Primary Hypotheses]{.alert}
+  - Core Idea:  Resumes with White-sounding names will receive more callbacks than equivalent resumes with African-American-sounding names
+  - H1:  White names will receive a significantly higher callback rate
+  - H2:  The racial gap in callback rates will persist even for higher quality resumes
+
+:::
+
+:::{.column width="50%"}
+- [The Logic]{.alert}
+  - Employer Bias:  Potential for both conscious and unconscious bias in hiring decisions
+  - Statistical Discrimination: Employers may use race as a proxy for unobservable skills or productivity
+  - Testing for Pure Discrimination: The randomised design helps isolate the effect of race, independent of qualifications
+  - Exploring Nuances: Varying resume quality and analysing by job/employer characteristics helps understand the nature of discrimination
+:::
+:::
+:::
+
+## Intervention
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Experimental Design]{.alert}
+    - Field Experiment:  Real-world setting of job applications
+    - Correspondence Testing:  Methodology of sending matched resumes with manipulated variables
+    - Random Assignment: Names randomly assigned to resumes
+
+- [Intervention: Name Manipulation]{.alert}
+    - White Names:  Emily Walsh, Greg Baker (distinctively White-sounding)
+    - African-American Names: Lakisha Washington, Jamal Jones (distinctively African-American-sounding)
+    - Control:  Implicit control through random assignment – each resume acts as its own control when names are varied
+
+- [Outcome Measurement]{.alert}
+    - Primary Outcome: Callback for an interview (binary - yes/no)
+    - Measurement: Tracked responses to resumes (phone or email)
+    - Robustness:  Consistent measurement across conditions
+:::
+
+:::{.column width="50%"}
+- [Creating Resumes]{.alert}
+    - Resume Templates:  Based on real resumes from job search websites (Boston & Chicago)
+    - Quality Variation:  Created "high-quality" and "low-quality" resumes with subtle differences in experience and skills
+    - Matching:  Resumes tailored to fit specific job ad requirements
+    - Large Scale:  Over 5000 resumes sent in response to over 1300 job ads
+
+- [Sample and Data Collection]{.alert}
+    - Job Ads:  Newspaper ads in Boston Globe and Chicago Tribune (Sales, Admin, Clerical, Customer Service).
+    - Cities: Boston and Chicago (conducted in 2001-2002)
+    - Data:  Callback rates for each resume type, analysed by name, resume quality, job/employer characteristics
+:::
+:::
+:::
+
+## Results
+
+:::{style="margin-top: 30px; font-size: 21px; text-align: center;"}
+![](figures/results-bertrand.png){width=75%}
+:::
+
+## Results
+
+:::{style="margin-top: 30px; font-size: 21px; text-align: center;"}
+![](figures/results-bertrand2.png){width=75%}
+:::
+
+
+## Results
+
+:::{style="margin-top: 30px; font-size: 21px; text-align: center;"}
+![](figures/results-bertrand3.png){width=75%}
+:::
+
+## Results
+
+:::{style="margin-top: 30px; font-size: 21px; text-align: center;"}
+![](figures/results-bertrand4.png){width=75%}
+:::
+
+## Discussion
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+- [Key Findings]{.alert}
+  - Significant Racial Gap: White names receive 50% more callbacks
+  - Resume Quality Matters Less for African-Americans:  Improved credentials do not close the racial gap
+  - Uniformity of Gap: Bias is consistent across occupations, industries, and employer types
+- [Implications]{.alert}
+    - Persistent Discrimination:  Racial bias remains a significant factor in the labour market
+    - Limited Returns to Human Capital:  Efforts to improve skills may not equally benefit all racial groups in terms of job access
+    - Challenges for Policy:  Highlights the complexity of addressing racial inequality, requiring more than just skills-based interventions
+
+- [Limitations]{.alert}
+  - Callback as Outcome:  Measures access to interview, not job offers or wages
+  - Name as Proxy for Race:  Confounding factors (social class inferences from names) are possible, although tested against
+  - Generalisability: Focus on specific job categories and cities (Boston & Chicago)
+:::
+
+# Chattopadhyay and Duflo (2004) 🇮🇳 {background-color="#2d4563"}
+
+## Chattopadhyay, R., & Duflo, E. (2004)
+### Women as Policy Makers: Evidence from a Randomized Policy Experiment in India
+
+:::{style="margin-top: 30px; font-size: 22px; text-align: center;"}
+![](figures/abstract-duflo.png){width=70%}
+
+
+[Article link](https://doi.org/10.1111/j.1468-0262.2004.00539.x) 
+:::
+
+## Overview
+
+:::{style="margin-top: 30px; font-size: 20px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Overview]{.alert}
+  - How does women's leadership affect policy decisions?
+  - Challenge: It is hard to isolate the effect of representation on policy choices
+  - India: A unique experiment with reserved seats for women in local government
+  - A quasi-experimental study to investigate this effect
+
+- [The Experiment]{.alert}
+  - Randomised:  One-third of Village Council head positions were randomly reserved for women
+  - Dataset collected in 265 Village Councils in West Bengal and Rajasthan
+  - Comparison: type of public goods in reserved and unreserved Village Councils
+  - Key Finding: Reservation affects the types of public goods provided, with leaders investing more in infrastructure relevant to their own genders
+:::
+
+:::{.column width="50%"}
+- [Why Should We Care?]{.alert}
+  - Underrepresentation: Women are underrepresented in political positions worldwide
+  - Policy Impact: Understanding if women make different policy choices
+  - Political Equality: Is vital for representative democracy
+
+- [Policy Relevance]{.alert}
+  - Affirmative Action: Findings inform debates about the necessity of affirmative action in politics
+  - Decentralisation: Results shed light on the consequences of decentralising power in India
+  - Institutions: Helps understand how the design of political institutions can affect outcomes
+:::
+:::
+:::
+
+## Key Debates
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Key Questions]{.alert}
+    - Do quotas rapidly enhance women's ability to participate in policymaking?
+   - Do women and men have different policy preferences?
+    - Does a politician's gender influence policy decisions?
+
+- [Primary Hypotheses]{.alert}
+  - Core Idea: The reservation of a council seat affects the types of public goods provided
+  - H1:  Leaders will invest more in infrastructure that is directly relevant to the needs of their own genders
+  - H2:  The effect of reservation is caused by gender, and not other characteristics of women leaders
+:::
+
+:::{.column width="50%"}
+- [The Logic]{.alert}
+  - Gendered Preferences: Men and women may prioritise different types of public goods
+  - Political Identity: the identity of a decision maker can influence policy decisions
+  - Representation Matters: Women's representation may lead to different policy outcomes than those chosen by men.
+    -  Affirmative action may be a way of counteracting the preference of those in power
+:::
+:::
+:::
+
+## Intervention
+
+:::{style="margin-top: 30px; font-size: 20px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Context]{.alert}
+    - India: A constitutional amendment required the reservation of one-third of all positions of village chief (Pradhan) to women
+    - Implementation: This was implemented in two states: West Bengal and Rajasthan
+    - GPs: Local Village Councils, which have influence on local public goods
+
+- [Intervention]{.alert}
+    - Randomisation: GPs were randomly selected to be reserved for women
+    - Treatment: Whether the village council was randomly reserved for a women leader
+    - Control Condition: The council is open to all candidates
+:::
+
+:::{.column width="50%"}
+- [Outcome Measurement]{.alert}
+    - Primary Outcome: The types of public goods provided
+    - Focus: Investments in specific goods such as drinking water, roads, and other local infrastructure
+    - Secondary Outcome: requests and complaints made by different genders
+
+- [The Process]{.alert}
+    - Allocation of GPs for reservation:  This was done based on specific pre-existing lists, and the selection was effectively random.
+    - Implementation: A specific set of rules ensures the random selection
+    - Data collection: Surveys of the investment made in the villages, and interviews with the village leaders
+    - Surveys collected in the summer of 2000 (West Bengal and Rajasthan) and in the end of 2002 (Rajasthan)
+:::
+:::
+:::
+
+## Balance test
+
+:::{style="margin-top: 30px; font-size: 21px; text-align: center;"}
+![](figures/balance-duflo.png){width=80%}
+:::
+
+## Results
+
+:::{style="margin-top: 30px; font-size: 21px; text-align: center;"}
+![](figures/results-duflo.png){width=80%}
+:::
+
+## Results (cont.)
+
+:::{style="margin-top: 30px; font-size: 21px; text-align: center;"}
+![](figures/results-duflo2.png){width=80%}
+:::
+
+## Discussion
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+- [Implications]{.alert}
+  - Policy choices are affected by the gender of the decision maker
+  - Women leaders invest more in public goods aligned with women's priorities, and vice-versa
+  - This effect is causal, and not driven by characteristics of women leaders, but their gender per se
+ - [Theoretical Contribution]{.alert}
+    - Evidence of the effect of identity on the policy making process
+    - Contradicts Downsian models of policy preferences.
+    - Shows the importance of design of political institutions in ensuring the representation of different social groups.
+- [Limitations]{.alert}
+  - The study focuses on local governance in India, and may not generalise to other contexts
+  - The model does not consider dynamic effects of the policy.
+  - Mechanisms: the exact mechanisms of the decision process is still not fully clear
+:::
+
+# Questions? 😉 {background-color="#2d4563"}
+
+# And that's it for today! 🎉 {background-color="#2d4563"}
+
+# All the very best! <br> See you soon! 🚀 {background-color="#2d4563"}

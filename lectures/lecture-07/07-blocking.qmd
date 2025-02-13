@@ -1,0 +1,627 @@
+---
+title: QTM 385 - Experimental Methods
+subtitle: Lecture 07 - Blocking and Clustering
+author:
+  - name: Danilo Freire
+    email: danilo.freire@emory.edu
+    affiliations: Emory University
+format:
+  clean-revealjs:
+    self-contained: true
+    code-overflow: wrap
+    footer: "[Blocking](https://raw.githack.com/danilofreire/qtm385/main/lectures/lecture-07/07-blocking.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: knitr
+revealjs-plugins:
+  - multimodal
+editor:
+  render-on-save: true
+---
+
+# Hi, there! <br> Hope all is well 😉{background-color="#2d4563"}
+
+# Brief recap 📚 {background-color="#2d4563"}
+
+## Last time, we...
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Discussed Kalla and Broockman (2015): [Campaign Contributions Facilitate Access to Congressional Officials: A Randomized Field Experiment](https://onlinelibrary.wiley.com/doi/full/10.1111/ajps.12180)
+- They conducted a field experiment demonstrating that informing congressional offices about meeting attendees being donors significantly increased (3-4 times) the likelihood of securing meetings with policymakers
+- Their treatment was a simple email sent to congressional offices with information about the meeting attendees (donors vs. local constituents)
+- The experiment also had a good theoretical grounding, as it was based on the idea that money distorts political representation
+- The results indicate this is true, at least in the American context (at the time of the experiment)
+:::
+
+:::{.column width="50%"}
+:::{style="margin-top: 30px; font-size: 22px; text-align: center;"}
+![](figures/abstract-kalla.png){width=80%}
+
+
+[Article link](https://doi.org/10.1111/ajps.12180) and [replication data](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/28582)
+:::
+:::
+:::
+:::
+
+## Last time, we...
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Also discussed another experiment by Bertrand and Mullainathan (2004): [Are Emily and Greg More Employable Than Lakisha and Jamal? A Field Experiment on Labor Market Discrimination](https://www.nber.org/papers/w9873)
+- This was a field experiment that sent out resumes with different names to test for racial discrimination in the job market
+- The results were striking: resumes with white-sounding names received 50% more callbacks than those with African American-sounding names
+- The experiment was widely reported in the media and sparked a lot of discussions about racial discrimination
+  - [YouTube video with Mullainathan discussing discrimination by algorithms and people](https://www.youtube.com/watch?v=ys2sMv_JHqA)
+:::
+
+:::{.column width="50%"}
+- The findings replicate elsewhere, too: For instance, 14% more callbacks for German- vs Turkish-sounding names ([Kaas and Munger (2019)](https://www.degruyter.com/document/doi/10.1111/j.1468-0475.2011.00538.x/html)) 
+  - But the effect disappears when recommendation letters are provided. Why? [Statistical discrimination?](https://en.wikipedia.org/wiki/Statistical_discrimination_(economics))
+- [Yemane and Reino (2019)](https://www.tandfonline.com/doi/full/10.1080/1369183X.2019.1622806#abstract) find that Latinos are also discriminated against in the US labor market, but not in Spain. Why is that?
+
+:::{style="margin-top: 30px; font-size: 24px; text-align: center;"}
+![](figures/abstract-bertrand.png){width=80%}
+
+[Article link](https://www.aeaweb.org/articles?id=10.1257%2F0002828042002561&ref=exo-insight) and [replication data](http://doi.org/10.3886/E116023V1)
+:::
+:::
+:::
+:::
+
+## Today, we will...
+
+:::{style="margin-top: 50px; font-size: 26px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Understand how to improve our experiments by using blocking 
+- Learn why blocking reduces variance and increases precision 
+- See how blocking solves some practical issues in field experiments
+- Learn about, and how to deal with, clustering and intra-cluster correlation
+- Differences between blocking and clustering
+- [But first...]{.alert}, let's talk about your group work again!
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/blocking.png)
+
+Source: [Data Science Discovery - University of Illinois](https://discovery.cs.illinois.edu/learn/Basics-of-Data-Science-with-Python/Experimental-Design-and-Blocking/)
+:::
+:::
+:::
+:::
+
+# Group work 👥 {background-color="#2d4563"}
+
+## Group work
+### The list is ready!
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- Thanks to everyone who emailed me with their group preferences 😉
+- I took all your preferences into account and tried to make the groups as balanced as possible
+- If you didn't email me, I assigned you to a group randomly, as we agreed in class
+- Group numbers were also randomised to avoid any selection bias! 😂
+- I will also create the groups on Canvas in case you need to refer to it later
+- If you are happy with your group, that's great! If not, please let me know and I will try to accommodate your request 🥳
+:::
+
+## Group 1
+### Pre-formed
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+
+| Name                  | Login ID | SIS ID  | Email              |
+|-----------------------|----------|---------|--------------------|
+| Elizabeth Shin        | EJSHIN6  | 2520422 | elizabeth.shin@emory.edu  |
+| Emily Choi            | ECHOI73  | 2492522 | emily.choi@emory.edu (?)  |
+| Esther Yang           | QYANG68  | 2487073 | esther.yang2@emory.edu (?)  |
+| Zhiyi Li (Yolanda Li) | ZLIT23   | 2513881 | zhiyi.li@emory.edu   |
+| Angela Xie            | JXIE82   | 2515217 | angela.xie@emory.edu   |
+
+:::
+
+## Group 2
+### Originally Anushka Basu & Annie Cao, now topped up to 4
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+
+| Name                  | Login ID | SIS ID  | Email             |
+|-----------------------|----------|---------|-------------------|
+| Anushka Basu          | ABASU9   | 2551669 | anushka.basu@emory.edu  |
+| Annie Cao             | JCAO66   | 2599315 | annie.cao@emory.edu  |
+| Courtney Fitzgerald   | CFITZG4  | 2484240 | courtney.fitzgerald@emory.edu |
+| Harris Wang           | MWAN467  | 2551003 | harris.wang@emory.edu |
+
+:::
+
+## Group 3
+### Pre-formed
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+
+| Name           | Login ID | SIS ID  | Email              |
+|----------------|----------|---------|--------------------|
+| Maura Dianno   | MDIANNO  | 2481848 | maura.dianno@emory.edu  |
+| Kush Bhatia    | KBHATI7  | 2492303 | kush.bhatia@emory.edu  |
+| Shriya Iyer    | SAIYER4  | 2493146 | shriya.iyer@emory.edu  |
+
+:::
+
+## Group 4
+### Pre-formed
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+
+| Name        | Login ID | SIS ID  | Email            |
+|-------------|----------|---------|------------------|
+| Sylvia Xing | JXING8   | 2549831 | sylvia.xing@emory.edu |
+| Lucy Liu    | CLIU452  | 2561533 | lucy.liu@emory.edu|
+| Jessie Hao  | JHAO23   | 2513298 | jessie.hao@emory.edu |
+| Zoe Liu     | SLIU547  | 2583239 | zoe.liu@emory.edu|
+
+:::
+
+## Group 5
+### Dhwani + Anita, now topped up to 4
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+
+| Name                   | Login ID | SIS ID  | Email                        |
+|------------------------|----------|---------|------------------------------|
+| Dhwani Venkatarangan   | DAVENKA  | 2554493 | dhwani.venkatarangan@emory.edu |
+| Anita Osuri            | AOSURI2  | 2557540 | anita.osuri@emory.edu         |
+| Ahshar Brown           | AOBROW2  | 2575182 | ahshar.brown@emory.edu        |
+| Adam Pastor            | AMPASTO  | 2565464 | adam.pastor@emory.edu         |
+
+:::
+
+## Group 6
+### Randomly assigned
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+
+| Name         | Login ID | SIS ID  | Email                         |
+|--------------|----------|---------|-------------------------------|
+| Daniel Nickas| DNICKAS  | 2549711 | daniel.nickas@emory.edu       |
+| Shuyang Yu   | SYU1025  | 2610436 | shuyang.yu@emory.edu          |
+| Phoebe Pan   | ZPAN66   | 2630423 | ziwen.pan@emory.edu           |
+| Xinyi Wang   | XWAN878  | 2549813 | xinyi.wang@emory.edu          |
+
+:::
+
+## Group 7
+### Randomly assigned
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+
+| Name            | Login ID | SIS ID  | Email                         |
+|-----------------|----------|---------|-------------------------------|
+| Davis Boor      | DBOOR    | 2556176 | davis.boor@emory.edu          |
+| Xipu Wang       | XWAN884  | 2551008 | xipu.wang@emory.edu           |
+| Miracle Ephraim | MEPHRAI  | 2492732 | miracle.ephraim@emory.edu     |
+| Zihan Liang     | ZLIAN57  | 2609381 | zihan.liang@emory.edu         |
+
+:::
+
+## Group 8
+### Randomly assigned
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+
+| Name           | Login ID | SIS ID  | Email                         |
+|----------------|----------|---------|-------------------------------|
+| Evelyn Shi     | CSHI59   | 2609525 | evelyn.shi2@emory.edu         |
+| Howie Brown    | HJBROW5  | 2585210 | howie.brown@emory.edu         |
+| Maxwell Troilo | MTROILO  | 2520874 | max.troilo@emory.edu          |
+| Lingxiao Chen  | LCHE462  | 2562583 | lingxiao.chen@emory.edu (?)   |
+
+:::
+
+# Questions? <br> Did I miss anyone? 😅 {background-color="#2d4563"}
+
+## Group Work 🤝
+### Next steps (from our previous lecture)
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- Now that you have your groups, I'd like you to start working on your pre-analysis plan
+- I'll give you some time to discuss your ideas and start writing your plan
+- What do you think about sending this to me [next week]{.alert}?
+  - Submit at most 2 paragraphs summarising an experiment that you want to develop in this course. At minimum, your summary should include a research question, why the question is important, and a rough sketch of how you plan to answer the question
+- [In two weeks]{.alert}:
+  - Write a title and abstract for a paper you imagine writing based on your proposed experiment. Assume that your findings align with your theoretical predictions. Remember to establish why the findings matter for your intended audience
+- [In three weeks]{.alert}:
+  - Outline your pre-analysis plan. Your outline should include sections on the research question, the experimental design, the data you will collect, and the analysis you will conduct
+:::
+
+# Blocking and Clustering {background-color="#2d4563"}
+
+## What is blocking?
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+:::{.incremental}
+- Blocking is a procedure that involves [grouping experimental units based on certain characteristics]{.alert}
+- These groups are called [blocks or strata]{.alert} and are formed based on variables that are expected to affect the outcome of the experiment (heterogeneous treatment effects)
+- [Within each block, units are randomly assigned]{.alert} to treatment or control groups
+- So we have ["experiments within experiments"]{.alert}!
+- This approach helps to ensure that the treatment and control groups are comparable within each block, reducing the potential for confounding variables to affect the results
+:::
+:::
+
+## Why is blocking important?
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- Blocking can also help us ensure that an [equal number of people from each group]{.alert} are assigned to the treatment and control groups
+- For instance, imagine an experiment that includes 20 people, 10 men and 10 women
+- If we randomly assign people to the treatment and control groups, we might end up with 15 women in the experiment, or even only men in our sample (although the chance of this happening is low)
+- [Blocking removes this risk entirely]{.alert}
+- And as groups will be more homogeneous, blocking also [reduces variance]{.alert} and [increases precision]{.alert}
+- ["Block what you can, and randomise what you cannot"]{.alert} (Gerber and Green 2012, p. 110)
+:::
+
+## One or many blocks?
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- With enough time and resources, we could create a block for every possible characteristic that might affect the outcome of the experiment
+- But this would be impractical and unnecessary
+- Instead, we should focus on the [most important characteristics]{.alert} that are likely to have the greatest impact on the outcome
+- But [how to we know which characteristics are important]{.alert} if we haven't run the experiment yet?
+- Two strategies:
+  - Use [previous research]{.alert} (quantitative or qualitative) to identify important characteristics
+  - [Pilot the experiment]{.alert} with a small sample to test for important characteristics
+:::
+
+## How does blocking help?
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- Let's say we are interested in testing the effect of a new drug on blood pressure
+- We know that age is an important factor that affects blood pressure, so we decide to block our sample by age
+- To simplify, we create two blocks: one for people under 50 and another for people over 50
+- Imagine that we have 12 people in our sample ($N$) and want to assign 6 of them ($m=6$) to the treatment group and 6 to the control group
+- How many possible ways are there to assign people to the treatment and control groups?
+
+:::{.columns}
+:::{.column width="50%"}
+```{r}
+#| echo: true
+#| eval: true
+
+# Random assignment
+choose(12, 6)
+```
+:::
+
+:::{.column width="50%"}
+```{r}
+#| echo: true
+#| eval: true
+
+# Two blocks with 6 people each
+# 3 in the treatment group
+choose(6, 3) * choose(6, 3)
+```
+:::
+:::
+:::
+
+## How does blocking help?
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+:::{.columns}
+:::{.column width="50%"}
+- The assignments that are ruled out are those in which [too many or too few units in a block are assigned to treatment]{.alert}
+- Those “extreme” assignments produce estimates that are [in the tails of the sampling distribution]{.alert} 
+- The figure shows the sampling distribution of the difference-in-means estimator under complete random assignment
+- The histogram is shaded according to whether the particular random assignment is permissible under a procedure that blocks on the binary covariate $X$ (`age`, in our case)
+- After many simulations, we see that blocking [rules out by design those assignments that are not perfectly balanced]{.alert}
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/blocking-helps.png){width=100%}
+
+Source: [Blair et al (2023)](https://book.declaredesign.org/library/experimental-causal.html#block-randomized-experiments)
+:::
+:::
+:::
+:::
+
+## Is there any disadvantage to blocking?
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- In general, [no!]{.alert}
+- Gerber and Green argue that, _even if you create blocks at random_, you will do no worse than if you had not blocked at all (simple randomisation)
+- So there is no real disadvantage to blocking according to them
+- Others, such as [Pashley and Miratrix (2021)](https://arxiv.org/abs/2010.14078), argue that in some specific conditions (such as unthoughtful blocking), blocking will not be too beneficial, but it will not be so harmful either
+- In the vast majority of cases, you have a lot of gain from blocking and very little to lose
+- [The only risk, in fact, is analysing the data incorrectly]{.alert}
+- And that can happen! We will see how soon 😉
+:::
+
+## When is blocking useful?
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- Blocking can be particularly useful when:
+  - The [sample size is small]{.alert}
+  - There are important characteristics that are likely to affect the outcome of the experiment
+  - The [cost of blocking is low]{.alert} compared to the potential benefits
+  - When it is important to affirm that [heterogeneity is expected]{.alert} and should be explored (defense against p-hacking)
+
+- We should [not overstate its benefits]{.alert}, as much of it can also be obtained with covariate adjustment. But the decrease in variance is real!
+:::
+
+## Kalla and Broockman (2015)
+
+:::{style="margin-top: 30px; font-size: 28px; text-align: center;"}
+![](figures/kalla-blocks.png){width=50%}
+![](figures/kalla-blocks2.png){width=50%}
+:::
+
+## How to define ATE in blocked experiments?
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+- If we consider the ATE at the unit level: 
+
+$$ATE = \frac{1}{N}\sum_{i=1}^N y_{i,1} - y_{i,0}$$
+
+- We could re-express this quantity equivalently using the ATE of block $j$, $ATE_j$, as follows:
+
+$$ATE = \frac{1}{J}\sum_{j=1}^J\sum_{i=1}^{N_j} \frac{y_{i,1} - y_{i,0}}{N_j} = \sum_{j=1}^J \frac{N_j}{N}ATE_j$$
+
+- And it would be logical to estimate this quantity by replacing what we can indeed calculate:
+
+$$\widehat{ATE} = \sum_{j=1}^J \frac{N_j}{N}\widehat{ATE_j}$$
+:::
+
+## How to define ATE in blocked experiments?
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- We can define the standard error of the estimator by averaging the standard errors within each block (if our blocks are sufficiently large)
+
+:::{style="text-align: center;"}
+![](figures/se.png){width=50%}
+:::
+
+- Take each block's standard error
+- Weight it by the squared proportion of that block's size
+- Add up all these weighted squared standard errors
+- Take the square root of the sum
+:::
+
+## How to define ATE in blocked experiments?
+### Let's simulate some data
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+```{r}
+#| echo: true
+#| eval: true
+set.seed(12345)
+# We have 10 units
+N <- 10
+# y0 is the potential outcome under control
+y0 <- c(0, 0, 0, 1, 1, 3, 4, 5, 190, 200)
+# For each unit, the treatment effect is intrinsic
+tau <- c(10, 30, 200, 90, 10, 20, 30, 40, 90, 20)
+# y1 is the potential outcome under treatment
+y1 <- y0 + tau
+# Two blocks: a and b
+block <- c("a", "a", "a", "a", "a", "a", "b", "b", "b", "b")
+# Z is the treatment assignment
+# (in the code we use Z instead of T)
+Z <- c(0, 0, 0, 0, 1, 1, 0, 0, 1, 1)
+# Y is the observed outcome
+Y <- Z * y1 + (1 - Z) * y0
+# The data
+dat <- data.frame(Z = Z, y0 = y0, y1 = y1, tau = tau, b = block, Y = Y)
+head(dat)
+```
+:::
+
+## How to define ATE in blocked experiments?
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- One option to estimate $ATE_j$ is just to replace it with $\widehat{ATE}$
+
+```{r}
+#| echo: true
+#| eval: true
+with(dat, table(b, Z))
+```
+
+As we can see, we have 6 units in block $a$, 2 of which are assigned to the treatment, and 4 units in block $b$, 2 of which are assigned to the treatment.
+:::
+
+## Estimating ATE in blocked experiments
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- First, let's see some possible estimations
+
+```{r}
+#| echo: true
+#| eval: true
+# The ATE
+library(estimatr)
+lm_robust(Y ~ Z, data = dat)
+```
+
+:::{style="margin-top: 20px;"}
+:::
+
+```{r}
+#| echo: true
+#| eval: true
+lm_robust(Y ~ Z + block, data = dat)
+```
+
+:::{style="margin-top: 20px;"}
+:::
+
+- How are they different?
+:::
+
+## Why are they different?
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- How are they different? (The first one ignores the blocks. The second one uses a different set of weights, created using fixed effects variables or indicator/dummy variables)
+
+- And we can estimate the total ATE by adjusting the weights according to the size of the blocks:
+
+```{r}
+#| echo: true
+#| eval: true
+lm_lin(Y ~ Z, covariates = ~ block, data = dat)
+```
+
+- Which one should we use? Any thoughts? 
+:::
+
+## Weighted average of block ATEs
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+:::{.columns}
+:::{.column width="50%"}
+- The [weighted average]{.alert} of the block ATEs is the best estimator 
+- The weights are the proportion of units in each block, $N_j/N$
+- If the likelihood of being assigned to the treatment group differs by block, comparing the means across all subjects will lead to a biased estimate of the ATE 
+  - Unless the probability of assignment to the treatment group is identical for every block
+- In a nutshell: when estimating the ATE in a blocked experiment, just do it the old-fashioned way! 😅
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/ates.png){width=100%}
+
+Source: [DeclareDesign (2018)](https://declaredesign.org/blog/posts/biased-fixed-effects.html)
+:::
+:::
+:::
+:::
+
+# Clustering {background-color="#2d4563"}
+
+## What is clustering?
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- So far, we have only allocated individual units to treatment and control groups
+- But in some cases, we might want to allocate [whole groups of units to treatment and control conditions]{.alert}
+- Usually, the main reason why we do this is because of [practical issues]{.alert}
+  - It is [impossible]{.alert} to randomly assign individuals to treatment and control groups (TV markets, for instance)
+  - We cannot [isolate individuals]{.alert} from each other (same household, same school, etc.)
+  - We have strong priors about possible [spillover effects]{.alert}
+- However, we still measure effects at [the individual level (or any level smaller than the randomisation unit)]{.alert}
+- Let's see how that impacts our analyses 😉
+:::
+
+## Clustering
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- A common example is an [education experiment]{.alert} in which the treatment is randomised at the classroom level
+- All students in a classroom are assigned to either treatment or control together, as it is impossible for students in the same classroom to be assigned to different conditions (different teachers, materials, etc)
+- Assignments do not vary within the classroom
+- Clusters can be localities, like [villages, precincts, or neighbourhoods]{.alert}
+- When clusters are all the same size, the standard difference-in-means estimator we usually employ is unbiased
+- However, caution is needed when clusters have different numbers of units or when there are very few clusters, as the treatment effects could be correlated with cluster size
+- When cluster size is related to potential outcomes, the usual difference-in-means estimator is often biased
+:::
+
+## Intra-cluster correlation
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- Typically, cluster randomised trials have higher variance than individually randomised trials
+- Why? Because individuals within the same cluster [tend to be more similar to each other than to individuals in different clusters]{.alert}
+- How much higher variance depends on a statistic that can be hard to think about, the [intra-cluster correlation (ICC) of the outcome]{.alert}
+- The total variance can be decomposed into the variance of the cluster means $\sigma^2_{between}$ plus the individual variance of the cluster-demeaned outcome $\sigma^2_{within}$
+- The ICC is a number between 0 and 1 that describes the fraction of the total variance that is due to the between variance: $\rho = \frac{\sigma^2_{between}}{\sigma^2_{between} + \sigma^2_{within}}$
+- Let me explain the ICC in more detail 😊
+:::
+
+## Intra-cluster correlation
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+- Think of a cluster as a group of individuals who share some common characteristic or environment
+- For example, all students in a class experience the same teacher and facilities
+- Intra-cluster correlation tells us [how similar individuals within the same group are in relation to individuals from different groups]{.alert}
+- If everyone in a group is very alike (like students who all perform similarly on a test), the correlation is high. If they’re quite different, it’s low
+- $\sigma^2_{between}$: Some classrooms might be better than others because of different teaching styles or resources
+- $\sigma^2_{within}$: Even within the same classroom, students might perform differently due to their own unique abilities or efforts
+- The [_total variance_ is the sum of these two components]{.alert}, and the ICC tells us how much of the total variance is due to differences between classrooms
+- [When ICC is 1, the effective sample size is equal to the number of clusters. When ICC is 0, the effective sample size is equal to the number of individuals.]{.alert}
+:::
+
+## Information reduction
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- The ICC is a measure of how much [information we lose by clustering]{.alert}
+- Imagine an impact evaluation with 10 people, where 5 are assigned to the treatment group and 5 to control
+- In one version of the experiment, the treatment is assigned to individuals
+- In another version, the 5 individuals with black hair and the 5 individuals with some other color of hair are assigned to treatment as a group
+- This design has two clusters: ‘black hair’ and ‘other color’ 
+- In the first version, the randomisation procedure allows for [252 different combinations]{.alert} of people as the treatment and control groups
+- However, in the second version, the randomisation procedure assigns all the black-haired subjects either to treatment or to control, and thus only ever produces [two ways]{.alert} of combining people to estimate an effect
+:::
+
+## Information reduction
+
+:::{style="margin-top: 30px; font-size: 19px;"}
+:::{.columns}
+:::{.column width="50%"}
+![](figures/icc01.png){width=100%}
+:::
+
+:::{.column width="50%"}
+![](figures/icc02.png){width=100%}
+:::
+:::
+:::
+
+## What to do about information reduction
+### Robust clustered standard errors
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- In many cases of clustered assignment, we will have to make sure that [our estimates of uncertainty about treatment effects reflect information loss]{.alert} 
+- This is because [classical standard error estimators assume that the data are independent]{.alert}, thus biasing downwards our results
+- We would have [type I errors more often than we should]{.alert}, and we would be more likely to conclude that a treatment effect is statistically significant than we should be
+- [But fear not]{.alert}! There is a solution:
+  - [Robust clustered standard errors]{.alert} (RCSE)
+  - Think of it as calculating a variance for each cluster first and then combining these in a way that reflects the true variability across the clusters
+:::
+
+## Blocking and clustering
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- One of the ways which can do to improve clustered designs is to use [blocking]{.alert}
+- Imagine villages nested within discrete regions, or classrooms nested within discrete schools
+- Usually we do have some information about the clusters, so we can use it to reduce variance and add more effective information
+- [But that is something we will see next time]{.alert} 😉
+:::
+
+## Summary
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- Blocking is a procedure that involves grouping experimental units based on certain characteristics
+- It helps to ensure that the treatment and control groups are comparable within each block, reducing the potential for confounding variables to affect the results
+- Blocking can also help us ensure that an equal number of people from each group are assigned to the treatment and control groups
+- Blocking reduces variance and increases precision
+- Clustering is a procedure that involves grouping experimental units based on some common characteristic or environment
+- It is useful when it is impossible to randomly assign individuals to treatment and control groups
+- But it is often not the ideal solution:
+  - We are usually _required_ to use clusters, not because we want to
+:::
+
+## Next time
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- We will see more on blocking and clustering in `R` with the `estimatr` package
+- Estimate models with robust clustered standard errors and see how they differ from regular standard errors
+- More on covariate adjustment
+- Learn about required sample sizes and power analysis
+- [And more!]{.alert} 😂 
+:::
+
+# Thanks very much! 😊 {background-color="#2d4563"}
+
+# See you next time! 👋 {background-color="#2d4563"}
