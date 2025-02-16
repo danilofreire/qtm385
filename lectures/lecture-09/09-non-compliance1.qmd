@@ -1,0 +1,45 @@
+---
+title: QTM 385 - Experimental Methods
+subtitle: Lecture 09 - One-Sided Non-Compliance
+author:
+  - name: Danilo Freire
+    email: danilo.freire@emory.edu
+    affiliations: Emory University
+format:
+  clean-revealjs:
+    self-contained: true
+    code-overflow: wrap
+    footer: "[Non-Compliance 1](https://raw.githack.com/danilofreire/qtm385/main/lectures/lecture-09/09-non-compliance1.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: knitr
+revealjs-plugins:
+  - multimodal
+editor:
+  render-on-save: true
+---
+
+# Hi, there! <br> Hope all is well! 😉 {background-color="#2d45630}
+
+# Group work 👥{background-color="#2d4563"}
+
+## Group task 📝
+### Trabalho pra esta semana
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+
+- Please send me an email (<danilo.freire@emory.edu>) by Wednesday with the following content:
+  - Two paragraphs (maximum) summarising an experiment that you wish to develop in this course. At a minimum, your summary should include a research question, why the question is important, and a rough outline of how you plan to answer the question.
+
+- We’ll be working on a little bit of the task each week during class, and I’ll be posting the week’s assignments on the website. It will be fun! 😊
+:::
+
+# Brief recap 📚 {background-color="#2d4563"}
+
+## Last class
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- 
