@@ -20,12 +20,12 @@ editor:
   render-on-save: true
 ---
 
-# Hi, there! <br> Hope all is well! 😉 {background-color="#2d45630}
+# Hi, there! <br> Hope all is well! 😉 {background-color="#2d4563"}
 
-# Group work 👥{background-color="#2d4563"}
+# Group work 👥 {background-color="#2d4563"}
 
-## Group task 📝
-### Trabalho pra esta semana
+## Group work 
+### This week's task
 
 :::{style="margin-top: 30px; font-size: 28px;"}
 
@@ -39,7 +39,536 @@ editor:
 
 ## Last class
 
-:::{style="margin-top: 30px; font-size: 24px;"}
+:::{style="margin-top: 30px; font-size: 23px;"}
 :::{.columns}
 :::{.column width=50%}
-- 
+- [Clustering]{.alert}:
+  - Assigns [whole groups]{.alert} (e.g. classrooms) to treatment due to practical constraints
+  - Introduces [intra-cluster correlation (ICC)]{.alert} which increases variance
+  - Requires [cluster-robust standard errors]{.alert} and careful power calculations
+  - The [effective sample size]{.alert} is always smaller than the actual sample size, sometimes substantially so!
+- A few suggestions on how to deal with clustering:
+  - [Increase the number of clusters]{.alert}
+  - [Increase the number of units per cluster]{.alert}
+  - [Use pair-matching]{.alert} (or any type of blocking) to improve precision
+:::
+
+:::{.column width=50%}
+- [Statistical power]{.alert}:
+  - Power = Probability of [detecting true effects]{.alert} (aim for [≥80%]{.alert})
+  Influenced by: [effect size magnitude, outcome variability, sample size, and significance level]{.alert} 
+  - [DeclareDesign package]{.alert} enables power simulation through:
+  - Model declaration, treatment effect estimation, design diagnosis across sample sizes
+  - You can use any power calculator to estimate power, [but DeclareDesign allows for any type of design]{.alert}, what can be difficult to estimate using traditional formulas
+  - [Power curves]{.alert} show how power changes with sample size
+:::
+:::
+:::
+
+# Today's plan 📋 {background-color="#2d4563"}
+
+## One-sided non-compliance
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+:::{.columns}
+:::{.column width=50%}
+- [One-sided non-compliance]{.alert}
+- [Compliers]{.alert} versus [never-takers]{.alert}
+- [Intent-to-treat (ITT)]{.alert} effect versus [average treatment effect (ATE)]{.alert}
+- [Complier average causal effect (CACE)]{.alert} is the effect of the treatment on the [compliers]{.alert}
+- [Instrumental variables (IV)]{.alert} can be used to estimate the CACE
+- [Two-stage least squares (2SLS)]{.alert} is the most common IV method
+- [Placebo designs]{.alert} can help test the IV assumptions
+:::
+
+:::{.column width=50%}
+:::{style="text-align: center;"}
+![](figures/sankey.png){width=100%}
+
+Source: [Chris Said (2021)](https://chris-said.io/2021/03/28/youre-measuring-wrong/)
+:::
+:::
+:::
+:::
+
+# Non-compliance 🤔 {background-color="#2d4563"}
+
+## Non-compliance: A big problem!
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+- In experimental research, [compliance]{.alert} is the extent to which participants follow the treatment assignment
+- Under [full compliance]{.alert}, all participants follow the treatment assignment (and that's what we want!)
+- [Non-compliance]{.alert} occurs when participants do not follow the treatment assignment
+- In everyday language, compliance and non-compliance have a negative connotation, but in research, they are neutral terms
+- Non-compliance is a problem because it [undermines the internal validity]{.alert} of the study
+- Today we will examine [one-sided non-compliance]{.alert}, which is when [units in the treatment group do not receive the treatment]{.alert}
+  - Those in the [control group are not affected]{.alert} by this issue
+- Next class, we will discuss [two-sided non-compliance]{.alert}, which is when some people in the treatment group do not receive the treatment and some people in the control group do receive the treatment
+  - This complicates analysis quite a bit, but we have methods to deal with it 🤓
+:::
+
+## Non-compliance visualised
+
+:::{style="margin-top: 30px; font-size: 25px; text-align: center;"}
+![](figures/spotify.png){width=100%}
+
+Source: [Spotify R&D Engineering (2023)](https://engineering.atspotify.com/2023/08/encouragement-designs-and-instrumental-variables-for-a-b-testing/)
+:::
+
+## A motivating example
+### Canvassing to increase voter turnout
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- Imagine that you are interested in studying the effect of canvassing on voter turnout
+  - Maybe if you knock on people's doors and talk to them about the importance of voting, they will be more likely to vote!
+- You design an experiment where you randomly assign 1000 to receive canvassing (treatment group) and 1000 to not receive canvassing (control group)
+- However... usually only 25% of the people in the treatment group are actually canvassed
+  - The rest are not home, refuse to talk, etc.
+- So we have 250 people treated and 1000 in the control group
+- [What would you do?]{.alert} 🤔
+:::
+
+## Option 01: Just compare the two groups
+### As-treated analysis
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- The first option we have is to [just compare the two groups]{.alert} as if nothing had happened
+- So we would compare the 1000 people who were in the treatment group with the 1000 people who were in the control group
+- Then calculate the [average treatment effect (ATE)]{.alert} as the difference between the two groups as we always do
+- [What do you think?]{.alert} 🤔
+:::
+
+## Option 01: Just compare the two groups
+### As-treated analysis
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- The problem with this approach is that it [undermines the internal validity]{.alert} of the study
+- The [random assignment]{.alert} is no longer valid because the treatment group is not receiving the treatment
+- We are assuming that the effect of canvassing is [zero for the 750 people who were not canvassed]{.alert}
+- There might be [selection bias]{.alert} in the treatment group
+  - For example, maybe the people who were canvassed are more likely to vote anyway
+  - People who refuse to talk to canvassers might be less likely to vote, and so on
+- So this approach is [not recommended]{.alert} 👎
+:::
+
+## Option 02: Assume random compliance
+### As-treated analysis
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- The second option, related to the first, is to [assume that the differences between the two groups are random]{.alert}
+- In other words, we assume that the people who were canvassed are [randomly selected]{.alert} from the treatment group
+- And the fact that only 25% of the people were canvassed is just [bad luck]{.alert}
+- If this is the case, we can [drop the people who were not canvassed]{.alert} from the treatment group and compare the 250 people who were canvassed with the 1000 people in the control group
+- This would be able to [recover the true ATE]{.alert} if the assumption is correct
+- [What do you think?]{.alert} 🤔
+:::
+
+## Option 02: Assume random compliance
+### As-treated analysis
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- The problem with this approach is that [we cannot test the assumption]{.alert}
+- We cannot know if the differences between the two groups are random or not
+- [Most likely they are not]{.alert}!
+- Unless you can [really justify]{.alert} that the differences are random, this approach is [not recommended]{.alert} 👎
+- But if you can justify it (good luck with that! 😂), this is okay!
+:::
+
+## Option 03: Redefine the ATE
+### Just give people the choice
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- The third option is to [stick to the random assignment]{.alert} and compare the two groups as if everyone had followed the treatment assignment
+- Instead of comparing the people who were actually canvassed with those who were not canvassed, [we compare the people who were assigned to be canvassed with those who were not assigned to be canvassed]{.alert}
+- The difference here is [semantic]{.alert}:
+  - We [would be able to recover the true ATE]{.alert} if we had only given people [the choice]{.alert} of whether or not to be canvassed
+- For instance, rather than analysing the effect of Medicaid on health outcomes, we would be analysing the effect of [being offered Medicaid on health outcomes]{.alert}
+  - In this definition, [non-compliance is impossible]{.alert}
+- [What do you think?]{.alert}
+:::
+
+## Option 03: Redefine the ATE
+### Just give people the choice
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- The problem with this approach is that it [underestimates the treatment effect]{.alert}
+- The [average treatment effect]{.alert} is the difference between the outcome of the people who were actually canvassed and the outcome of the people who were not canvassed
+- But the this analysis compares the outcome of the people who were [assigned]{.alert} to be canvassed with the outcome of the people who were [not assigned]{.alert} to be canvassed
+- This is not the same as [receiving the treatment]{.alert} or not!
+- So this approach is [not recommended]{.alert} either 👎
+:::
+
+## Option 04: Instrumental variables (IV)
+### A clever way to deal with non-compliance
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- The fourth option is to use [instrumental variables (IV)]{.alert} (or two-stage least squares - 2SLS)
+- The benefit of IV is that it allows us to [recover the true effect of the programme]{.alert} instead of only the effect of being offered the programme
+- The downside is that [IV does not allow us to recover the true ATE]{.alert} in the whole population
+- This is because it only measures the effect of the programme on the [compliers]{.alert}, that is, those who took the treatment when it was assigned to them
+- This is the best approach 👍
+- But first, some definitions and concepts... 🤓
+:::
+
+# New definitions and assumptions 🤓 {background-color="#2d4563"}
+
+## Full compliance
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+- In an ideal experiment, we randomly assign each user to a treatment or a control group
+- All users in the treatment group experience the treatment, and all users in the control group do not experience the treatment
+- The table below summarises full compliance:
+
+| [Random assignment]{.alert} ($Z$) | [Treatment status]{.alert} ($D$) |
+|---|---|
+| Treatment | Treated |
+| Control | Untreated |
+
+:::{style="margin-top: 20px;"}
+:::
+
+- For the next slides, it is useful to introduce some definitions: 
+  - $Z \in \{0, 1\}$ indicates whether a user was [assigned to the treatment or the control group]{.alert} (visited by a canvasser or not)
+  - $D \in \{0, 1\}$ indicates [whether a user was treated]{.alert} (actually heard the message)
+  - $Y$, as always, is the [outcome]{.alert} we care about (voter turnout)
+- In this case, the [treatment effect]{.alert} is the difference between the [potential outcomes]{.alert} of the treated and untreated users, as we have seen before
+:::
+
+## One-sided non-compliance
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- In the case of one-sided non-compliance, some users in the treatment group do not receive the treatment
+- The table below summarises the situation:
+
+| [Random assignment]{.alert} ($Z$) | [Treatment status]{.alert} ($D$) |
+|---|---|
+| Treatment | Treated |
+|  | Untreated |
+| Control | Untreated |
+
+:::{style="margin-top: 20px;"}
+:::
+
+- In this case, the quantity $E = [Y| Z=1] - [Y|Z=0]$ does not represent the [treatment effect]{.alert} anymore
+- Instead, it represents the [effect of being assigned to the treatment group]{.alert} only, i.e., the [intent-to-treat (ITT) effect]{.alert}
+- Let's formalise this a bit more...
+:::
+
+## One-sided non-compliance
+### Notation
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- Let the experimental assignment of subject $i$ be $z_i$
+- When $z_i = 1$, the subject is assigned to the treatment group, and when $z_i = 0$, the subject is assigned to the control group
+- Let $d_i(z)$ represent whether subject $i$ is actually treated, given the assignment $z_i$
+- To make it short, let's write $d_i(z = 1)$ as $d_i(1)$ and $d_i(z = 0)$ as $d_i(0)$
+- If a subject receives no treatment when assigned to the control groups, we represent them as $d_i(0) = 0$
+- For one-sided non-compliance, $d_i(0)$ is always 0 for all people in the control groups, but $d_i(1)$ can be 0 or 1
+- If $d_i(1) = 1$, [I would open the door]{.alert} if canvassed, but if $d_i(1) = 0$, [I would not open the door]{.alert}
+:::
+
+## Compliers and never-takers
+### Two new groups
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- In the case of one-sided non-compliance, we have two new groups of analysis
+- [Compliers]{.alert} are those who would take the treatment if assigned to the treatment group and would not take the treatment if assigned to the control group
+  - So, $d_i(1) = 1$ and $d_i(0) = 0$
+- However, we also have a group of people who would not take the treatment even if assigned to the treatment group
+  - These are the [never-takers]{.alert}
+  - For them, $d_i(1) = d_i(0) = 0$
+- Thus, the expression $ATE | d_i(1)$ means the average treatment effect [(ATE) for the compliers]{.alert}
+- Keep in mind that the names "compliers" and "never-takers" are unrelated with the outcomes $Y_i$, just with the treatment assignment $d_i(z)$
+- It is not always easy to define who is a complier in an experiment
+  - What if canvassing is done in the weekends but some people are at home only during the week? Compliers or never-takers?
+  - If we canvass them during the week instead, are they compliers or never-takers?
+:::
+
+## First assumption: Non-interference
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- The first assumption we need to make is that of [non-interference]{.alert}
+- Non-interference means that whether a subject is treated depends [only on the subject's own treatment group assignment]{.alert}
+- This assumption is [strong]{.alert}, [difficult to test]{.alert}, and [often violated]{.alert}
+- The [intent-to-treat ($ITT$) effect]{.alert} of assignment ($d$) on [treatment status]{.alert} ($d$) is defined as:
+  
+$$ ITT_{i, D} = d_i (1) - d_i (0) $$
+
+- If everyone complies perfectly, then $d_i(1)$ will be 1 and $d_i(0)$ will be 0, so the difference is 1
+- The average $ITT_{i, D}$ across all subjects is 
+
+$$ITT_D = E[ITT_{i, D}] = E[d_i(1)] - E[d_i(0)]$$
+
+- That is, the proportion of people who take the treatment when assigned to the treatment group minus the proportion of people who take the treatment when assigned to the control group
+- In one-sided non-compliance, $E[d_i(0)] = 0$ for all subjects, so $ITT_D = E[d_i(1)] \geq 0$
+:::
+
+## ITT effect on the outcome
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+- The intent-to-treat effect of $z_i$ on $Y_i$ for each subject is:
+
+$$ITT_{i,Y} = Y_i(z = 1, d(1)) - Y_i(z = 0, d(0))$$
+
+- That is:
+  - $Y_i(z = 1, d(1))$: Outcome for person $i$ if assigned to treatment ($z=1$) and they actually take the treatment ($d(1)$)
+  - $Y_i(z = 0, d(0))$: Outcome for person $i$ if assigned to control ($z=0$) and do not take the treatment ($d(0)$) 
+
+- Hence, the average $ITT_{Y}$ is:
+
+$$ITT_{Y} = E[ITT_{Y}] = E[Y_i(z = 1, d(1))] - E[Y_i(z = 0, d(0))]$$
+
+- If we have full compliance, $ITT_{Y}$ is the same as the [average treatment effect (ATE)]{.alert}
+
+- If not, $ITT_{Y}$ is the [intent-to-treat (ITT) effect]{.alert}: whether a programme "made a difference" in the outcome, regardless of whether people actually took the treatment
+:::
+
+## Second assumption: Exclusion restriction
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+- The second assumption we need to make is that of the [exclusion restriction]{.alert}
+- The exclusion restriction means that the only way the treatment assignment ($z$) affects the outcome ($Y$) is through its effect on [whether people actually get the treatment]{.alert} ($d$)
+- In other words, untreated subjects have the same potential outcomes regardless of their assignments: 
+  - $Y_i(z = 0, d(0)) = Y_i(z = 0, d(1))$
+- And the same is true for treated subjects:
+  - $Y_i(z = 1, d(1)) = Y_i(z = 1, d(0))$
+- In general:
+  - $Y_i(z, d) = Y_i(d)$
+
+- This assumption is also [strong]{.alert}, and the main reason why we have [placebos]{.alert} in science!
+:::
+
+# CACE and IVs 🤓 {background-color="#2d4563"}
+
+## Complier average causal effect (CACE)
+### The effect of the treatment on the compliers
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- As we cannot correctly estimate the ATE with non-compliance, we focus on the [complier average causal effect (CACE)]{.alert}
+- CACE tries to answer this question: "[For those individuals who actually heard the message, what is the effect of the message on their likelihood of voting?]{.alert}"
+- Formally, the CACE is defined as:
+
+$$
+CACE \equiv \frac{\sum_{i=1}^{N}(Y_i(1) - Y_i(0))d_i(1)}{\sum_{i=1}^{N}d_i(1)} = \frac{ITT_Y}{ITT_D} = E[(Y_i(d = 1) - Y_i(d = 0)) | d_i(1) = 1]
+$$
+
+- In other words, it is [the treatment effect, but only coming from the compliers, divided by the number of compliers]{.alert}
+- CACE is also know as [Local Average Treatment Effects]{.alert} (LATE)
+
+:::
+
+## CACE and instrumental variables
+### The effect of the treatment on the compliers
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+:::{.columns}
+:::{.column width="50%"}
+- The good thing about CACE/LATE is that we have a consistent estimator for it
+- Equivalent to [two-stage least square estimators]{.alert}
+  - Regress $D_i$ on $Z_i$ to get fitted values $\hat{D_i}$
+  - Regress $Y_i$ on $\hat{D_i}$
+- But remember the assumptions:
+  - [Non-interference]{.alert} will be violated, for instance, if subject $j$ is canvassed and tells $i$ about it
+  - [Excludability]{.alert} can also be violated if the controls are treated by another canvassing campaign
+  - [First stage]{.alert} requires that at least one person is treated
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/iv.png){width="100%"}
+
+Source: [Blackwell (2021)](https://mattblackwell.github.io/gov2003-f21-site/files/06_iv.pdf)
+:::
+:::
+:::
+:::
+
+## Estimating the regressions
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- Let's go back to our example of canvassing
+- We have the following regressions to estimate the CACE:
+  - First stage: $TREATED_i = \alpha_0 + \alpha_1 ASSIGNED + \epsilon_i$
+  - Second stage: $VOTED_i = \beta_0 + \beta_1 TREATED + u_i$
+
+- The first stage estimates the effect of the treatment assignment on the treatment status
+- The second stage estimates the effect of the treatment status on the outcome
+- The coefficient $\beta_1$ is the [two-stage least squares (2SLS)]{.alert} estimator of the CACE
+:::
+
+## Estimating the regressions
+### Data preparation
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+```{r}
+#| echo: true
+#| eval: true
+# Load the dataset
+data1 <- read.csv("canvassing.csv", head=TRUE, sep=",")
+colnames(data1)
+dim(data1)
+
+# Select one-person households that were either pure controls or canvass only
+sel <-  data1$onetreat==1 & data1$mailings==0 & data1$phongotv==0 & data1$persons==1
+
+# Verify the number of observations
+table(sel)
+data2 <- data1[sel,]
+
+# Rename variables
+data2$VOTED    <- data2$v98
+data2$ASSIGNED <- data2$persngrp
+data2$TREATED  <- data2$cntany
+```
+:::
+
+## Estimating the regressions
+### First stage: $ITT_d$ with robust standard errors
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+- The intercept of zero in this equation indicates that [no one in the control group was contacted]{.alert}, in keeping with the definition of one-sided noncompliance
+- The coefficient 0.273 indicates that [assignment to the treatment group caused 27.3% of the targeted subjects to be treated]{.alert}
+- In other words, the estimated share of [Compliers in the treatment group is 27.3%]{.alert}. The 95% CI suggests that this proportion ranges from 25.0% to 29.6%
+
+```{r}
+#| echo: true
+#| eval: true
+# Load the required packages
+library(AER)      # For IV
+library(sandwich) # For robust SEs
+
+# Box 5.5: ITT_D
+# Note that results from this will vary from the book
+itt_d_fit <- lm(TREATED ~ ASSIGNED, data = data2)
+coeftest(itt_d_fit, vcovHC(itt_d_fit))
+```
+:::
+
+## Estimating the regressions
+### $ITT_Y$ with robust standard errors
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- Here we estimate the [ITT of the whole population]{.alert}
+- This model accounts for the possibility that `ASSIGNED` is not a perfect measure of treatment status
+- It can be "endogenous", that is, related to unobserved factors ($u_i$) that affect outcomes
+- Those [assigned to the treatment group were 3.84 percentage points more likely to vote]{.alert}
+- The estimated ITT may be a useful thing to know!
+- If you are conducting an evaluation of a programme, you can use the ITT to assess the programs output in relation
+to its costs
+
+```{r}
+#| echo: true
+#| eval: true
+# Box 5.4: ITT with robust SEs
+itt_fit <- lm(VOTED ~ ASSIGNED, data = data2)
+coeftest(itt_fit, vcovHC(itt_fit))
+```
+:::
+
+## Estimating the regressions
+### CACE using 2SLS
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- Finally, here we estimate the [CACE]{.alert}
+- It is the effect of the treatment on the [compliers]{.alert}
+- So we could just have used the formula: $CACE = \frac{ITT_Y}{ITT_D} = \frac{0.038464}{0.2734} \approx 0.1407$
+- The estimated average treatment effect of the canvassing treatment among Compliers is a [14.07 percentage point increase]{.alert} in the probability of voting
+- We could have estimated the CACE using the `ivreg` function from the `AER` package and gotten the same result
+
+```{r}
+#| echo: true
+#| eval: true
+# Box 5.6: CACE
+cace_fit <- ivreg(VOTED ~ TREATED, ~ ASSIGNED, data = data2)
+coeftest(cace_fit, vcovHC(cace_fit))
+```
+:::
+
+## Estimating the regressions
+### Using `estimatr`
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- There's no need to learn how to use `ivreg` if you don't want to!
+- Our familiar `estimatr` package has a function called `iv_robust` that does the same thing
+- The results are the same as before, and we also see that the 95% confidence interval ranges from 0.038 to 0.24, that is, canvassing increses the probability of voting by [3.8 to 24 percentage points]{.alert}
+- The effect is [positive and statistically significant]{.alert}
+
+```{r}
+#| echo: true
+#| eval: true
+# Box 5.6: CACE 
+# Load estimatr
+library(estimatr)
+
+# CACE with estimatr
+cace_fit2 <- iv_robust(VOTED ~ TREATED | ASSIGNED, data = data2)
+cace_fit2
+```
+:::
+
+# Designs that antecipate non-compliance 🤓 {background-color="#2d4563"}
+
+## Large-$n$ designs
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- Non-compliance not only prevents us from estimating the true ATE, [it also makes CACE estimation more challenging]{.alert}.
+- While 2SLS is a consistent estimator for the CACE, the estimator becomes [much less precise if the proportion of compliers is small]{.alert}
+- So the first advice is to [design experiments with large sample sizes]{.alert} to increase the number of compliers
+- This is not always feasible, though, as it can be [expensive]{.alert}
+- But if you can, do it! 😊
+:::
+
+## Placebo designs
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- A more realistic approach is to [anticipate non-compliance]{.alert} and include [placebo conditions]{.alert} in the experiment
+- This is done in two steps:
+  - First, subjects are [recruited to the study]{.alert} and assigned to treatment and control groups
+  - Second, [given compliance]{.alert}, subjects are randomly allocated to [two groups]{.alert}:
+    - The treatment group receives the treatment in the usual way
+    - The placebo group receives a [“non-treatment”]{.alert} that is assumed to have no effect on the outcome of interest
+- For instance, we could have a placebo group that receives a [fake canvassing]{.alert} treatment, such as information about the importance of recycling or the benefits of exercise
+- CACE can be estimated by comparing the [outcomes for those given the canvassing treatment and those given the “non-treatment”]{.alert} 
+:::
+
+## Placebo designs
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- Why does this work?
+- Because the main problem in one-sided compliance is [the existence of never-takers]{.alert}
+- But if we randomise the treatment amongst the compliers, [we screen-out the never-takers by design]{.alert}
+- Compliers in the treated state can then be [compared directly to Compliers in the untreated state]{.alert}, which eliminates the noise generated by the never-takers
+- Thus, we are back to [full compliance]{.alert} and can estimate the [true ATE]{.alert}!
+- This is a [very powerful tool]{.alert} in experimental research
+- Think about it when designing your experiments! 😊
+:::
+
+## Partial treatment
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- Finally, what to do when we have [partial treatment]{.alert}?
+- For instance, a subject interrupts the medical treatment before the end
+- The easiest and most widely used approach is to [classify the partially-treated subject as untreated]{.alert}, estimate the CACE, and then [classify the subject as treated]{.alert} and estimate the CACE again
+- Those two estimates provide [bounds for the CACE]{.alert}
+  - The [lower bound]{.alert} is the estimate when the subject is classified as treated
+  - The [upper bound]{.alert} is the estimate when the subject is classified as untreated
+- While not perfect, this strategy at least provides a [range of possible values]{.alert} for the CACE and allows us to [quantity the uncertainty]{.alert} in our estimates
+:::
+
+# Conclusion 📚 {background-color="#2d4563"}
+
+## Conclusion
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- Non-compliance is a [big problem]{.alert} in experimental research
+- One-sided non-compliance is when [units in the treatment group do not receive the treatment]{.alert}
+- We have seen that we have [several options]{.alert} to deal with non-compliance, but the best one is to use [instrumental variables (IV)]{.alert}
+- IV allows us to estimate the [complier average causal effect (CACE)]{.alert}, which is the effect of the treatment on the [compliers]{.alert}
+- We have also seen that [large-$n$ designs]{.alert} and [placebo designs]{.alert} can help anticipate non-compliance
+- Next class, we will discuss [two-sided non-compliance]{.alert}, which is when some people in the treatment group do not receive the treatment and some people in the control group do receive the treatment
+- ...and we will see how to deal with it! 😊
+:::
+
+# ...and that's all for today! 🎉 {background-color="#2d4563"}
+
+# Thank you! 🙏 {background-color="#2d4563"}
