@@ -343,7 +343,7 @@ $$ITT_{Y} = E[ITT_{Y}] = E[Y_i(z = 1, d(1))] - E[Y_i(z = 0, d(0))]$$
 ## Complier average causal effect (CACE)
 ### The effect of the treatment on the compliers
 
-:::{style="margin-top: 30px; font-size: 24px;"}
+:::{style="margin-top: 30px; font-size: 22px;"}
 - As we cannot correctly estimate the ATE with non-compliance, we focus on the [complier average causal effect (CACE)]{.alert}
 - CACE tries to answer this question: "[For those individuals who actually heard the message, what is the effect of the message on their likelihood of voting?]{.alert}"
 - Formally, the CACE is defined as:
