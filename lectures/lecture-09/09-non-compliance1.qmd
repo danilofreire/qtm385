@@ -290,7 +290,7 @@ Source: [Spotify R&D Engineering (2023)](https://engineering.atspotify.com/2023/
 - The first assumption we need to make is that of [non-interference]{.alert}
 - Non-interference means that whether a subject is treated depends [only on the subject's own treatment group assignment]{.alert}
 - This assumption is [strong]{.alert}, [difficult to test]{.alert}, and [often violated]{.alert}
-- The [intent-to-treat ($ITT$) effect]{.alert} of assignment ($d$) on [treatment status]{.alert} ($d$) is defined as:
+- The [intent-to-treat ($ITT$) effect]{.alert} of assignment ($z$) on [treatment status]{.alert} ($d$) is defined as:
   
 $$ ITT_{i, D} = d_i (1) - d_i (0) $$
 
