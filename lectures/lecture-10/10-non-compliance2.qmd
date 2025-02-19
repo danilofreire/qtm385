@@ -177,12 +177,12 @@ Source: [Alves (2022)](https://matheusfacure.github.io/python-causality-handbook
 ## Quantifying compliance
 ### Numbers from the debate study
 
-:::{style="margin-top: 30px; font-size: 19px;"}
+:::{style="margin-top: 30px; font-size: 24px;"}
 - Under random assignment, [the assigned treatment group has the same expected shares of Always-Takers, Never-Takers, Compliers, and Defiers as the assigned control group]{.alert} 
   - Right? Why or why not?
 - [In the control group]{.alert}, the untreated subjects are either Never-Takers or Compliers
   - The study of the New York City mayoral debates found that 84% of the control group reported not watching the debate, so $\hat{\pi}_{NT} + \hat{\pi}_{C} = 0.84$
-  - Subjects in the control group who watched the debate are either Always-Takers or Defiers, and $\hat{\pi}_{AT} + \hat{\pi}_{D} = = 0.16$
+  - Subjects in the control group who watched the debate are either Always-Takers or Defiers, and $\hat{\pi}_{AT} + \hat{\pi}_{D} = 0.16$
 - In the treatment group, 37% of the subjects reported watching the debate
   - These subjects must be either Always-Takers or Compliers, so $\hat{\pi}_{AT} + \hat{\pi}_{C} = 0.37$
   - The remaining 63% are either Never-Takers or Defiers, so $\hat{\pi}_{NT} + \hat{\pi}_{D} = 0.63$
@@ -195,10 +195,10 @@ Source: [Alves (2022)](https://matheusfacure.github.io/python-causality-handbook
 ## Monotonicity assumption
 ### No defiers allowed! 😂
 
-:::{style="margin-top: 30px; font-size: 24px;"}
+:::{style="margin-top: 30px; font-size: 28px;"}
 - [Monotonicity]{.alert} is a key assumption in two-sided non-compliance
 - It states that no subject is a [Defier]{.alert}: No one does the opposite of their assignment
-- This is a [strong assumption too], as it is possible that _someone_ does the opposite of what they were told
+- This is a [strong assumption too]{.alert}, as it is possible that _someone_ does the opposite of what they were told
 - But if we assume that is the case, all problems are solved! 😂
 - In our previous example:
   - If we assume that no one watched the debate when they were told not to, we can estimate the proportions of each group
@@ -224,9 +224,9 @@ Source: [Alves (2022)](https://matheusfacure.github.io/python-causality-handbook
 # Now the easy part, CACE estimation 🤓 {background-color="#2d4563"}
 
 ## Estimating CACE
-### Now we know what to do! 😂
+### Now we know what to do! 😉
 
-:::{style="margin-top: 30px; font-size: 28px;"}
+:::{style="margin-top: 30px; font-size: 29px;"}
 - Once we [eliminated Defiers]{.alert}, we can estimate the [CACE]{.alert} using the same formula as before
 - The [CACE]{.alert} is the [difference in observed treatment and control group outcomes by the proportion of subjects who are Compliers]{.alert}
 - Although two-sided noncompliance introduces the [possibility that some subjects are Always-Takers]{.alert}, they pose [no identification problems]{.alert}
@@ -255,3 +255,314 @@ Source: [Alves (2022)](https://matheusfacure.github.io/python-causality-handbook
   \tau_{LATE} = \frac{ITT_Y}{ITT_D}
   $$
 :::
+
+# Back to our example 📊 {background-color="#2d4563"}
+
+## Estimating CACE in the debate study
+### Let's see how all this works in practice! 😉
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- Remember [Mullainathan et al's (2010)](https://sendhil.org/wp-content/uploads/2019/08/Book-Chapter-5.pdf) initial experimental design:
+  - [Treatment group]{.alert}: Encouraged to watch debate
+  - [Control group]{.alert}: Encouraged to watch non-political programme
+  - [Treatment defined as self-reported debate viewing]{.alert}
+- Now let's analyse a subset of their data in the table below:
+
+:::{style="margin-top: 20px; text-align: center; font-size: 28px;"}
+
+|                                  | Treatment group | Control group |
+|----------------------------------|-----------------|---------------|
+| % Reporting change (N treated)   | 59.5 (185)      | 50.0 (80)     |
+| % Reporting change (N untreated) | 40.6 (320)      | 40.2 (415)    |
+| % Reporting change (total N)     | 47.5 (505)      | 41.8 (495)    |
+
+:::{style="font-size: 22px; text-align: center;"}
+*Source: Mullainathan, Washington, and Azari 2010.*
+
+Download the data from [our GitHub repository](https://github.com/danilofreire/qtm385/blob/main/lectures/lecture-10/mullainathan.csv)
+:::
+:::
+:::
+
+## Does it seem confusing? 🤔
+### Let's break it down! 😉
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- The study $N$ is 1000, with 505 in the treatment group and 495 in the control group
+  - These are the total $N$ in each group, in parentheses, last row of the table
+- What wbout those who were actually treated?
+  - 185 in the treatment group and 80 in the control group (huge non-compliance!) 
+  - These are the $N$ treated, in parentheses, first row of the table
+- And those who were not treated?
+  - 320 in the treatment group and 415 in the control group
+  - These are the $N$ untreated, in parentheses, second row of the table
+- How to calculate CACE here? Remember that $CACE = \frac{ITT_Y}{ITT_D}$
+- $ITT_Y$ is the difference in outcomes between treatment and control groups
+  - $ITT_Y = 47.5 - 41.8 = 5.7$, or $0.057$ in percentage points
+- So far so good? 😉
+:::
+
+## Calculating CACE
+### Let's do the maths again! 😉
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- $ITT_Y = 0.057$, right?
+- Now let's calculate $ITT_D$:
+  - $ITT_D = 36.6 - 16.2 = 20.4$, or $0.204$ in percentage points
+- [Wait a minute!]{.alert} Where do these numbers come from?
+  - Remember that only 185 people were treated in the treatment group
+  - $\frac{185}{505} \times 100 \approx 36.6$% reported change in the treatment group! [Aha!]{.alert} 😂
+- Control group "treatment" rate (non-compliance):
+  - $\frac{80}{495} \times 100 \approx 16.2$% reported change in the control group
+- So, $ITT_D = 20.4$ or $0.204$ in percentage points. Let's keep it in percentage points for now 😉
+- Finally, $CACE = \frac{ITT_Y}{ITT_D} = \frac{0.057}{0.204} \approx 0.28$
+- So, the [CACE]{.alert} is $0.28$! Woo-hoo! 🥳
+- In fancy words: "[The estimate suggests that watching the debates raises the rate at which Compliers report opinion change by 28 percentage points.]{.alert}"
+:::
+
+## Wait, there's more! 🤓
+### Using IVs to estimate CACE
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- Remember that I said we could use [IV methods]{.alert} to estimate the [CACE]{.alert}?
+- It works the same way as in one-sided non-compliance, but with the ["no defiers" (monotonicity)]{.alert} assumption
+- We regress treatment receipt on assignment, and then use predicted treatment status to estimate outcome effects
+- The formula is the same: `estimatr:::iv_robust(Y ~ D | Z, data = data)`
+- The `estimatr` package is your friend here once again! 😉
+- Since we don't live in the Stone Age any longer, we can use [R](https://www.r-project.org/) to do all the hard work for us! 😂
+- The script is [also avaliable in our GitHub repository](https://github.com/danilofreire/qtm385/blob/main/lectures/lecture-10/iv_estimation.R)
+- Let's do it together, step-by-step, to make sure we all understand what the coefficients mean 🤓
+:::
+
+## IV estimation in R
+### ITT
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- First, let's load the data and estimate the [ITT]{.alert}
+- Remember that $ITT_Y = 0.057$ when we calculated it manually?
+- We will use the `lm_robust` function to estimate the [ITT]{.alert}
+- Can you explain what the coefficients mean?
+
+```{r}
+#| echo: true
+#| eval: true
+library(estimatr)
+
+# Load the data
+df <- read.csv("./mullainathan.csv")
+
+# Rename variables
+ASSIGNED <- df$watch
+TREATED <- df$watchdps
+Y <- df$ochange
+
+# Estimate ITT
+itt_model <- lm_robust(Y ~ ASSIGNED)
+summary(itt_model)
+
+# Extract ITT for later
+ITT <- coef(itt_model)[2]
+```
+:::
+
+## ITT interpretation
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- Let's see coefficients table mean:
+- `(Intercept)`: 
+  - Estimate: 0.41818
+  - The intercept is the predicted value of `Y` (opinion change) when `ASSIGNED = 0` (control group)
+  - This is approximately the [average rate of opinion change in the control group]{.alert}
+  - Looking back at our table, the "% Reporting change (total N)" in the control group was 41.8% or 0.418. Very close!
+:::
+
+:::{.column width=50%}
+- `ASSIGNED`: 
+  - Estimate: 0.05707
+  - This is the coefficient for `ASSIGNED`
+  - It's the [estimated difference in the average value of Y (opinion change) between those assigned to the treatment condition and those who were not]{.alert}
+  - This is our [regression estimate of the ITT]{.alert}! 
+  - And it's very close to the 0.057 we calculated by hand before
+- The results show that the p-value is close to 0.05, suggesting marginal statistical significance
+:::
+:::
+:::
+
+## IV estimation in R
+### ITT_D
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- So the first step is done! 🥳
+- Now let's estimate the [ITT_D]{.alert}
+- $ITT_D = 0.204$, correct?
+- We will use the `lm_robust` function again, but this time with the `TREATED` variable
+
+```{r}
+#| echo: true
+#| eval: true
+# Estimate ITT_D
+itt_d_model <- lm_robust(TREATED ~ ASSIGNED)
+summary(itt_d_model)
+
+# Extract ITT_D for later
+ITT_D <- coef(itt_d_model)[2]
+```
+:::
+
+## ITT_D interpretation
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- Let's see coefficients table mean this time:
+- `(Intercept)`: 
+  - Estimate: 0.1625
+  - The intercept is the predicted value of `TREATED` when `ASSIGNED = 0` (control group)
+  - This is approximately the [average rate of opinion change in the control group]{.alert}
+  - Looking back at our table, the "% Reporting change (total N)" in the control group was 16.2% or 0.162 indeed!
+:::
+
+:::{.column width=50%}
+- `ASSIGNED`: 
+  - Estimate: 0.2041
+  - This is the coefficient for `ASSIGNED = 1`
+  - It's the [estimated difference in the average value of TREATED between those assigned to the treatment condition and those who were not]{.alert}
+  - This is our [regression estimate of the ITT_D]{.alert}! 
+  - So those who were assigned to the treatment group were 20% more watch the debate than those who were not
+  - The p-values are quite low this time, so the results are statistically significant
+:::
+:::
+:::
+
+## Putting it all together
+### IV estimation of CACE
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- Now that we have both [ITT]{.alert} and [ITT_D]{.alert}, we can calculate the [CACE]{.alert}
+
+```{r}
+#| echo: true
+#| eval: true
+# Calculate CACE
+cace <- iv_robust(Y ~ TREATED | ASSIGNED)
+summary(cace)
+
+# Check value
+ITT/ITT_D 
+```
+:::
+
+## CACE interpretation
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- Our final table indicates that:
+- `(Intercept)`: 
+  - Estimate: 0.41818
+  - This is the predicted value of `Y` when `TREATED = 0` (control group)
+  - This is approximately the [average rate of opinion change in the control group]{.alert}
+:::
+
+:::{.column width=50%}
+- `TREATED`: 
+  - Estimate: 0.2787
+  - It's the [estimated difference in the average value of Y (opinion change) between those who were treated and those who were not]{.alert}
+  - This is our [regression estimate of the CACE]{.alert}, our main estimate in this experiment
+- The p-value is above 0.05, so there is no statistical significance here
+:::
+:::
+:::
+
+# Now you're experts in non-compliance 😎 {background-color="#2d4563"}
+
+## Discussing the assumptions in this model
+### And how to deal with them in practice (in your own experiments!)
+
+:::{style="margin-top: 30px; font-size: 20px;"}
+:::{.columns}
+:::{.column width=50%}
+- Let's start with the [monotonicity assumption]{.alert}
+- In this case, [defiers would be people who watch the debate if encouraged not to]{.alert}, while [not watching the debate if told to do so]{.alert}
+- This behaviour [does seem a little weird]{.alert}, but it's not impossible
+- Suppose some people get bored and just flip from one channel to another and end up watching the debate
+- Remember that, when we have defiers, [we cannot estimate the CACE]{.alert} because $ITT_D$ is not identified (it includes both compliers and defiers)
+- How big a problem is this in practice? [It depends on the context]{.alert}
+:::
+
+:::{.column width=50%}
+- If the ratio of defiers is small, the [bias introduced by defiers is small too]{.alert} and CACE is still a good estimate
+- So what to do?
+  - Gerber and Green argue that if you have a large sample size, [the ATE amongst defiers will probably be close to that of compliers]{.alert}. [Do you agree?]{.alert}
+  - [Create treatments that more closely align with the preferences of the subjects]{.alert}
+  - Check if any [reverse psychology]{.alert} or [reason to resist the treatment]{.alert} exists
+  - Check if the [control condition seems unfair]{.alert} or [unattractive]{.alert}, so that people would resist them
+  - Finally, [check if you have a very small $ITT_D$]{.alert}, as this may indicate that defiers are not a big problem
+:::
+:::
+:::
+
+## Exclusion restriction
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+:::{.columns}
+:::{.column width=50%}
+- The [exclusion restriction]{.alert} is another key assumption in this model
+- It states that the [instrumental variable (Z) affects the outcome (Y) only through the treatment (D)]{.alert}
+- In our example, the [assignment to watch the debate (Z) should only affect opinion change (Y) through watching the debate (D)]{.alert}
+- Oh well... [This is a tough one]{.alert}
+- Imagine that people who watch the debate [start reading more newspapers]{.alert} and [become more informed]{.alert}, which leads to opinion change
+- In this case, the [exclusion restriction is violated]{.alert}, and the [IV estimate is biased]{.alert}
+:::
+
+:::{.column width=50%}
+- Another possible violation is when [people are aware of observer's presence]{.alert} and [change their behaviour]{.alert}
+- This is a serious problem in [survey experiments about sensitive topics]{.alert}, like [voting intentions]{.alert} or [drug use]{.alert}
+- In these cases, people may [lie about their behaviour]{.alert} to avoid embarrassment or legal consequences
+- So the effect will be overestimated because people are [more likely to report what they think the observer wants to hear]{.alert}
+- How to deal with this? [Difficult to say!]{.alert}
+- In my experience, the best solution is to use [objective measures]{.alert} whenever possible, that is, indicators that [do not depend on self-reporting]{.alert}
+- Do you want to talk more about this? [Let's discuss!]{.alert} 😉
+:::
+:::
+:::
+
+# How would you improve the experiment? 🤓 {background-color="#2d4563"}
+
+## Let's discuss the debate study for a bit
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- How do you think we could [lower the number of defiers]{.alert} in this study?
+- What about the [exclusion restriction]{.alert}? How could we [make sure that the IV only affects the outcome through the treatment]{.alert}?
+- Do you think that [people's behaviour would change if they knew they were being observed]{.alert}? How could we [mitigate this problem]{.alert}?
+- Finally, do you think that the [results are generalisable]{.alert}? Why or why not?
+- Think about your own experiments: [How would you deal with these issues]{.alert}?
+:::
+
+# That's all for today! 🥳 {background-color="#2d4563"}
+
+## Summary
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- Today we discussed [two-sided non-compliance]{.alert}, which is even more complex than one-sided non-compliance
+- We have four compliance types: [Compliers]{.alert}, [Never-takers]{.alert}, [Always-takers]{.alert}, and [Defiers]{.alert}
+- We also discussed the [monotonicity assumption]{.alert}, which states that no one does the opposite of their assignment
+- We saw how to estimate the [CACE]{.alert} using [IV methods]{.alert} and how to interpret the results (again!)
+- Finally, we discussed the [exclusion restriction]{.alert} and how to deal with it in practice
+- [Do you have any questions]{.alert}? [Let's me know!]{.alert} 😉
+:::
+
+## Next class
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- Next class, we will discuss [attrition]{.alert} (missing data in the outcome)
+- We will see how to deal with [missing data]{.alert} in experiments and how to [impute missing values]{.alert} (should you do it?)
+- Please also send me your ideas for the [final project]{.alert}! I'm looking forward to hearing from you! 🤓
+- Thanks to all of you who have already done so! You're awesome! 🥳
+:::
+
+# Thank you! 🙏 {background-color="#2d4563"}
+
+# See you next time! 😉 {background-color="#2d4563"}
