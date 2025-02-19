@@ -1,0 +1,257 @@
+---
+title: QTM 385 - Experimental Methods
+subtitle: Lecture 10 - Two-sided non-compliance
+author:
+  - name: Danilo Freire
+    email: danilo.freire@emory.edu
+    affiliations: Emory University
+format:
+  clean-revealjs:
+    self-contained: true
+    code-overflow: wrap
+    footer: "[Non-Compliance 2](https://raw.githack.com/danilofreire/qtm385/main/lectures/lecture-10/10-non-compliance2.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: knitr
+revealjs-plugins:
+  - multimodal
+editor:
+  render-on-save: true
+---
+
+# Hi, there! <br> Hope all is well! 😉 {background-color="#2d4563"}
+
+# Brief recap 📚 {background-color="#2d4563"}
+
+## Last class
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- [One-sided non-compliance]{.alert} occurs when units in the treatment group fail to receive the intervention, while control group members remain unaffected
+- This scenario introduces two key groups: 
+  - [Compliers]{.alert}: Subjects who accept treatment when assigned 
+  - [Never-takers]{.alert}: Subjects who reject treatment regardless of assignment 
+- The [intent-to-treat (ITT)]{.alert} effect measures the impact of treatment assignment, while the [complier average causal effect (CACE)]{.alert} estimates the true effect on those who actually received treatment
+- CACE can be calculated via: $CACE = \frac{ITT_Y}{ITT_D}$
+:::
+
+:::{.column width=50%}
+- [Instrumental variables (IV)]{.alert} methods like [two-stage least squares (2SLS)]{.alert} are preferred for estimation: 
+  - Regress treatment receipt on assignment (`D ~ Z`)
+  - Use predicted treatment status to estimate outcome effects (`Y ~ D_hat`)
+  - `estimatr:::iv_robust(Y ~ D | Z, data = data)`
+- [Placebo designs]{.alert} help validate IV assumptions by testing compliers against non-treatment conditions
+- We should anticipate non-compliance through [large sample sizes]{.alert} and [robust experimental designs]{.alert} to maintain internal validity
+:::
+:::
+:::
+
+# Today's plan 📋 {background-color="#2d4563"}
+
+## Two-sided non-compliance
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- [Two-sided non-compliance]{.alert}: 
+  - [Treatment group]{.alert}: Some units don't receive treatment 
+  - [Control group]{.alert}: Some units access treatment externally
+- Four compliance types: 
+  - [Compliers]{.alert}: Follow assigned treatment 
+  - [Never-takers]{.alert}: Never receive treatment 
+  - [Always-takers]{.alert}: Always seek treatment 
+  - [Defiers]{.alert}: Do opposite of assignment
+- [Non-ignorable selection]{.alert} and [cross-contamination]{.alert} between arms
+- [Monotonicity]{.alert} (no defiers)
+- [Encouragement designs]{.alert}, [double randomisation]{.alert}, and [noncompliance-adjusted power calculations]{.alert} 
+:::
+
+:::{.column width=50%}
+:::{style="text-align: center;"}
+![](figures/defiers.png){width=100%}
+
+Source: [Alves (2022)](https://matheusfacure.github.io/python-causality-handbook/09-Non-Compliance-and-LATE.html)
+:::
+:::
+:::
+:::
+
+# Two-sided non-compliance 🤔 {background-color="#2d4563"}
+
+## Non-compliance: You already know it's a problem
+### Now it will get worse 😂
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+- Last class, we discussed one-sided non-compliance
+- We saw that [ATE is not estimable]{.alert} in this scenario, as treatment and control groups are no longer comparable ([selection bias risk]{.alert})
+- We also learned how to estimate the [CACE]{.alert} using [IV methods]{.alert}, and it is [the difference in observed treatment and control group outcomes by the proportion of subjects who are Compliers]{.alert}
+- Today, we will discuss two-sided non-compliance, which is even more complex
+- In this scenario, some subjects in the treatment group do not receive treatment, while some in the control group do
+- [Underestimation of treatment effect (usually)]{.alert}: If some in the treatment group don't comply, and some in the control group get treatment, the difference between the groups in terms of [actual treatment received becomes smaller]{.alert} 
+- This can make it look like the treatment is [less effective than it actually is]{.alert}. We "dilute" the treatment effect 🤓
+:::
+
+# Compliance types 📊 {background-color="#2d4563"}
+
+## Four types of compliance
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- So far, we have discussed [Compliers]{.alert} and [Never-takers]{.alert}
+- In two-sided non-compliance, we also have [Always-takers]{.alert} and [Defiers]{.alert}
+- [Always-takers]{.alert}: Subjects who always seek treatment, regardless of assignment 
+- [Defiers]{.alert}: Subjects who do the opposite of their assignment: Imagine stubborn teenagers! 😂
+- Many experiments face this issue, especially in social sciences
+  - [Encouragement designs]{.alert}: For example, students who receive private school vouchers but still attend public schools, but some students in the control group attend private schools even without vouchers
+  - [Natural experiments]{.alert}: Lottery defined who would be drafted to the Vietnam War, but some drafted soldiers avoided service, while some non-drafted soldiers volunteered
+- Fortunately, the estimation is [similar to one-sided non-compliance]{.alert}, just with more assumptions
+:::
+
+## Four types of compliance
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- More formally, we have the following:
+- $Z_i$ is the treatment assignment, $D_i$ is the treatment receipt, and $Y_i$ is the outcome
+- [Compliers]{.alert}: $D_i(1) = 1$ and $D_i(0) = 0$. Similarly, $D_i(1) \gt D_i(0)$
+- [Never-takers]{.alert}: $D_i(1) = 0$ and $D_i(0) = 0$
+- [Always-takers]{.alert}: $D_i(1) = 1$ and $D_i(0) = 1$
+- [Defiers]{.alert}: $D_i(1) = 0$ and $D_i(0) = 1$. These are usually rare, though
+
+- Connections between observed data and compliance types:
+
+|         | $Z_i = 0$             | $Z_i = 1$             |
+|---------|-----------------------|-----------------------|
+| $D_i = 0$ | Never-taker or Complier | Never-taker or Defier |
+| $D_i = 1$ | Always-taker or Defier  | Always-taker or Complier |
+
+:::{style="margin-top: 20px;"}
+:::
+
+- Notice that treatment assignment has [no effect on whether always-takers or never-takers are treated]{.alert} 
+  - Always-takers are treated regardless of assignment, while never-takers are never treated
+- [Defiers and compliers]{.alert}, on the other hand, respond to treatment assignment, but in opposite ways
+  - So the problem is that we can't tell who is who, and this makes estimation difficult! 🤔
+:::
+
+## How to solve this? 🤔
+### Motivating example: Candidate debate study
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- [Mullainathan et al (2010)](https://sendhil.org/wp-content/uploads/2019/08/Book-Chapter-5.pdf) designed a study to measure the impact of watching a political debate on voting intentions
+- [Treatment group]{.alert}: Encouraged to watch debate
+- [Control group]{.alert}: Encouraged to watch non-political programme
+- [Treatment defined as self-reported debate viewing]{.alert}
+:::
+
+:::{.column width=50%}
+- [Always-Takers]{.alert}: Watch debate regardless of encouragement
+- [Never-Takers]{.alert}: Never watch debate, even if encouraged
+- [Compliers]{.alert}: Watch debate only when encouraged
+- [Defiers]{.alert}: Watch debate only when discouraged (watch non-political programme)
+- [Compliance type]{.alert} is a fixed attribute in this design
+  - If the design was different, compliance types could change!
+:::
+:::
+:::
+
+## Quantifying compliance
+### Estimating group sizes
+
+:::{style="margin-top: 30px; font-size: 19px;"}
+- Let $\pi_{AT}$, $\pi_{NT}$, $\pi_{C}$, $\pi_{D}$ denote proportions of Always-Takers, Never-Takers, Compliers, and Defiers
+
+- Formulas to estimate these proportions:
+  - Always-Takers' share ($\pi_{AT}$): 
+  $$ \pi_{AT} = \frac{1}{N} \sum_{i=1}^{N} d_i(1)d_i(0) $$
+  - Never-Takers' share ($\pi_{NT}$):
+  $$ \pi_{NT} = \frac{1}{N} \sum_{i=1}^{N} (1-d_i(1))(1-d_i(0)) $$
+  - Compliers' share ($\pi_{C}$):
+  $$ \pi_{C} = \frac{1}{N} \sum_{i=1}^{N} d_i(1)z_i(1-d_i(0)) $$
+  - Defiers' share ($\pi_{D}$):
+  $$ \pi_{D} = 1 - \pi_{AT} - \pi_{NT} - \pi_{C} $$
+:::
+
+## Quantifying compliance
+### Numbers from the debate study
+
+:::{style="margin-top: 30px; font-size: 19px;"}
+- Under random assignment, [the assigned treatment group has the same expected shares of Always-Takers, Never-Takers, Compliers, and Defiers as the assigned control group]{.alert} 
+  - Right? Why or why not?
+- [In the control group]{.alert}, the untreated subjects are either Never-Takers or Compliers
+  - The study of the New York City mayoral debates found that 84% of the control group reported not watching the debate, so $\hat{\pi}_{NT} + \hat{\pi}_{C} = 0.84$
+  - Subjects in the control group who watched the debate are either Always-Takers or Defiers, and $\hat{\pi}_{AT} + \hat{\pi}_{D} = = 0.16$
+- In the treatment group, 37% of the subjects reported watching the debate
+  - These subjects must be either Always-Takers or Compliers, so $\hat{\pi}_{AT} + \hat{\pi}_{C} = 0.37$
+  - The remaining 63% are either Never-Takers or Defiers, so $\hat{\pi}_{NT} + \hat{\pi}_{D} = 0.63$
+- But we don't know how many people are in each group, as mentioned before
+- We can estimate these proportions with a trick...
+:::
+
+# Monotonicity 📏 {background-color="#2d4563"}
+
+## Monotonicity assumption
+### No defiers allowed! 😂
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- [Monotonicity]{.alert} is a key assumption in two-sided non-compliance
+- It states that no subject is a [Defier]{.alert}: No one does the opposite of their assignment
+- This is a [strong assumption too], as it is possible that _someone_ does the opposite of what they were told
+- But if we assume that is the case, all problems are solved! 😂
+- In our previous example:
+  - If we assume that no one watched the debate when they were told not to, we can estimate the proportions of each group
+:::
+
+## Monotonicity assumption
+###  Simplifying the Model
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+- Assume [no Defiers]{.alert} ($\pi_{D} = 0$) to simplify estimation
+- With $\pi_{D} = 0$, we can estimate other proportions:
+    - Always-Takers ($\hat{\pi}_{AT}$):
+    - $\hat{\pi}_{AT} + \hat{\pi}_{D} = 0.16 \implies \hat{\pi}_{AT} = 0.16$
+    - Never-Takers ($\hat{\pi}_{NT}$):
+    - $\hat{\pi}_{NT} + \hat{\pi}_{D} = 0.63 \implies \hat{\pi}_{NT} = 0.63$
+    - Compliers ($\hat{\pi}_{C}$): 
+    - $\hat{\pi}_{AT} + \hat{\pi}_{C} = 0.37 \implies \hat{\pi}_{C} = 0.37 - \hat{\pi}_{AT} = 0.37 - 0.16 = 0.21$
+    - Alternatively, using: 
+    - $\hat{\pi}_{NT} + \hat{\pi}_{C} = 0.84 \implies \hat{\pi}_{C} = 0.84 - \hat{\pi}_{NT} = 0.84 - 0.63 = 0.21$
+- Both formulas yield approximately $\hat{\pi}_{C} \approx 0.2$
+:::
+
+# Now the easy part, CACE estimation 🤓 {background-color="#2d4563"}
+
+## Estimating CACE
+### Now we know what to do! 😂
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- Once we [eliminated Defiers]{.alert}, we can estimate the [CACE]{.alert} using the same formula as before
+- The [CACE]{.alert} is the [difference in observed treatment and control group outcomes by the proportion of subjects who are Compliers]{.alert}
+- Although two-sided noncompliance introduces the [possibility that some subjects are Always-Takers]{.alert}, they pose [no identification problems]{.alert}
+- [Always-Takers have no effect on the $ITT$]{.alert}, and the share of Always-Takers is differenced away when we calculate the $ITT_D$
+- Why so? Because they are treated regardless of assignment, so they don't affect the treatment effect!
+:::
+
+## ITT decomposition with no defiers
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- Intent-to-treat effect on outcome ($ITT_Y$) can be decomposed:
+
+  $$
+  ITT_Y = ITT_{Y,co} \pi_{co} + \underbrace{ITT_{Y,at} \pi_{at}}_{=0} + \underbrace{ITT_{Y,nt} \pi_{nt}}_{=0} + \underbrace{ITT_{Y,de} \pi_{de}}_{=0 \text{ (mono)}}
+  $$
+
+- Under Exclusion Restriction (ER) and Monotonicity (mono) assumptions, ITT simplifies to:
+
+  $$
+  ITT_Y = ITT_{co} \pi_{co}
+  $$
+
+- Same identification result:
+
+  $$
+  \tau_{LATE} = \frac{ITT_Y}{ITT_D}
+  $$
+:::
