@@ -1,0 +1,74 @@
+---
+title: QTM 385 - Experimental Methods
+subtitle: Lecture 11 - Attrition
+author:
+  - name: Danilo Freire
+    email: danilo.freire@emory.edu
+    affiliations: Emory University
+format:
+  clean-revealjs:
+    self-contained: true
+    code-overflow: wrap
+    footer: "[Attrition](https://raw.githack.com/danilofreire/qtm385/main/lectures/lecture-11/11-attrition.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: knitr
+revealjs-plugins:
+  - multimodal
+editor:
+  render-on-save: true
+---
+
+# Hello, everyone! <br> How are you doing today? 😉 {background-color="#2d4563"}
+
+# Brief recap 📚 {background-color="#2d4563"}
+
+## Last class
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- [Two-sided non-compliance]{.alert} occurs when both treatment and control groups experience imperfect compliance
+- Four compliance types:
+  - [Compliers]{.alert}: Follow treatment assignment
+  - [Never-takers]{.alert}: Never receive treatment
+  - [Always-takers]{.alert}: Always seek treatment
+  - [Defiers]{.alert}: Do opposite of assignment (rare)
+- [Monotonicity assumption]{.alert} required (no defiers) for identification
+- [IV methods]{.alert} estimate CACE: $\tau_{LATE} = \frac{ITT_Y}{ITT_D}$
+:::
+
+:::{.column width=50%}
+- Analyzed debate study example:
+  - 36.6% compliance in treatment vs 16.2% in control
+  - Estimated CACE = 0.28 using 2SLS
+- Key challenges:
+  - [Exclusion restriction]{.alert} violations
+  - [Selection bias]{.alert} from cross-group contamination
+  - [Power calculations]{.alert} for complier subpopulation
+:::
+:::
+:::
+
+# Today's plan 📋 {background-color="#2d4563"}
+
+## Attrition
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+
+:::
+
+:::{.column width=50%}
+:::{style="text-align: center;"}
+![](figures/defiers.png){width=100%}
+
+Source: [Alves (2022)](https://matheusfacure.github.io/python-causality-handbook/09-Non-Compliance-and-LATE.html)
+:::
+:::
+:::
+:::
+
+# Two-sided non-compliance 🤔 {background-color="#2d4563"}
