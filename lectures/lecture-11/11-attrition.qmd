@@ -40,7 +40,7 @@ editor:
 :::
 
 :::{.column width=50%}
-- Analyzed debate study example:
+- Analysed debate study example:
   - 36.6% compliance in treatment vs 16.2% in control
   - Estimated CACE = 0.28 using 2SLS
 - Key challenges:
@@ -53,22 +53,418 @@ editor:
 
 # Today's plan 📋 {background-color="#2d4563"}
 
-## Attrition
+## Attrition in experiments
+### Another missing data problem
 
 :::{style="margin-top: 30px; font-size: 24px;"}
 :::{.columns}
 :::{.column width=50%}
-
+- [Attrition]{.alert}: Loss of participants before study completion
+- Two main types:
+  - [Random attrition]{.alert}: Missingness unrelated to treatment/outcome
+  - [Non-random/Systematic attrition]{.alert}: Missingness correlates with variables
+- Impacts:
+  - Reduced statistical power 📉
+  - Potential [selection bias]{.alert} threat to validity
+  - Compromised generalisability 🌐
 :::
 
 :::{.column width=50%}
-:::{style="text-align: center;"}
-![](figures/defiers.png){width=100%}
-
-Source: [Alves (2022)](https://matheusfacure.github.io/python-causality-handbook/09-Non-Compliance-and-LATE.html)
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/drake.png){width=100%}
 :::
 :::
 :::
 :::
 
-# Two-sided non-compliance 🤔 {background-color="#2d4563"}
+## Handling Attrition
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+:::{.columns}
+:::{.column width=50%}
+- Prevention strategies:
+  - [Tracking systems]{.alert} for participants
+  - Incentive structures 
+  - Multiple contact methods 
+- Analysis methods:
+  - [Intent-to-treat]{.alert} analysis
+  - [Multiple imputation]{.alert} techniques
+  - [Bounds analysis]{.alert} for worst-case scenarios
+:::
+
+:::{.column width=50%}
+- Reporting standards:
+  - CONSORT flow diagram 
+  - Compare attriters vs remainers
+  - Sensitivity analyses 
+- Design solutions:
+  - Oversampling strategies
+  - Refreshment samples 
+  - Planned missingness designs
+:::
+:::
+:::
+
+# Attrition in Experiments 🧩 {background-color="#2d4563"}
+
+## Attrition in experiments
+### Missing outcome data
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- [Attrition]{.alert} is, unfortunately, another common issue in experiments
+- When attrition is correlated with treatment, [it can bias estimates]{.alert}
+- Several factors can lead to attrition:
+  - [Non-compliance]{.alert}: Intervention too burdensome, unfair, or ineffective
+  - [Survey fatigue]{.alert}: Participants lose interest over time
+  - [Unforeseen events]{.alert}: Health issues, job changes, etc.
+  - [Data collection errors]{.alert}: Intentional or not
+:::
+
+:::{.column width=50%}
+- Attrition [forces scholars to make assumptions]{.alert} about missing data
+- The main one being that [missingness is ignorable]{.alert}, that is, not related to the outcome
+- Another approach is to assume that [missingness is related to observed variables]{.alert}
+- In this case, [multiple imputation]{.alert} can be used to model the missingness mechanism
+- We can also try to [model the missingness]{.alert} mechanism, usually through [multiple imputation]{.alert}
+- Finally, we can [try to collect more data]{.alert} to reduce attrition, but this is not always feasible
+:::
+:::
+:::
+
+## Motivating example: RAND Health Insurance Experiment
+### Does healthcare insurance improve health outcomes?
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+- [RAND Health Insurance Experiment]{.alert} (HIE) was a large-scale study in the 1970s that randomly assigned families to different insurance plans
+- The goal was to assess the impact of insurance on health outcomes
+- The experiment covered 5%, 50%, 75%, or 100% of each family’s health costs, with the remaining covered by the family
+- to insure families in the first three experimental groups against catastrophic financial loss, costs over $1,000 were covered by the experimental insurance plan
+- The study found that insurance coverage [did not significantly affect health outcomes]{.alert}
+- The conclusion was that [public health insurance]{.alert} was not cost-effective, thus the government did not need to expand it
+- Overall, the study cost about $550 million in today’s dollars 😮
+- However, the study had [high attrition]{.alert} rates, which may have biased the results!
+:::
+
+## Health expenditure and health outcomes in the RAND HIE
+
+:::{style="margin-top: 30px; text-align: center; font-size: 20px;"}
+![](figures/rand-hie.png){width=70%}
+
+Column (1) shows the average for the group assigned catastrophic coverage. Columns (2)–(5) compare averages in the deductible, cost-sharing, free care, and any insurance groups with the average in column (1).
+
+Source: Angrist and Piscke (2014, 19)
+:::
+
+## Attrition in RAND HIE
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- Statistical analyses found out that [researchers excluded people who dropped out]{.alert}
+- Initial refusal rates differed significantly:
+    -  [8% of those assigned to the free care group refused]{.alert} to enroll after the baseline survey
+    - [25% of those assigned to cost-sharing plans refused]{.alert} to enrol after the baseline survey.
+- Among those who enrolled, further attrition occurred during the 3- to 5-year study
+:::
+
+:::{.column width=50%}
+- Withdrawal was [more common in experimental groups where subjects had to pay]{.alert} for health services
+- Voluntary attrition rates varied by plan:
+    - [0.4%]{.alert} in the free plan group
+    - [6.7%]{.alert} in the cost-sharing plan groups
+- Subjects in cost-sharing conditions who anticipated serious health problems might have dropped out to maintain existing coverage
+- [What issues do you see with this attrition pattern?]{.alert}
+:::
+:::
+:::
+
+# Some notation 📝 {background-color="#2d4563"}
+
+## Attrition in experiments
+### Using the potential outcomes framework
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+- You're all familiar with the potential outcomes framework by now 🤓
+- Remember our variables from last class?
+  - $Y_i(0)$ and $Y_i(1)$: Potential outcomes for individual $i$
+  - $z_i$: Treatment assignment
+  - $d_i$: Actual treatment received by individual $i$
+  - $Y_i$: Observed outcome for individual $i$
+- Here, let's first assume that there is [full compliance]{.alert} with treatment assignment, that is, $d_i = z_i$
+- So far, so good? 😊
+- Now, let's introduce [attrition]{.alert} to the mix and use a similar notation
+:::
+
+## Attrition in experiments
+### Some new notation
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+:::{.columns}
+:::{.column width=50%}
+- Let $r_i$ (for [reported]{.alert}) be an indicator for whether individual $i$ remains in the study
+- $r_i(z)$: This is a [new potential outcome related to attrition]{.alert}
+- It represents whether [the outcome for person $i$ is reported]{.alert} (i.e., they stay in the study and we get their data) if they were assigned to treatment $z$
+- $r_i(1)$: Whether the [outcome for person $i$ would be reported if they were in the treatment group]{.alert} 
+  - $r_i(1) = 1$: Outcome is reported (person stays in the study) 
+  - $r_i(1) = 0$: Outcome is missing (person drops out).
+:::
+
+:::{.column width=50%}
+- Similarly, $r_i(0)$: Whether the [outcome for person $i$ would be reported if they were in the control group]{.alert}
+  - $r_i(0) = 1$: Outcome is reported (person stays in the study)
+  - $r_i(0) = 0$: Outcome is missing (person drops out)
+
+$$r_i = r_i(0)(1 - z_i) + r_i(1)z_i $$
+
+- If they are in the control group, their reporting outcome is just $r_i(0)$, and if they are in the treatment group, it is $r_i(1)$
+- [Attrition occurs when some values are $r_i = 0$]{.alert}!
+- A bit formal, but just stating the obvious 😅
+:::
+:::
+:::
+
+## When does bias occur?
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- Bias arises if the [characteristics of those who stay in the study $(R_i(z) = 1)$ are systematically different from those who drop out (R_i(z) = 0)]{.alert}, and if these differences are [related to the potential outcomes Y_i(z)]{.alert}
+- In other words, if [attrition is non-random]{.alert}, we have a problem!
+- We are essentially [missing a piece of the puzzle (the dropouts)]{.alert}, and that missing piece can distort our view of the true treatment effect
+- Sadly, if there's non-random attrition, the [difference-in-means estimator not recover the ATE for the entire subject pool, and it will not recover the ATE for any meaningful subgroup either!]{.alert}
+- Why? 
+  - Attrition might be [non-random within each of these baseline subgroups]{.alert}
+  - For example, maybe younger people in the treatment group drop out more than older people, but the opposite can be true in the control group!
+:::
+
+# Special cases of attrition {background-color="#2d4563"}
+
+## Special cases of attrition
+### Missing independent of potential outcomes
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- [Random attrition]{.alert} is the best-case scenario!
+- This claim is usually [not verified directly]{.alert}, but rather assumed
+- Formally, 
+
+$$Y_i(z) \perp R_i(z)$$
+
+- In some cases this may be true, such as a computer malfunction that causes data loss to some participants
+- We can actually test that using randomisation inference!
+  - Just regress $r_i$ on the covariates and treatment assignment and you should find no significant relationship
+:::
+
+:::{.column width=50%}
+- If attrition is random, we can [ignore it]{.alert} and proceed with our analysis
+- It still has issues, though:
+  - [Reduced power]{.alert} due to smaller sample size
+  - [Generalisability]{.alert} issues
+- But at least we can [estimate the ATE]{.alert} without bias 😅
+- [What are some other examples of random attrition?]{.alert} Can you think of any?
+:::
+:::
+:::
+
+## Special cases of attrition
+### Missing related to observed variables
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- Since random attrition is rare, we often have to deal with [non-random attrition]{.alert}
+- A special type if [missing independent of potential outcomes given X]{.alert}, or $MIPO | X$
+- It is formally defined as:
+
+$$Y_i(z) \perp R_i(z) | X_i$$
+
+- You can include more covariates in $X_i$ if you think they are related to attrition
+:::
+
+:::{.column width=50%}
+- Suppose that students with poor attendance are both more likely to be missing on the day of the assessment and
+more likely to benefit from the intervention
+- $MIPO|X$ means that if one [partitions the experimental sample by prior attendance, missingness is random within each subgroup]{.alert}
+- There is, among students whose record of attendance is poor, there is no relationship between missing school on the day of the assessment and the subjects potential outcomes
+- The same goes for students with a good record of attendance
+:::
+:::
+:::
+
+# Inverse probability weighting {background-color="#2d4563"}
+
+## Inverse probability weighting
+### A way to handle missing related to observed variables
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- We can compensate for missing data by [weighting the observed data]{.alert}
+- The idea is to [upweight the observations that are similar to the missing ones]{.alert}
+- Let me give you a simple example:
+  - Suppose we have 40 people in our experiment
+  - 30 are men and 10 are women
+  - The overall average would be $\frac{30}{40} \times$ men's average + $\frac{10}{40} \times$ women's average
+- Now assume that 15 out of the 30 men drop out
+- "Controlling for gender" (i.e., weighting):
+  - The remaining 15 men produce an unbiased estimate of the average amongst 30 men
+  - So we can just [count them twice]{.alert}!
+  - This is the essence of [inverse probability weighting]{.alert} (IPW)
+:::
+
+## Inverse probability weighting
+### The formula
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- IPW estimates ATE when $MIPO|X$ holds
+- To estimate ATE, we need $E[Y_i(1)]$ and $E[Y_i(0)]$ (as you know!)
+- When $MIPO|X$ holds, $E[Y_i(1)]$ is weighted average:
+
+$$E[Y_i(1)] = \frac{1}{N} \sum_{i=1}^{N} \frac{Y_i(1) r_i(1)}{\pi_i(z = 1, x)},$$
+
+  - $\pi_i(z = 1, x)$: share of non-missing subjects among treated with covariate profile $x$
+  - Missing outcomes have no effect on sum
+  - Reported outcomes weighted by $1/\pi_i(z = 1, x)$
+  - Weights replace missing values with copies of non-missing values
+- Weighting scheme called inverse probability weighting because [observations weighted by inverse probability of being observed]{.alert}
+:::
+
+## Motivating example for IPW
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- Treatment: [Educational programme at a community centre]{.alert}
+- $X_i$: Covariate indicating proximity to the center
+    - $X_i = 1$: Lives near the community center
+    - $X_i = 0$: Lives far away
+- Follow-up evaluation at the community center
+- [Attrition is related to $X_i$]{.alert}: People living far are less likely to show up
+- [Potential outcomes differ by $X_i$]{.alert}: People living far away have higher potential outcomes
+- Let's see how it can recover ATE when $MIPO|X$ holds!
+:::
+
+## Motivating example for IPW
+### Potential outcomes and covariates
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+
+| Observation | $Y_i(0)$ | $Y_i(1)$ | $r_i(0)$ | $r_i(1)$ | $Y_i(0) \vert r_i(0)$ | $Y_i(1) \vert r_i(1)$ | $X_i$ |
+|-------------|----------|----------|----------|----------|-----------------------|-----------------------|-------|
+| 1           | 3        | 4        | 1        | 1        | 3                     | 4                     | 1     |
+| 2           | 4        | 7        | 1        | 1        | 4                     | 7                     | 1     |
+| 3           | 3        | 4        | 1        | 1        | 3                     | 4                     | 1     |
+| 4           | 4        | 7        | 1        | 1        | 4                     | 7                     | 1     |
+| 5           | 10       | 14       | 0        | 0        | Missing               | Missing               | 0     |
+| 6           | 12       | 18       | 0        | 0        | Missing               | Missing               | 0     |
+| 7           | 10       | 14       | 1        | 1        | 10                    | 14                    | 0     |
+| 8           | 12       | 18       | 1        | 1        | 12                    | 18                    | 0     |
+
+
+:::
+
+## Motivating example for IPW
+### Calculation of ATE
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- ATE with complete data: $E[Y_i(1)] - E[Y_i(0)] = 3.5$
+- Relevant proportions of non-missingness:
+    - $\pi_i(z = 1, x = 1) = 1$
+    - $\pi_i(z = 1, x = 0) = 1$
+    - $\pi_i(z = 0, x = 1) = 1$
+    - $\pi_i(z = 0, x = 0) = 0.5$
+- Applying the weighted average formula (7.15):
+
+$$E[Y_i(1)] = (\frac{1}{8}) (\frac{4}{1} + \frac{7}{1} + \frac{4}{1} + \frac{7}{1} + \frac{14}{0.5} + \frac{18}{0.5}) = 10.75,$$
+
+$$E[Y_i(0)] = (\frac{1}{8}) (\frac{3}{1} + \frac{4}{1} + \frac{3}{1} + \frac{4}{1} + \frac{10}{0.5} + \frac{12}{0.5}) = 7.25,$$
+
+$$E[Y_i(1)] - E[Y_i(0)] = 3.5.$$
+
+- [IPW recovers the true ATE!]{.alert} 🎉
+:::
+
+## Downsides of IPW 
+### When $MIPO|X$ is incorrect
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- [Incorrect $MIPO|X$ assumption]{.alert} leads to misleading estimates
+- IPW gives [largest weights to high-attrition subgroups]{.alert}
+- Biased subgroup estimate can disproportionately influence overall ATE
+- IPW average may be [more biased than unweighted data]{.alert}
+- Re-weighting [increases sampling variability]{.alert}
+    - Extra weight on subsamples with many missing observations
+- $MIPO|X$ discussion: [hypothetical scenarios]{.alert} with known potential outcomes
+- In practice, researchers must [make assumptions about attrition]{.alert}
+- Evaluating $MIPO|X$: [detective work and speculation]{.alert} 🕵️‍♂️
+:::
+
+# ATE Bounds {background-color="#2d4563"}
+
+## Extreme bounds analysis
+### A robustness check for attrition
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+- Now, let's analyse the worst case scenario: when attrition is so severe that it [invalidates the $MIPO|X$ assumption]{.alert}
+- In this case, there is no clear way to recover the ATE
+- But we can do something about it!
+- [Extreme bounds analysis]{.alert} (EBA - Manski bounds) is a robustness check that evaluates the [sensitivity of the ATE to different assumptions]{.alert}
+- The idea is to [bound the ATE by the most extreme assumptions]{.alert} about the missing data
+  - That is, we assume the [best and worst-case scenarios]{.alert} for the missing data
+- [Sensitivity methods](https://scholar.google.com.br/scholar?hl=en&as_sdt=0%2C6&q=sensitivity+methods+causal+inference&btnG=) are a growing area of research in causal inference, and EBA is one of the most popular methods
+:::
+
+## Extreme bounds analysis
+### The procedure
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+-  Imagine the [missing outcomes from those who dropped out]{.alert}
+-  We don't know what those outcomes are, but we can consider [two extreme scenarios]{.alert}:
+  - [Best-case scenario]{.alert}: Assume the [dropouts in the treatment group would have had the best possible outcomes]{.alert}, and [dropouts in the control group would have had the worst possible outcomes]{.alert} (relative to the observed data) 
+  - [Worst-case scenario]{.alert}: Assume the [dropouts in the treatment group would have had the worst possible outcomes]{.alert}, and [dropouts in the control group would have had the best possible outcomes]{.alert} 
+
+- By calculating the ATE under these extreme assumptions, we get a range (upper bound and lower bound) that (hopefully 😅) contains the true ATE
+:::
+
+## A simple example
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+:::{.columns}
+:::{.column width=50%}
+- Suppose our programme has the following outcomes if there is no attrition:
+  - Average for the treatment group: $\frac{(7 + 10 + 6 + 6)}{4} = \frac{29}{4} = 7.25$
+  - Average for the control group: $\frac{(3 + 7 + 5 + 6)}{4} = \frac{21}{4} = 5.25$
+  - ATE: $7.25 - 5.25 = 2$
+:::
+
+:::{.column width=50%}
+- Now, suppose that we only observe the following outcomes:
+  - Average for the treatment group: $\frac{(7 + 10 + ? + ?)}{4} = ?$
+  - Average for the control group: $\frac{(? + 7 + 5 + 6)}{4} = ?$
+
+- Assume that out collected outcomes show that the possible values for the missing data are between 0 and 10
+- Let's see how to calculate the bounds for the ATE!
+:::
+:::
+:::
+
+## A simple example
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- To find the [upper bound]{.alert} on the treatment effect estimate, [substitute 10 for the missing values in the treatment
+group and 0 for the missing value in the control group]{.alert}
+
+- Upper bound: $\frac{(7 + 10 + 10 + 10)}{4} - \frac{(0 + 7 + 5 + 6)}{4} = \frac{37}{4} - \frac{18}{4} = 4.75$
+
+- To find the lower bound on the treatment effect estimate, [substitute 0 for the missing values in the treatment group and 10 for the missing value in the control group]{.alert}
+
+- Lower bound: $\frac{(7 + 10 + 0 + 0)}{4} - \frac{(10 + 7 + 5 + 6)}{4} = \frac{17}{4} - \frac{28}{4} = -2.75$
+
+- So, the [ATE is between -2.75 and 4.75]{.alert}... and indeed it is ([2]{.alert})! 🎉
+
+- But as you can see, [the bounds are pretty wide]{.alert}... 
+:::
+
+## Trimming the bounds
+### Stronger assumptions for EBA
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+
+:::
