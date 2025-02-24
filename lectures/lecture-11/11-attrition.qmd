@@ -26,9 +26,7 @@ editor:
 
 ## Last class
 
-:::{style="margin-top: 30px; font-size: 24px;"}
-:::{.columns}
-:::{.column width=50%}
+:::{style="margin-top: 30px; font-size: 28px;"}
 - [Two-sided non-compliance]{.alert} occurs when both treatment and control groups experience imperfect compliance
 - Four compliance types:
   - [Compliers]{.alert}: Follow treatment assignment
@@ -37,18 +35,6 @@ editor:
   - [Defiers]{.alert}: Do opposite of assignment (rare)
 - [Monotonicity assumption]{.alert} required (no defiers) for identification
 - [IV methods]{.alert} estimate CACE: $\tau_{LATE} = \frac{ITT_Y}{ITT_D}$
-:::
-
-:::{.column width=50%}
-- Analysed debate study example:
-  - 36.6% compliance in treatment vs 16.2% in control
-  - Estimated CACE = 0.28 using 2SLS
-- Key challenges:
-  - [Exclusion restriction]{.alert} violations
-  - [Selection bias]{.alert} from cross-group contamination
-  - [Power calculations]{.alert} for complier subpopulation
-:::
-:::
 :::
 
 # Today's plan 📋 {background-color="#2d4563"}
@@ -64,9 +50,9 @@ editor:
   - [Random attrition]{.alert}: Missingness unrelated to treatment/outcome
   - [Non-random/Systematic attrition]{.alert}: Missingness correlates with variables
 - Impacts:
-  - Reduced statistical power 📉
+  - Reduced [statistical power]{.alert} 📉
   - Potential [selection bias]{.alert} threat to validity
-  - Compromised generalisability 🌐
+  - Compromised [generalisability]{.alert} 🌐
 :::
 
 :::{.column width=50%}
@@ -80,29 +66,13 @@ editor:
 ## Handling Attrition
 
 :::{style="margin-top: 30px; font-size: 27px;"}
-:::{.columns}
-:::{.column width=50%}
-- Prevention strategies:
-  - [Tracking systems]{.alert} for participants
-  - Incentive structures 
-  - Multiple contact methods 
 - Analysis methods:
-  - [Intent-to-treat]{.alert} analysis
-  - [Multiple imputation]{.alert} techniques
-  - [Bounds analysis]{.alert} for worst-case scenarios
-:::
-
-:::{.column width=50%}
-- Reporting standards:
-  - CONSORT flow diagram 
-  - Compare attriters vs remainers
-  - Sensitivity analyses 
-- Design solutions:
-  - Oversampling strategies
-  - Refreshment samples 
-  - Planned missingness designs
-:::
-:::
+  - [Inverse probability weighting]{.alert} (IPW)
+  - [Extreme bounds analysis]{.alert} (EBA)
+  - [Lee bounds]{.alert} (trimming the bounds)
+- [IPW]{.alert} estimates ATE when missingness is related to observed variables
+- [EBA]{.alert} is a robustness check that evaluates the sensitivity of the ATE to different assumptions about the missing data
+- [Lee bounds]{.alert} are a way to trim the bounds to make them more informative
 :::
 
 # Attrition in Experiments 🧩 {background-color="#2d4563"}
@@ -126,8 +96,7 @@ editor:
 - Attrition [forces scholars to make assumptions]{.alert} about missing data
 - The main one being that [missingness is ignorable]{.alert}, that is, not related to the outcome
 - Another approach is to assume that [missingness is related to observed variables]{.alert}
-- In this case, [multiple imputation]{.alert} can be used to model the missingness mechanism
-- We can also try to [model the missingness]{.alert} mechanism, usually through [multiple imputation]{.alert}
+- In this case, [some statistical methods]{.alert} can be used to model the missingness mechanism
 - Finally, we can [try to collect more data]{.alert} to reduce attrition, but this is not always feasible
 :::
 :::
@@ -228,7 +197,7 @@ $$r_i = r_i(0)(1 - z_i) + r_i(1)z_i $$
 ## When does bias occur?
 
 :::{style="margin-top: 30px; font-size: 26px;"}
-- Bias arises if the [characteristics of those who stay in the study $(R_i(z) = 1)$ are systematically different from those who drop out (R_i(z) = 0)]{.alert}, and if these differences are [related to the potential outcomes Y_i(z)]{.alert}
+- Bias arises if the [characteristics of those who stay in the study]{.alert} $(R_i(z) = 1)$ [are systematically different from those who drop out]{.alert} ($R_i(z) = 0)$, and if these differences are [related to the potential outcomes]{.alert} $Y_i(z)$
 - In other words, if [attrition is non-random]{.alert}, we have a problem!
 - We are essentially [missing a piece of the puzzle (the dropouts)]{.alert}, and that missing piece can distort our view of the true treatment effect
 - Sadly, if there's non-random attrition, the [difference-in-means estimator not recover the ATE for the entire subject pool, and it will not recover the ATE for any meaningful subgroup either!]{.alert}
@@ -370,7 +339,7 @@ $$E[Y_i(1)] = \frac{1}{N} \sum_{i=1}^{N} \frac{Y_i(1) r_i(1)}{\pi_i(z = 1, x)},$
     - $\pi_i(z = 1, x = 0) = 1$
     - $\pi_i(z = 0, x = 1) = 1$
     - $\pi_i(z = 0, x = 0) = 0.5$
-- Applying the weighted average formula (7.15):
+- Applying the weighted average formula:
 
 $$E[Y_i(1)] = (\frac{1}{8}) (\frac{4}{1} + \frac{7}{1} + \frac{4}{1} + \frac{7}{1} + \frac{14}{0.5} + \frac{18}{0.5}) = 10.75,$$
 
@@ -462,9 +431,246 @@ group and 0 for the missing value in the control group]{.alert}
 - But as you can see, [the bounds are pretty wide]{.alert}... 
 :::
 
-## Trimming the bounds
-### Stronger assumptions for EBA
+## Trimming the bounds with stronger assumptions
+### Monotonicity revisited
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+- [Lee (2009)](https://academic.oup.com/restud/article/76/3/1071/1590707) suggested that we can [trim the bounds]{.alert} to make them more informative (and narrower)
+- The key assumption of Lee is [monotonicty]{.alert}, similar to what we discussed in the context of non-compliance
+- Lee proposed that we have [four types of respondents]{.alert}, defined with respect to specific post-treatment outcomes (some observed, others not):
+  - [Never-reporters]{.alert}: Those who would never report their outcomes ($R(1) = 0$ and $R(0) = 0$)
+  - [Always-reporters]{.alert}: Those who would always report their outcomes ($R(1) = 1$ and $R(0) = 1$)
+  - [If-treated reporters]{.alert}: Those who would report their outcomes if treated ($R(1) = 1$ and $R(0) = 0$)
+  - [If-untreated reporters]{.alert}: Those who would report their outcomes if in the control group ($R(1) = 0$ and $R(0) = 1$)
+- The assumption is that [there are no if-untreated reporters]{.alert}, similar to the "no defiers" assumption in non-compliance
+:::
+
+## Trimming the bounds with stronger assumptions
+### Monotonicty revisited
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+- Under monotonicity, [we can bound the average treatment effect for Always-Reporters]{.alert} 
+- For them, the ATE is defined as:
+
+$$E[Y_i(1) | R_i(1) = 1, R_i(0) = 1] - E[Y_i(0) | R_i(1) = 1, R_i(0) = 1]$$
+
+- That is, we observe $Y(0)$ only for the Always-Reporters, as If-Treated-Reporters and Never-Reporters produce only missing values, and under monotonicity we assume there are no If-Untreated-Reporters
+- It sounds a bit confusing, because it is! 😅
+- The difficult part is to estimate the ATE for Always-Reporters, as we observe $Y(1)$ for both Always-Reporters and If-Treated-Reporters
+- We can estimate the share of Always-Reporters by assuming that the share of Always-Reporters in the control group is the same as in the treatment group
+- The difference is the share of If-Treated-Reporters in the treatment group, we can use the lower and upper bound of the distribution of outcomes to estimate the ATE for Always-Reporters
+:::
+
+## Trimming the bounds with stronger assumptions
 
 :::{style="margin-top: 30px; font-size: 27px;"}
-
+- We can bound the effect for always-responders by [taking the means of trimmed versions of the treated outcome distribution]{.alert}
+- A lower bound comes from trimming off the share of compliers from the top of the distribution, and an upper bound comes from trimming this share from the bottom
+- There are several `R` packages that calculate Lee bounds
+  - Have a look at <https://github.com/lbassan/attritevis>
+- Although this is a good solution to attrition, [it has received some criticism too](https://blogs.worldbank.org/en/impactevaluations/dealing-attrition-field-experiments)
+- For instance, [McKenzie (2024)](https://blogs.worldbank.org/en/impactevaluations/lee-bounds-in-practice) argues that it's not clear how to use Lee bounds with binary variables, that incorporating covariates isn't straightforward ([paper proposing a solution here](https://arxiv.org/abs/2309.08985)), and that bounds are not easy to use with clustered data
 :::
+
+# Handling attrition in R {background-color="#2d4563"}
+
+## Handling attrition in `R`
+### `attritevis` package
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+- The `attritevis` package has several useful functions to [visualise the attrition process]{.alert}, [calculate the bounds]{.alert}, and [estimate the ATE]{.alert}
+- It has very few assumptions:
+  - Data must be ordered by survey questions, i.e. if respondents answered Q1 before Q2, the variable Q1 must appear before Q2 (i.e. in an earlier column) in the dataframe
+  - Attrition is defined as completely leaving the survey, not just skipping a question.
+  - For balance tests, treatment and control conditions must be defined
+- The package is available on GitHub: <https://github.com/lbassan/attritevis>
+:::
+
+## An empathy experiment
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+:::{.columns}
+:::{.column width=50%}
+- The experiment manipulates peer-praise and measures empathy in a behavioral task
+- There are two arms in the peer-praise randomisation: peer-praise and no praise (control)
+- In the first arm, a word cloud of praise, drawn from real praise collected in a pilot study, is given for people who behave empathetically, with a line of text about peer group average thermometer ratings towards people who are empathetic 
+  - “Peers of yours on this platform have said they hold favorable feelings towards people who engage in empathetic behavior, with an average of 7.9, on a scale of 0 (least favorable) to 10 (most favorable), That same peer group provided real feedback for empathetic behavior which is pictured in the word cloud below” 
+:::
+
+:::{.column width=50%}
+- Respondents in the control condition do not receive any additional information
+ 
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/wordcloud.png){width=50%}
+
+![](figures/cards.png){width=50%}
+:::
+:::
+:::
+:::
+
+## Installing the package and loading a dataset
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- To install and load the package, run the following code:
+
+```{r}
+#| echo: true
+#| eval: true
+# devtools::install_github("lbassan/attritevis", dependencies = TRUE)
+library(attritevis)
+library(ggrepel)
+
+test_data <- read.csv("./test_data.csv")
+names(test_data)
+```
+:::
+
+## Attrition dataframe
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+
+- The `attrition()` function creates a frame that indicates, per question: 
+  - `attrited` -- how many respondents attrited (left the survey) at each question
+  - `proportion` -- number of attrited respondents / number of respondents who entered survey  
+  - `prop_q` -- number of attrited respondents / number of respondents entering into the question
+  - `questions` -- question names
+  - `responded` -- how many respondents responded in each question  
+  - `prop_r` -- number of respondents who responded / number of respondents who entered survey
+
+```{r}
+#| echo: true
+#| eval: true
+attrition_data <- attritevis::attrition(test_data)
+head(attrition_data, 20)
+
+sum(attrition_data$attrited) #How many respondents attrited overall?
+sum(attrition_data$attrited)/nrow(test_data) #What proportion of the overall sample is this?
+```
+:::
+
+## Visualising the attrition process
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- The `plot_attrition()` function shows the attrition process for the post-treatment questions
+
+```{r}
+#| echo: true
+#| eval: true
+plot_attrition(test_data)  
+```
+:::
+
+## Visualising the attrition process
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- We can specify `y="resonded"` to account for response, rather than attrition
+
+```{r}
+#| echo: true
+#| eval: true
+plot_attrition(test_data, y="responded")  
+```
+:::
+
+## Visualising the attrition process
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- With `treatment_q`, we can specify the treatment question, and with `outcome_q`, we can specify the outcome questions
+
+```{r}
+#| echo: true
+#| eval: true
+attritevis::plot_attrition(test_data,
+              y = "responded",
+              outcome_q = c("cards1", "cards2",  "cards3"),
+              treatment_q = "treat1",
+              mycolors = c(treatment = "#000066",
+                           control = "#CC0033"))
+```
+:::
+
+## Balance tests
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- The `balance_cov()` function calculates the balance of covariates between the treatment and control groups
+
+```{r}
+#| echo: true
+#| eval: true
+attritevis::balance_cov(data = test_data, 
+        treatment = "treat1", 
+        question = "age")
+```
+:::
+
+## Balance tests
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- We can also use the function `balance_cov()` when the covariate (`question`) is a factor, but we must specify which factor we are interested in
+
+```{r}
+#| echo: true
+#| eval: true
+attritevis::balance_cov(data = test_data, 
+        treatment = "treat1", 
+        question = "sex",
+        factor = TRUE,
+        factor_name = "female")
+```
+:::
+
+## Balance across attrition
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- Next, we can check whether our treatment is correlated with attrition at any moment in the survey with the `balance_attrite()` function
+
+```{r}
+#| echo: true
+#| eval: true
+attritevis::balance_attrite(data = test_data, 
+        treatment = "treat1", 
+        question = "Happy_3_1")
+```
+:::
+
+## Calculating the bounds
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- Finally, we can estimate both Manski bounds and Lee bounds with the `bounds()` function
+- We have to install the [`attrition`](https://alexandercoppock.com/attrition/) package to estimate the bounds
+
+```{r}
+#| echo: true
+#| eval: true
+# devtools::install_github("acoppock/attrition")
+attritevis::bounds(data = test_data, 
+        treatment = "treat1", 
+        DV = "cards1")
+```
+
+```{r}
+#| echo: true
+#| eval: true
+attritevis::bounds(data = test_data, 
+        treatment = "treat1", 
+        DV = "cards1", 
+        type = "Lee")
+```
+:::
+
+## Summary
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+- Attrition is a common issue in experiments, and it can bias estimates (as everything else we've seen so far 😅)
+- We can handle attrition by assuming that it is related to observed variables
+- In this case, we can use [inverse probability weighting]{.alert} (IPW) to estimate the ATE
+- We can also use [extreme bounds analysis]{.alert} (EBA) to evaluate the sensitivity of the ATE to different assumptions about the missing data
+- [Lee bounds]{.alert} are a way to trim the bounds to make them more informative
+- The `attritevis` package in `R` has several functions to visualise the attrition process, calculate the bounds, and estimate the ATE
+- Consider using these functions in your next experiment! 🤓
+:::
+
+# ...and that's it! 🎉 {background-color="#2d4563"}
+
+# See you next time! 😉 {background-color="#2d4563"}
