@@ -1,0 +1,247 @@
+---
+title: "QTM 385 - Experimental Methods"
+subtitle: "Assignment 04"
+output: html_document
+date: "2025-02-19"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+library(readr)
+library(estimatr)
+library(ri2)
+library(randomizr)
+
+```
+
+# Instructions
+
+As in previous assignments, here are 10 questions related to our recent classes. They cover randomisation inference, blocking, clustering, and statistical power.
+
+If you have any questions about the assignment, feel free to email me at [danilo.freire\@emory.edu](mailto:danilo.freire@emory.edu){.email}.
+
+Good luck!
+
+*-note: i tried to work R in VScode for assignment 3, but the kernel kept dying and I spent a few hours trying to figure out how to run jupyter properly via anaconda prompt,before eventually giving up and submitting what I had, which is why it didn't run properly last time (cran mirrors and Ir kernel are surprisingly finicky with VS) Went simple this week with classic R studio, but now that we learned about Quarto in 350 - that may be the best option for future assignments!*
+
+# Questions
+
+# 1. Explain what the ICC represents in the context of a clustered randomised trial. Give a concrete example of a situation where you would expect a high ICC.
+
+ICC, or the intra-cluster correlation, is a number between 0 and 1 that descirbes how much of the total variance is due to difference between different clusters. It essentially measures how much info we lose as a result of clustering.
+
+A high ICC means that people in the same cluster are more likely to have similar outcomes compared to those in other clusters. A personal example could be studying college acceptance rates in different high schools across the Bay Area. I attended Gunn High School in the Palo Alto Unified School District, which is known to be very rigorous - in general, students in Palo Alto typically have access to strong academic resources and college preparation programs. Compared to a different Bay area public school district with fewer resources and less known for being rigorous (ex: San Jose Unified School District) it would make more sense if schools in my district had similar college acceptance rates compared to each other vs. schools in San Jose's.
+
+If you wanted to reduce variance, we could block within districts based on household income (Palo Alto is known to be a more expensive city), since it's most likely that students with higher income -\> more resources and more likely to perform better and get into college
+
+# 2. Imagine that you have designed a cluster-randomised trial with 10 schools (5 treatment, 5 control) and found an ICC of 0.15. Calculate the design effect (or variance inflation factor) for this study if the average cluster size is 2000 students.
+
+We know that ICC = sd between/ sd between + sd within. We also know that ness = n/ (1 + k-1) x ICC. The variance inflation factor is the denominator.
+
+n=10 x 2000 = 20,000 , k=2000, icc=0.15
+
+Variance inflation: 1+ (2000-1)) x 0.15 = 300.85
+
+(ness: 20000/300.85 = 66.6
+
+The variance inflation of 300.85 is the number that our effective sample size is reduced by
+
+# 3. You want to increase the statistical power of your experiment. What are the main factors that influence the power of a study, and how can you increase it?
+
+influences:
+
+Strength of treatment effect: larger the effect, the higher the power
+
+Variability in data: the more variability, the lower the power
+
+Sample size: the larger the sample size, the bigger the power usually is.
+
+The main thing that we can control in an experiment is size, since we can't truly determine variability and treatment strength. So the best way to increase power is by increasing sample size, since we are more likely to detect an effect. This can be done by adding more clusters or increasing the number of units in each cluster.
+
+# 4. A diet and exercise program advertises that it causes everyone who is currently starting a diet to lose at least seven pounds more than they otherwise would have during the first two weeks. Use randomisation inference to test the hypothesis that $\tau_i = 7$ for all $i$. The treatment group's weight losses after two weeks are $\{2, 11, 14, 0, 3\}$ and the control group's weight losses are $\{1, 0, 0, 4, 3\}$. In order to test the hypothesis $\tau_i = 7$ for all $i$ using the randomisation inference methods discussed in this chapter, subtract 7 from each outcome in the treatment group so that the exercise turns into the more familiar test of the sharp null hypothesis that $\tau_i = 0$ for all $i$. When describing your results, remember to state the null hypothesis clearly, and explain why you chose to use a one-sided or two-sided test. (Adapted from Gerber and Green, 2012, p. 88).
+
+```{r}
+# Treatment and control groups
+treatment <- c(2, 11, 14, 0, 3) - 7
+control <- c(1, 0, 0, 4, 3)
+
+# Create dataset
+diet.data <- data.frame(
+  weight_loss = as.numeric(c(treatment, control)),  # Ensure numeric
+  treat = as.numeric(c(rep(1, length(treatment)), rep(0, length(control))))  # Ensure numeric
+)
+
+# Declare randomization procedure
+declaration <- declare_ra(N = nrow(diet.data), m = sum(diet.data$treat))
+
+ri_result <- conduct_ri(
+  formula = weight_loss ~ treat,
+  assignment = "treat",
+  declaration = declaration,  
+  sharp_hypothesis = 0,
+  data = diet.data,
+  sims = 1000 
+)
+
+```
+
+null hypothesis: ti=0 for all i alternative hypothesis: ti does not =0 for all i
+
+Since a two sided alternative states that the alternative would not equal 0, it makes the most sense to use a two tailed test - because we also have to consider that it isn't just about the existence of weight loss, it can increase OR decrease weight loss!
+
+# 5. Below is an R function to calculate statistical power in R. Assuming that \$\mu\_t = 55, $\mu_c = 50$, $\sigma = 30$, $n = 100$, and $\alpha = 0.05$, calculate the statistical power of the test. How many individuals would be necessary for the statistical power to be 0.8?
+
+``` r
+power_calculator <- function(mu_t, mu_c, sigma, alpha=0.05, N){ 
+  lowertail <- (abs(mu_t - mu_c)*sqrt(N))/(2*sigma) 
+  uppertail <- -1*lowertail 
+  beta <- pnorm(lowertail- qnorm(1-alpha/2), lower.tail=TRUE) + 1- pnorm(uppertail- qnorm(1-alpha/2), lower.tail=FALSE) 
+  return(beta) 
+  }
+```
+
+```{r}
+# we use the specificed values
+mu_t <- 55
+mu_c <- 50
+sigma <- 10
+alpha <- 0.05
+N <- 100 
+
+power_calculator <- function(mu_t, mu_c, sigma, alpha=0.05, N) { 
+  lowertail <- (abs(mu_t - mu_c) * sqrt(N)) / (2 * sigma) 
+  uppertail <- -1 * lowertail 
+  beta <- pnorm(lowertail - qnorm(1 - alpha/2), lower.tail=TRUE) + 
+          1 - pnorm(uppertail - qnorm(1 - alpha/2), lower.tail=FALSE) 
+  return(beta) 
+}
+
+power_value <- power_calculator(mu_t, mu_c, sigma, alpha, N)
+print(power_value) 
+
+# The statistical power is 0.705, which means there is a 70.5% chance of detecting a true treatment effect
+```
+
+# 6. Sometimes, rather than calculate a budget based on sample size, we have a maximum budget and need to decide whether it is worth doing the study (that is, whether we are sufficiently powered to detect a given effect size, conditional on budgetary limitations). You find out that you only have enough funds for a sample size of 2400 in total. Using the estimate of a roughly 5% increase in test scores and a standard deviation of test scores of 16.5, what is the power of your experiment? (An approximate answer is okay; it’s hard to get exact power on the calculator this way.) The mean test score in the control group is 37. Is it worth carrying out the study on just 2400 students? How would you determine this? (Adapted from J-PAL, 2019).
+
+```{r}
+# do the same thing as above
+
+mu_t <- 37 * 1.05  # 0.5 because 5% increase in test scores
+mu_c <- 37
+sigma <- 16.5
+N <- 2400 #this is our constraint on how much we can afford 
+
+power_calculator <- function(mu_t, mu_c, sigma, alpha=0.05, N) { 
+  lowertail <- (abs(mu_t - mu_c) * sqrt(N)) / (2 * sigma) 
+  uppertail <- -1 * lowertail 
+  beta <- pnorm(lowertail - qnorm(1 - alpha/2), lower.tail=TRUE) + 
+          1 - pnorm(uppertail - qnorm(1 - alpha/2), lower.tail=FALSE) 
+  return(beta) 
+}
+
+power_value <- power_calculator(mu_t, mu_c, sigma, alpha, N)
+print(power_value) 
+
+# the power is usually worth it if its around 0.8. With a sample size of 2400, the statistical power is 0.784, which is close enough for me to say  the study is likely worth conducting - but a slightly higher sample size would make it better
+```
+
+The text below, also adapted from Gerber and Green (2012, p. 88), discusses an article by Titiunik (2010) that analyses two natural experiments that can be combined. Using this text as a basis, answer questions 7 to 10. The dataset is available [in our GitHub repository](https://github.com/danilofreire/qtm385/blob/main/assignments/04-assignment/titiunik.csv). Use the packages we have been using in class to answer these questions (`randomizr`, `estimatr`, `fabricatr`, `ri2`, and others you may find useful). A table with the number of bills introduced by senators in both states is available below.
+
+| Texas | \# of bills introduced | Arkansas | \# of bills introduced |
+|:----------------:|:----------------:|:-----------------:|:----------------:|
+| Term Length: |  | Term Length: |  |
+| 0 = four-year term; |  | 0 = four-year term; |  |
+| 1 = two-year term |  | 1 = two-year term |  |
+| --------------------- | --------------------- | ---------------------- | --------------------- |
+| 0 | 18 | 0 | 11 |
+| 0 | 29 | 0 | 15 |
+| 0 | 41 | 0 | 23 |
+| 0 | 53 | 0 | 24 |
+| 0 | 60 | 0 | 25 |
+| 0 | 67 | 0 | 26 |
+| 0 | 75 | 0 | 28 |
+| 0 | 79 | 0 | 31 |
+| 0 | 79 | 0 | 33 |
+| 0 | 88 | 0 | 34 |
+| 0 | 93 | 0 | 35 |
+| 0 | 101 | 0 | 35 |
+| 0 | 103 | 0 | 36 |
+| 0 | 106 | 0 | 38 |
+| 0 | 107 | 0 | 52 |
+| 0 | 131 | 0 | 59 |
+| 1 | 29 | 1 | 9 |
+| 1 | 37 | 1 | 10 |
+| 1 | 42 | 1 | 14 |
+| 1 | 45 | 1 | 15 |
+| 1 | 45 | 1 | 15 |
+| 1 | 54 | 1 | 17 |
+| 1 | 54 | 1 | 18 |
+| 1 | 58 | 1 | 19 |
+| 1 | 61 | 1 | 19 |
+| 1 | 64 | 1 | 20 |
+| 1 | 69 | 1 | 21 |
+| 1 | 73 | 1 | 23 |
+| 1 | 75 | 1 | 23 |
+| 1 | 92 | 1 | 24 |
+| 1 | 104 | 1 | 28 |
+|  |  | 1 | 30 |
+|  |  | 1 | 32 |
+|  |  | 1 | 34 |
+|  |  | 0 | 17 |
+
+# 7. Naturally occurring experiments sometimes involve what is, in effect, block random assignment. For example, Titiunik studies the effect of lotteries that determine whether state senators in Texas and Arkansas serve two-year or four-year terms in the aftermath of decennial redistricting. These lotteries are conducted within each state, and so there are effectively two distinct experiments on the effects of term length. An interesting outcome variable is the number of bills (legislative proposals) that each senator introduces during a legislative session. The table below lists the number of bills introduced by senators in both states during 2003. For each state, estimate the effect of having a two-year term on the number of bills introduced.
+
+note: chatgpt was used to double check the next few problems since it kept returning a FUN error
+
+```{r}
+titiunik <- read_csv("C:/Users/Abasu/Documents/GitHub/qtm385/assignments/04-assignment/titiunik.csv")
+
+# Texas
+texas_model <- lm_robust(bills_introduced ~ term2year, data = titiunik %>% filter(texas0_arkansas1 == 0))
+summary(texas_model)
+
+# Arkansas
+arkansas_model <- lm_robust(bills_introduced ~ term2year, data = titiunik %>% filter(texas0_arkansas1 == 1))
+summary(arkansas_model)
+```
+
+A two-year term reduces bill introductions by 16.74 in texas when in Arkansas a two-year term reduces bill introductions by 10.09 The effect is only statistically significant in Arkansas
+
+# 8.Estimate the overall ATE for both states combined.
+
+```{r}
+# pooling both states
+combined_model <- lm_robust(bills_introduced ~ term2year + factor(texas0_arkansas1), data = titiunik)
+summary(combined_model)
+
+```
+
+The average treatment effect (ATE) across both states is -13.22 bills which means overall there are less bills with these senators vs 4 year
+
+# 9. Explain why, in this study, simply pooling the data for the two states and comparing the average number of bills introduced by two-year senators to the average number of bills introduced by four-year senators leads to different estimates of the overall ATE.
+
+Pooling assumes that treatment effects are identical across both states, but differences in legislative behavior/political culture in states could lead to heterogeneous treatment effects. If Arkansas has a generally lower number of bills introduced than Texas, the pooled estimate could be misleading.
+
+# 10. Use randomisation inference to test the sharp null hypothesis that the treatment effect is zero for senators in both states.
+
+```{r}
+library(ri2)
+library(randomizr)
+
+declaration <- declare_ra(N = nrow(titiunik), m = sum(titiunik$term2year))
+
+ri_result <- conduct_ri(
+  formula = bills_introduced ~ term2year,
+  assignment = "term2year",
+  declaration = declaration,  
+  sharp_hypothesis = 0,
+  data = titiunik,
+  sims = 1000  
+)
+
+```
+
+The randomization inference test checks whether the observed effect could be due to random chance. f the p value is low, we can reject the sharp null hypothesisc - so the term length likely has an actual impact.
