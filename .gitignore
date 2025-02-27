@@ -635,3 +635,5 @@ $RECYCLE.BIN/
 
 ### Quarto ###
 .quarto
+
+/.quarto/

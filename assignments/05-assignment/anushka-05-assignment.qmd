@@ -52,17 +52,44 @@ Estimate the intent-to-treat (ITT) effect of `assignment` on `financial_knowledg
 
 financial <- read.csv("C:/Users/Abasu/Documents/GitHub/qtm385/assignments/05-assignment/financial.csv")
 
+colnames(financial)
+
+dim(financial)
+
+
+library(AER)    
+library(sandwich) # For robust SEs
+
+
+itt_model <- lm(financial_knowledge_score ~ assignment, data=financial)
+coeftest(itt_model, vcov = vcovHC(itt_model, type = "HC1"))
+
 
 ```
 
 ## 6.  Estimate the ITT effect of `assignment` on `programme_usage` using robust linear regression. Interpret this ITT_D in terms of programme uptake.
 
 ```{r}
+# Estimate ITT_D using robust linear regression
+itt_d_model <- lm(programme_usage ~ assignment, data=financial)
+coeftest(itt_d_model, vcov = vcovHC(itt_d_model, type = "HC1"))
 
 
 ```
 
 ## 7.  Use the IV approach to estimate the CACE. Interpret the estimates and compare with the results from the ITT analysis you conducted in questions 5 and 6.
+
+```{r}
+# Estimate CACE using 2SLS
+library(AER)
+
+cace_model <- ivreg(financial_knowledge_score ~ programme_usage | assignment, data=financial)
+summary(cace_model)
+
+# Compare with ITT results
+summary(itt_model)
+summary(itt_d_model)
+```
 
 ## 8.  In her study of election monitoring in Indonesia, [Hyde (2010)](https://doi.org/10.1017/S1537592710001222) randomly assigned international election observers to monitor certain polling stations.Here, we consider a subset of her experiment where approximately 20% of the villages were assigned to the treatment group. Because of difficult terrain and time constraints, observers monitored 68 of the 409 polling places assigned to treatment. Observers also monitored 21 of the 1,562 stations assigned to the control group. The dependent variable here is the number of ballots that were declared invalid by polling station officials.
 
