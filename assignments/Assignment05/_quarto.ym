@@ -1,0 +1,15 @@
+---
+format: 
+  html: 
+    toc: true
+    code-fold: true
+  pdf:
+    toc: true
+    number-sections: true
+
+#| echo: true
+#| message: false
+#| warning: false
+
+    
+---

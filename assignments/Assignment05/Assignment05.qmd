@@ -1,0 +1,169 @@
+---
+title: "Assignment 05"
+author: "Anushka"
+date: "February 26, 2025"
+format:
+  html:
+    toc: true
+    code-fold: true
+  pdf:
+    toc: true
+    number-sections: true
+---
+
+# Instructions
+
+As in previous assignments, here are 10 questions related to our recent classes. They cover one-sided and two-sided non-compliance. Please answer all question and export the file as a PDF or html file. If you use R or Jupyter Notebook, make sure to include both the code and the output in the document.
+
+If you have any questions about the assignment, feel free to email me at [danilo.freire\@emory.edu](mailto:danilo.freire@emory.edu){.email}.
+
+Good luck!
+
+# Questions
+
+## 1.Name the four compliance types in two-sided non-compliance, and provide a brief description of each. Imagine a scenario in which each type of non-compliance could occur.
+
+**Compliers**: only take the treatment if they are assigned to the treatment group and vice versa.
+ex: A participant assigned to a new medication takes it as instructed, while someone not assigned won't take it
+
+**Always-Takers**: takes the treatment whether they are assigned to the treatment group or not.
+ex: A participant in a school that takes a class even if they aren't enrolled
+
+**Never-Takers**: never takes the treatment, even if assigned to the treatment group.  
+ex: A participant who is antivax may refuse to take a vaccine when asked
+
+**Defiers**: They do the opposite of what they are assigned
+ex: stubborn teenagers being assigned to different tasks may act up and do the other one
+
+## 2. Explain the concept of Two-Stage Least Squares (2SLS) in the context of estimating CACE. Briefly describe the two stages.
+
+2SLS (coefficient beta) is a consistent estimator for CATE, and we use two regressions to estimate it. The first stage estimates the effect of the treatment assignment on the treatment status, while the second stage estimates the effect of the treatment status on the outcome.
+
+## 3. Discuss the trade-off between internal validity and external validity when focusing on CACE rather than ATE in the presence of non-compliance.
+
+The CACE has a high internal validity for compliers  because it tells us the causal effect among those who actually take the treatment, ut it may have lower external validbity because compliers may differ from non-compliers or be a relatively dmall number. 
+
+Meanwhile, ATE is has more external validity because it includes everyone assigned, regardless of whether they complied.  However, non-compliance makes it hard to accurately measure the true effect of treatment among those who actually take it.
+
+## 4. The following three quantities are similar in appearance but refer to different things. Describe the differences.
+
+## 
+
+$$
+E[Y_i(d_i(1)) | D_i = 1]
+$$ 
+This is a standard conditional expectation (thank you QTM 220!) The Given that an individual is assigned to treatment group (di=1), what is the expected outcome? This includes all types of people
+$$
+E[Y_i(d_i(1)) | d_i(1) = 1]
+$$
+given that an indidivual is assigned to the treatment group and actually takes the treatment (di(1)=1) what is the expected outcome? This excludes never-takers
+
+$$
+E[Y_i(d_i(1)) | d_i(1) = d_i(0) = 1]
+$$
+This is given that an individual would take the treatment regardless of their group (di(1) = di(0) = 1]), what is the expected outcome? This focuses on always-takers
+
+## 5.Imagine we have a dataset for a hypothetical experiment evaluating a "Financial Literacy Programme" aimed at improving personal financial management skills. The dataset is available at <https://github.com/danilofreire/qtm385/blob/main/assignments/05-assignment/financial.csv>. The dataset has the following variables:
+
+-   `id`: Unique participant identifier.
+-   `assignment`: Treatment assignment (0 = control group, 1 = treatment group). Participants assigned to the treatment group were offered access to the programme.
+-   `programme_Usage`: Actual usage of the Financial Literacy Programme (0 = no usage, 1 = used the programme). This indicates whether participants in either group actually used the programme (treatment). Note that control group members could theoretically access similar resources outside the study, leading to potential two-sided non-compliance aspects, though we will primarily focus on IV analysis suitable for non-compliance scenarios discussed in lectures.
+-   `financial_knowledge_score`: Score on a financial knowledge test post-experiment (outcome variable). Higher scores indicate better financial knowledge.
+
+Estimate the intent-to-treat (ITT) effect of `assignment` on `financial_knowledge_score` using robust linear regression. Interpret, in detail, the ITT effect in the context of the Financial Literacy Programme.
+
+```{r}
+
+library(AER)
+library(sandwich)
+library(lmtest)
+
+financial <- read.csv("C:/Users/Abasu/Documents/GitHub/qtm385/assignments/05-assignment/financial.csv")
+
+colnames(financial)
+dim(financial)
+
+itt_model <- lm(financial_knowledge_score ~ assignment, data = financial)
+
+coeftest(itt_model, vcov = vcovHC(itt_model, type = "HC1"))
+
+# The ITT estimate does not distinguish between compliers, always takers  or never takers, and a statisticall significant coefficient means the the offer itself of the program improves financial scores rather than actual treatment
+```
+
+## 6.  Estimate the ITT effect of `assignment` on `programme_usage` using robust linear regression. Interpret this ITT_D in terms of programme uptake.
+
+```{r}
+itt_d_model <- lm(programme_usage ~ assignment, data = financial)
+
+coeftest(itt_d_model, vcov = vcovHC(itt_d_model, type = "HC1"))
+
+# this measures how much programme uptake changes due to treatment assignment. If the coefficient is closre to 1, we are close to full complaince, and if it is closer to 0, non-compliance is high.
+
+```
+
+## 7.  Use the IV approach to estimate the CACE. Interpret the estimates and compare with the results from the ITT analysis you conducted in questions 5 and 6.
+
+```{r}
+
+cace_model <- ivreg(financial_knowledge_score ~ programme_usage | assignment, data = financial)
+
+summary(cace_model)
+
+# compare!
+summary(itt_model)
+summary(itt_d_model)
+
+# the CACE estimates the effect of  using the programme on financial knowledge but ONLY for compliers
+```
+
+## 8.  In her study of election monitoring in Indonesia, [Hyde (2010)](https://doi.org/10.1017/S1537592710001222) randomly assigned international election observers to monitor certain polling stations.Here, we consider a subset of her experiment where approximately 20% of the villages were assigned to the treatment group. Because of difficult terrain and time constraints, observers monitored 68 of the 409 polling places assigned to treatment. Observers also monitored 21 of the 1,562 stations assigned to the control group. The dependent variable here is the number of ballots that were declared invalid by polling station officials.
+
+# Explain what the non-interference assumption means in the context of this experiment.
+
+Non-interfence in this context means that outcomes don't affect each other, in that the treatment at one polling station doesn't affect another. If one location is monitered, this wouldn't affect voter behavior at a different location.
+
+## 9.  Download the sample dataset at <https://github.com/danilofreire/qtm385/blob/main/assignments/05-assignment/hyde.csv> and estimate the ITT and the CACE. Interpret the results.
+```{r}
+
+hyde <- read.csv("C:/Users/Abasu/Documents/GitHub/qtm385/assignments/05-assignment/hyde.csv")
+
+colnames(hyde)
+
+itt_hyde <- lm(invalid_ballots ~ sample, data = hyde)
+coeftest(itt_hyde, vcov = vcovHC(itt_hyde, type = "HC1"))
+
+cace_hyde <- ivreg(invalid_ballots ~ observed | sample, data = hyde)
+summary(cace_hyde)
+
+# ITT measures how being assigned monitors affects invalid ballots on average, regardless of actual monitoring, while the CACE measures how actually being monitored affects invalid ballots among polling locations in which the treatment status is influenced.
+
+```
+
+## 10. Use randomisation inference to test the sharp null hypothesis that there is no intent-to-treat effect for any polling location. Interpret the results. Explain why testing the null hypothesis that the ITT is zero for all subjects serves the same purpose as testing the null hypothesis that the ATE is zero for all Compliers.
+
+```{r}
+
+# ai was used since the last few lectures didnt mention random inference 
+set.seed(123)  
+
+obs_diff <- mean(hyde$invalid_ballots[hyde$sample == 1]) - 
+            mean(hyde$invalid_ballots[hyde$sample == 0])
+
+permute_diff <- function(data) {
+  permuted_sample <- sample(data$sample)
+  mean(data$invalid_ballots[permuted_sample == 1]) - 
+    mean(data$invalid_ballots[permuted_sample == 0])
+}
+
+n_permutations <- 1000
+perm_diffs <- replicate(n_permutations, permute_diff(hyde))
+
+p_value <- mean(abs(perm_diffs) >= abs(obs_diff))
+
+hist(perm_diffs, main = "Randomization Distribution of Test Statistic",
+     xlab = "Difference in Means", breaks = 30)
+abline(v = obs_diff, col = "red", lwd = 2)
+text(obs_diff, max(hist(perm_diffs, plot = FALSE)$counts), 
+     labels = paste("Observed Diff =", round(obs_diff, 2)), pos = 4, col = "red")
+
+```
