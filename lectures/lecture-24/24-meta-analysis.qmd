@@ -1,0 +1,714 @@
+---
+title: DATASCI 385 - Experimental Methods
+subtitle: Lecture 24 - Integration of Research Findings
+author:
+  - name: Danilo Freire
+    email: danilo.freire@emory.edu
+    affiliations: Department of Data and Decision Sciences <br> Emory University
+format:
+  clean-revealjs:
+    self-contained: true
+    code-overflow: wrap
+    footer: "[Integration of Research Findings](https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-24/24-meta-analysis.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: knitr
+editor:
+  render-on-save: true
+---
+
+# Hello, everyone! 😉 {background-color="#2d4563"}
+
+# Brief recap 📚 {background-color="#2d4563"}
+
+## Texts for discussion
+
+:::{style="font-size: 23px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- We discussed [four papers]{.alert}:
+  - [Druckman et al. (2015)]{.alert} used a list experiment on athlete drug/alcohol use, showing significant underreporting compared to direct questions
+  - [Blair et al. (2014)]{.alert} compared list and endorsement experiments to measure support for NATO forces in Afghanistan
+  - [Rosenfeld et al. (2016)]{.alert} validated list experiments, endorsement experiments, and the randomised response technique (RRT) against Mississippi referendum results, finding RRT performed pretty well
+  - [Freire & Skarbek (2023)]{.alert} employed a conjoint experiment to understand attitudes towards lynching in Brazil
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/freire-figure03.jpg){width=100%}
+:::
+:::
+:::
+:::
+
+# Today's plan 📅 {background-color="#2d4563"}
+
+## Integration of research findings
+
+:::{style="font-size: 22px; margin-top: 32px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Discuss the challenge of [generalising experimental results]{.alert}
+- Distinguish between [Sample ATE (SATE)]{.alert} and [Population ATE (PATE)]{.alert}
+- Understand the calculation and interpretation of [standard errors for the PATE]{.alert}
+- Introduce a [Bayesian framework]{.alert} for updating beliefs with new experimental evidence
+- Consider how to incorporate potential [bias]{.alert} (like sampling bias) into our analysis and uncertainty estimates
+- Introduce [meta-analysis]{.alert} as a technique for pooling results from multiple studies
+- Examine the [assumptions and limitations]{.alert} of common meta-analytic approaches
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/freire02.png){width=100%}
+
+Source: [Freire et al (2022)](https://doi.org/10.1017/S0007123422000552)
+:::
+:::
+:::
+:::
+
+# The challenge of generalisation 🤔 {background-color="#2d4563"}
+
+## Extrapolation from experiments
+
+:::{style="font-size: 23px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Experiments yield estimates (like the SATE) specific to the [sample, setting, treatment details, and time]{.alert} of the study
+- However, research aims to answer broader questions: 
+  - How do these findings [fit with existing literature?]{.alert} 
+  - What are the implications for [theory]{.alert}? 
+  - What [policy recommendations]{.alert} follow?
+- Answering these requires [extrapolation]{.alert}, that is, extending conclusions beyond the precise conditions of the experiment
+- This process involves [additional assumptions and some educated guesswork]{.alert}, moving away from the strong causal footing provided by randomisation
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/xkcd.png){width=100%}
+
+Source: [xkcd (2025)](https://xkcd.com/3042/)
+:::
+:::
+:::
+:::
+
+## Uncertainty and bias
+
+:::{style="font-size: 22px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Extrapolation can also introduce systematic [bias]{.alert}:
+  - [Sampling bias]{.alert}: Convenience samples (common in experiments) might not represent the broader population of interest
+  - [Publication bias]{.alert}: Statistically significant or 'interesting' results are often more likely to be published, skewing the available literature
+  - [Contextual changes]{.alert}: Underlying conditions governing cause and effect might shift over time or across locations
+  - [Measurement bias]{.alert}: Variations in how outcomes are measured can lead to inconsistencies in reported effects
+- Even a direct replication involves a new sample and potentially subtle contextual shifts
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/nature.webp){width=60%}
+
+Source: [Nature (2016,](https://www.nature.com/articles/533452a) [2025)](https://www.nature.com/articles/d41586-024-04253-w)
+:::
+:::
+:::
+:::
+
+## Verification vs. replication
+
+:::{style="font-size: 23px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Verification]{.alert}: Taking the [original data]{.alert} from a completed study and attempting to [reproduce the reported statistical results]{.alert}.
+  - Here, the goal is to check for [clerical errors]{.alert}, understand the impact of specific analytical choices, and assess the sensitivity of results to different modelling decisions
+
+- [Replication]{.alert}: Conducting a *new* experiment that uses the [same design]{.alert} (treatments, outcome measures, general procedures) as an earlier study, often in a similar setting with similar subjects
+  - The goal is to assess the [robustness and generalisability]{.alert} of the original finding
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/gelman.png){width=100%}
+
+Source: [Gelman and Loken (2014)](https://sites.stat.columbia.edu/gelman/research/unpublished/p_hacking.pdf)
+:::
+:::
+:::
+:::
+
+# Estimating population average treatment effects (PATE) 🌎 {background-color="#2d4563"}
+
+## From sample to population
+
+:::{style="font-size: 24px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Sample Average Treatment Effect (SATE)]{.alert}: Average causal effect specifically within the group of individuals included in our experiment
+- Often, our real interest lies in the [Population Average Treatment Effect (PATE)]{.alert}: The average effect we would expect if [the treatment were applied to the entire population]{.alert} from which our sample was drawn
+- [Replication studies]{.alert} (which involve drawing new samples) highlight the shift from considering only within-sample randomisation variability (for SATE) to considering [sample-to-sample variability]{.alert} (for PATE)
+:::
+
+:::{.column width="50%"}
+- If subjects are selected via [random sampling]{.alert} from a well-defined, large population, we can statistically estimate the PATE and quantify the uncertainty around that estimate
+- This involves an [additional layer of uncertainty]{.alert} compared to just estimating the SATE, because our specific sample might not perfectly mirror the population due to random chance
+  - The [standard error of the PATE is usually larger]{.alert} than that of the SATE, reflecting this added uncertainty
+:::
+:::
+:::
+
+## Quantifying uncertainty
+
+:::{style="font-size: 23px; margin-top: 30px;"}
+- Under ideal conditions ([independent random sampling]{.alert} from a fixed, large population $N*$), the standard error of the estimated PATE ($SE(\widehat{PATE})$) is given by:
+
+  $$SE(\widehat{PATE}) = \sqrt{ \frac{Var(Y_i(1))}{m} + \frac{Var(Y_i(0))}{N-m} } \quad$$
+
+- $Var(Y_i(1))$ and $Var(Y_i(0))$ are the [variances of potential outcomes in the population]{.alert} under treatment and control
+- $m$ is the number of subjects in the treatment group, and $N-m$ is the number in the control group
+- As you can see, the variance of both groups goes down as sample sizes increase, reducing the overall standard error
+- However, these are typically [estimated using the variances observed in the treatment and control groups]{.alert} of our sample 
+- This formula differs from the SATE standard error because [it relies on population variances]{.alert} and, due to the assumption of a large population $N*$, [the covariance between potential outcomes is assumed to be zero]{.alert}
+:::
+
+# A Bayesian framework for interpretation 📈 {background-color="#2d4563"}
+
+## Updating beliefs with evidence
+
+:::{style="font-size: 25px; margin-top: 30px;"}
+- [Convenience samples tend to be clustered]{.alert}, drawing all of the subjects from a common location or period of time
+- So we need [a framework to reason about generalisation]{.alert}
+- Because generalisation involves inference beyond the data at hand, a [Bayesian approach]{.alert} is useful here
+- Bayesian inference views probability as representing a [subjective degree of belief]{.alert} about a hypothesis or parameter value
+- The process involves the following steps:
+  1.  Starting with [prior beliefs]{.alert} about the parameter (e.g., the PATE) before seeing the current study's results
+  2.  Observing the [evidence]{.alert} from the new experiment
+  3.  Using [Bayes' Rule]{.alert} to combine the prior beliefs and the evidence to form updated [posterior beliefs]{.alert}
+- This framework explicitly models how our understanding should rationally change as new information becomes available
+:::
+
+## Priors and posteriors 
+### Characterising beliefs
+
+:::{style="font-size: 24px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [**Prior Beliefs**]{.alert}: Our knowledge or belief about a parameter (like the PATE) *before* considering the evidence from the current experiment
+  - Often expressed as [a probability distribution]{.alert} (e.g., assuming the PATE follows a normal distribution with a certain mean and variance)
+  - [The mean reflects the best guess, and the variance reflects the degree of prior uncertainty]{.alert}
+  - Can be based on previous studies, theory, or expert judgement
+:::
+:::{.column width="50%"}
+- [**Posterior Beliefs**]{.alert}: Our [updated]{.alert} state of knowledge or belief *after* incorporating the evidence from the experiment
+  - [Also expressed as a probability distribution]{.alert}
+  - Mathematically derived by [combining the prior distribution and the likelihood of the observed data]{.alert} (which reflects the experimental result and its precision)
+  - Represents a [compromise (weighed average) between prior beliefs and the new evidence]{.alert}. Stronger priors or less precise evidence lead to smaller updates
+:::
+:::
+:::
+
+## Bayes' rule for discrete outcomes
+### Updating beliefs about a hypothesis
+
+:::{style="font-size: 21px; margin-top: 30px;"}
+- Imagine that we ran an RCT that gave us a statistically significant result and we want to update our belief about whether the treatment has a positive effect
+- We have our hypothesis $H$ (the treatment has a positive effect) and evidence $E$ from an experiment (the result is statistically significant at the $0.05$ level)
+- Bayes' rule tells us how to update our belief in $H$ after observing $E$ (the posterior probability, $P(H|E)$):
+
+  $$ P(H|E) = \frac{P(E|H)P(H)}{P(E)} = \frac{P(E|H)P(H)}{P(E|H)P(H) + P(E|\neg H)(1-P(H))} $$
+
+- The numerator, $P(E|H)P(H)$, represents the probability $E$ occurs assuming $H$ is true, multiplied by the probability $H$ is true in the first place
+- Now we need $P(E)$, the total probability of seeing the evidence
+- Why? $E$ can occur in two mutually exclusive ways: either $H$ is true or $H$ is false
+- Thus, we have the denominator: $P(E|H)P(H) + P(E|\neg H)(1-P(H))$
+- If $H$ was unlikely to begin with (low $P(H)$), you need very strong evidence (high $P(E|H)$) to believe it now
+- Conversely, if $H$ was already very likely, even weak evidence can reinforce that belief
+:::
+
+## Bayes' rule for discrete outcomes
+### Updating beliefs about a hypothesis
+
+:::{style="font-size: 22px; margin-top: 30px;"}
+- To solve the equation, we need three components:
+  - [P(H)]{.alert}: Our prior belief in $H$ before the experiment. Imagine we thought there was a 50/50 chance the treatment worked
+  - [P(E|H)]{.alert}: The probability of observing evidence $E$ if $H$ is true (the statistical power of the test)
+  - [P(E|~H)]{.alert}: The probability of observing $E$ if $H$ is false (Type I error rate, $0.05$)
+- We can then plug these values into Bayes' rule to get the updated (posterior) belief:
+
+  $$ P(H|E) = \frac{P(E|H)P(H)}{P(E|H)P(H) + P(E|\neg H)(1-P(H))} $$
+
+  $$ = \frac{0.45 \times 0.5}{0.45 \times 0.5 + 0.05 \times 0.5} $$
+  $$ = \frac{0.225}{0.225 + 0.025} = \frac{0.225}{0.25} = 0.90 $$
+
+- So after seeing a significant result, our belief that the treatment has a positive effect jumps [from 50% to 90%!]{.alert}
+:::
+
+## Bayesian updating with normal distributions
+### Estimating a continuous parameter (PATE)
+
+:::{style="font-size: 24px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Now let's apply this to estimate a continuous parameter, the PATE, denoted $\tau$
+- [**Prior beliefs**]{.alert}: Assume our prior beliefs about $\tau$ can be represented by a normal distribution with mean $g$ (our best guess) and variance $\sigma^2_g$
+- [**Experimental result**]{.alert}: The experiment yields an estimate $x_e$ with a standard error $\sigma_{xe}$, so its variance is $\sigma^2_{xe}$
+- [**Likelihood**]{.alert}: Assuming the experimental estimate $x_e$ follows a normal sampling distribution centred on the true PATE ($\tau$), the likelihood is also normal (conjugate priors)
+:::
+:::{.column width="50%"}
+- [**Posterior beliefs**]{.alert}: When both the prior and the likelihood are normal, the resulting posterior distribution for $\tau$ is also normal
+- The [mean and variance of this posterior distribution]{.alert} are calculated as a weighted average of the prior information and the experimental evidence, reflecting the relative precision of each
+- We will now incorporate the possibility of bias in the experimental estimate of the PATE
+:::
+:::
+:::
+
+## Visualising the Bayesian update
+
+:::{style="font-size: 20px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="40%"}
+- Consider a simple case (initially ignoring bias):
+  - [Prior belief about PATE]{.alert}: Centred at $g=0$ with standard deviation $\sigma_g=2$ (variance $\sigma^2_g=4$)
+  - [Experimental result]{.alert}: Estimate $x_e=10$ with standard error $SE_{xe}=1$ (variance $\sigma^2_{xe}=1$)
+- The [Posterior belief about PATE]{.alert} will be:
+  - A normal distribution
+  - Centred between the prior mean ($0$) and the data ($10$)
+  - More precise (smaller variance) than the prior in our example
+- In this example, the posterior mean is $8$, and the posterior standard deviation is approximately $0.89$. The data, being more precise than the prior, pulls the posterior belief strongly towards it
+:::
+:::{.column width="60%"}
+::: {style="text-align: center; margin-top: 50px;"}
+![](figures/figure11_1.png){width=60%}
+
+Source: FEDAI Figure 11.1. Prior (dotted), likelihood based on experimental result (dashed), and posterior (solid) distributions.
+:::
+:::
+:::
+:::
+
+## Calculating the posterior (normal-normal case) 
+
+:::{style="font-size: 21px; margin-top: 20px;"}
+- It is often easier to work with [precision]{.alert}, which is defined as the [inverse of the variance]{.alert}: $\text{precision} = 1 / \sigma^2$
+    - [Small variance]{.alert} means low uncertainty and [high precision]{.alert}
+    - [Large variance]{.alert} means the opposite: high uncertainty and [low precision]{.alert}
+    - Prior precision: $\rho_{prior} = 1 / \sigma^2_{prior}$
+    - Data precision: $\rho_{data} = 1 / \sigma^2_{data}$
+- The [posterior precision]{.alert} is simply the [sum]{.alert} of the prior and data precisions:
+    $$\rho_{posterior} = \rho_{prior} + \rho_{data}$$
+    - This addition reflects how combining information increases our overall certainty
+- The [posterior mean]{.alert} is a [precision-weighted average]{.alert} of the prior mean and the data:
+    $$\mu_{posterior} = \frac{\rho_{prior} \mu_{prior} + \rho_{data} x_e}{\rho_{posterior}} = \frac{(1/\sigma^2_{prior}) \mu_{prior} + (1/\sigma^2_{data}) x_e}{(1/\sigma^2_{prior}) + (1/\sigma^2_{data})}$$
+    - Information sources with higher precision (lower variance) receive more weight in determining the final posterior belief
+- The [posterior variance]{.alert} is the inverse of the posterior precision: $\sigma^2_{posterior} = 1 / \rho_{posterior}$
+:::
+
+## R code for Bayesian update (normal-normal)
+
+:::{style="font-size: 20px; margin-top: 30px;"}
+- Let's apply this to the example from Figure 11.1, calculating precisions first
+
+```{r}
+#| echo: true
+#| eval: true
+
+# Prior
+prior_mean <- 0
+prior_se <- 2
+prior_var <- prior_se^2
+# Prior precision
+prior_precision <- 1 / prior_var
+
+# Experimental data
+data_mean <- 10 
+data_se <- 1
+data_var <- data_se^2
+# Calculate data precision
+data_precision <- 1 / data_var
+
+# Posterior precision
+posterior_precision <- prior_precision + data_precision
+
+# Posterior variance and SE
+posterior_var <- 1 / posterior_precision
+posterior_se <- sqrt(posterior_var)
+
+# Posterior mean (precision-weighted average)
+posterior_mean <- (prior_precision * prior_mean + data_precision * data_mean) / posterior_precision
+
+# Print Results
+cat("Prior Mean:", prior_mean, " Prior SE:", prior_se, " Prior Precision:", round(prior_precision, 2), "\n")
+cat("Data Mean:", data_mean, "  Data SE:", data_se, "  Data Precision:", round(data_precision, 2), "\n")
+cat("Posterior Mean:", round(posterior_mean, 2), " Posterior SE:", round(posterior_se, 2), " Posterior Precision:", round(posterior_precision, 2), "\n")
+
+```
+:::
+
+
+## Incorporating potential bias
+### When the experiment might be biased for PATE
+
+:::{style="font-size: 25px; margin-top: 30px;"}
+- Now, let's consider the more realistic scenario where our experiment might yield an unbiased estimate of the *Sample* ATE, but due to [non-random sampling or other factors]{.alert}, it might be a biased estimate of the *Population* ATE ($\tau$)
+- Let $B$ represent this potential [sampling bias]{.alert}, such that the expected experimental result, given the true PATE $\tau$, is $\tau + B$
+- We need to expand our Bayesian model to include prior beliefs about this bias term $B$
+- Assume $B \sim N(\beta, \sigma^2_B)$, where $\beta$ is our prior belief about the bias and $\sigma^2_B$ is our uncertainty about it
+- We typically assume that our prior beliefs about the true effect $\tau$ and the bias $B$ are independent
+:::
+
+## Posterior mean and variance with bias
+### Updating beliefs about PATE ($\tau$)
+
+:::{style="font-size: 23px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- We define the [data's effective precision]{.alert} for estimating $\tau$ as:
+
+$$\rho_{effective\_data} = \frac{1}{\sigma^2_B + \sigma^2_{xe}}$$
+
+- [Higher uncertainty about the bias ($\sigma^2_B$) directly *reduces* the effective precision of the data]{.alert}
+- Think of [bias uncertainty as adding noise]{.alert} to $\tau$
+- Researchers implicitly setting $\beta = 0$ and $\sigma^2_B = 0$ when extrapolating from convenience samples risk [significant overconfidence]{.alert}
+:::
+
+:::{.column width="50%"}
+- The [posterior mean]{.alert} becomes a weighted average using the prior precision ($\rho_{prior}$) and the data's *effective* precision ($\rho_{effective\_data}$) as weights:
+
+$$\mu_{posterior} = \frac{\rho_{prior} g + \rho_{effective\_data} (x_e - \beta)}{\rho_{prior} + \rho_{effective\_data}}$$
+
+- The [posterior variance]{.alert} also incorporates bias uncertainty, making the final belief less certain than if bias were ignored:
+
+$$\sigma^2_{posterior} = \frac{1}{\rho_{prior} + \rho_{effective\_data}}$$    
+:::
+:::
+:::
+
+## R code for update with bias beliefs
+
+:::{style="font-size: 22px; margin-top: 30px;"}
+- Now we add prior beliefs about the bias (mean `bias_mean` = $\beta$, se `bias_se` = $\sigma_B$) and test the impact of different levels of uncertainty about the bias on the posterior mean and variance
+
+```{r}
+#| echo: true
+#| eval: true
+#| code-fold: true
+#| code-summary: "R Code"
+calculate_posterior <- function(prior_mean, prior_se,
+                                data_mean, data_se,
+                                bias_mean, bias_se) {
+
+  # Precisions for prior and data measurement
+  prior_var <- prior_se^2
+  prior_precision <- 1 / prior_var
+  data_var <- data_se^2
+  data_precision <- 1 / data_var # Precision of the measurement itself
+
+  # Precision related to bias belief
+  bias_var <- bias_se^2
+  # Handle case where bias_se is 0 (certainty about bias) to avoid division by zero
+  if (bias_var == 0) {
+      bias_precision <- Inf
+  } else {
+      bias_precision <- 1 / bias_var # How certain are we about the bias value
+  }
+
+
+  # Calculate data's effective precision for estimating tau
+  # Uncertainty about bias adds to the data's measurement variance
+  total_data_uncertainty_variance <- bias_var + data_var
+  if (total_data_uncertainty_variance == 0) { # Should only happen if bias_se=0 and data_se=0
+      effective_data_precision <- Inf
+  } else {
+      effective_data_precision <- 1 / total_data_uncertainty_variance
+  }
+
+
+  # Calculate posterior precision (certainty about tau)
+  posterior_precision <- prior_precision + effective_data_precision
+  posterior_precision <- prior_precision + effective_data_precision
+
+  # Calculate posterior variance and SE for tau
+  if (posterior_precision == Inf) { # Handle certainty case
+       posterior_var <- 0
+  } else {
+       posterior_var <- 1 / posterior_precision
+  }
+  posterior_se <- sqrt(posterior_var)
+
+  # Calculate posterior mean for tau
+  # Weighted average using prior precision and data's *effective* precision
+  # Note: Data point is corrected by expected bias (data_mean - bias_mean)
+
+   # Handle edge case of infinite precisions
+  if (is.infinite(prior_precision) && is.infinite(effective_data_precision)) {
+      # This case is ill-defined unless prior_mean equals (data_mean - bias_mean)
+      # For simplicity, let's prioritize data if both are infinitely precise.
+       posterior_mean <- data_mean - bias_mean
+  } else if (is.infinite(prior_precision)) {
+       posterior_mean <- prior_mean
+  } else if (is.infinite(effective_data_precision)) {
+      posterior_mean <- data_mean - bias_mean
+  } else if (posterior_precision == 0) { # Both prior and effective data precision are 0 (infinite variance)
+       posterior_mean <- NA # Undefined / Non-informative
+  } else {
+      posterior_mean <- (prior_precision * prior_mean +
+                         effective_data_precision * (data_mean - bias_mean)) / posterior_precision
+  }
+
+
+  # Return results
+  list(prior_mean = prior_mean, prior_se = prior_se, prior_precision = prior_precision,
+       data_mean = data_mean, data_se = data_se, data_precision = data_precision,
+       bias_mean = bias_mean, bias_se = bias_se, bias_precision = bias_precision,
+       effective_data_precision = effective_data_precision,
+       posterior_mean = posterior_mean, posterior_se = posterior_se, posterior_precision = posterior_precision)
+}
+
+# --- Example cases ---
+# Base info from Fig 11.1
+prior_mean_base <- 0
+prior_se_base <- 2
+data_mean_base <- 10
+data_se_base <- 1
+
+# Case A: Certainty of no bias (Bias SE = 0)
+results_A <- calculate_posterior(prior_mean_base, prior_se_base, data_mean_base, data_se_base, bias_mean = 0, bias_se = 0)
+
+# Case B: Moderate uncertainty about bias (Bias SE = 2)
+results_B <- calculate_posterior(prior_mean_base, prior_se_base, data_mean_base, data_se_base, bias_mean = 0, bias_se = 2)
+
+# Case C: High uncertainty about bias (Bias SE = 10)
+results_C <- calculate_posterior(prior_mean_base, prior_se_base, data_mean_base, data_se_base, bias_mean = 0, bias_se = 10)
+
+# --- Print results ---
+print_results <- function(results, case_label) {
+  cat("--- Case:", case_label, "---\n")
+  cat(sprintf("Bias Beliefs: Mean=%.1f, SE=%.1f (Bias Var=%.1f, Bias Precision=%.4f)\n",
+              results$bias_mean, results$bias_se, results$bias_se^2, results$bias_precision))
+  cat(sprintf("Data Effective Precision: %.4f\n", results$effective_data_precision))
+  cat(sprintf("Posterior: Mean=%.2f, SE=%.2f (Posterior Precision=%.4f)\n\n",
+              results$posterior_mean, results$posterior_se, results$posterior_precision))
+}
+
+print_results(results_A, "A: Certain No Bias")
+print_results(results_B, "B: Moderate Bias Uncertainty (SE=2)")
+print_results(results_C, "C: High Bias Uncertainty (SE=10)")
+```
+:::
+
+## Application: combining studies
+### Experiment + observational study
+
+:::{style="font-size: 32px; margin-top: 30px;"}
+- This Bayesian framework is flexible and can integrate different kinds of evidence.
+- Imagine using results from a high-quality, [unbiased randomised experiment]{.alert} to establish your prior beliefs about the PATE ($g, \sigma^2_g$)
+- You could then update these priors using findings from a large, but potentially [biased observational study]{.alert} ($x_e, \sigma^2_{xe}$)
+- To do this rigorously, you must explicitly state your prior beliefs about the [bias of the observational study]{.alert} ($\beta, \sigma^2_B$)
+:::
+
+# Meta-Analysis 📊 {background-color="#2d4563"}
+
+## Meta-Analysis
+### Systematically combining results
+
+:::{style="font-size: 23px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Meta-analysis]{.alert} is a set of statistical techniques designed to pool results from multiple related studies
+- Often, individual studies might be small or lack statistical power, but [combining their results can lead to a more precise and clearer conclusion]{.alert}
+- It is a [widely used method]{.alert} for summarising research literatures across many disciplines, mainly in the health sciences
+- The most basic form, known as [fixed effects meta-analysis]{.alert}, has strong parallels with the Bayesian updating process described earlier, particularly under the assumption of no bias
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/freire01.png){width=80%}
+
+Source: [Freire et al (2022)](https://doi.org/10.1017/S0007123422000552)
+:::
+:::
+:::
+:::
+
+## Fixed effects meta-analysis
+
+:::{style="font-size: 22px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="55%"}
+- [Assumption]{.alert}: All studies ($k=1, ..., K$) included in the analysis are estimating the [exact same underlying true population treatment effect]{.alert}, $\tau$. Any variation in results is due purely to random sampling error
+- [Method]{.alert}: Calculate a pooled estimate ($ATE_{pooled}$) as a weighted average of the individual study estimates ($ATE_k$)
+- [Weighting]{.alert}: Each study's contribution is weighted by its [precision]{.alert}. Studies with smaller standard errors (higher precision) receive more weight
+
+$$ATE_{pooled} = \frac{\sum_{k=1}^{K} w_k ATE_k}{\sum_{k=1}^{K} w_k} = \frac{\sum_{k=1}^{K} (ATE_k / SE_k^2)}{\sum_{k=1}^{K} (1 / SE_k^2)}$$
+:::
+:::{.column width="45%"}
+- [Standard error of pooled estimate]{.alert}: The variance of the pooled estimate is the inverse of the sum of the precisions:
+  
+$$Var(ATE_{pooled}) = \frac{1}{\sum_{k=1}^{K} w_k} = \frac{1}{\sum_{k=1}^{K} (1 / SE_k^2)}$$
+
+$$SE_{pooled} = \sqrt{Var(ATE_{pooled})}$$
+
+- The resulting [pooled standard error]{.alert} reflects the gain in precision from combining evidence
+:::
+:::
+:::
+
+## When is fixed effects meta-analysis appropriate?
+
+:::{style="font-size: 22px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- This simple pooling method rests on several [strong and often unrealistic assumptions]{.alert}:
+  1.  [Homogeneity of Effect]{.alert}: All studies are estimating precisely the same true effect size $\tau$. There is no real variation in the effect across different populations, settings, or minor treatment variations
+  2.  [Independence of Studies]{.alert}: The results of the studies are statistically independent (often violated if studies share researchers, settings, or are aware of each other)
+  3.  [No Bias]{.alert}: Each individual study estimate ($ATE_k$) is assumed to be an unbiased estimate of the common true effect $\tau$. Potential biases (sampling, publication, etc.) are ignored
+- These assumptions are [particularly questionable when pooling studies across diverse contexts or designs]{.alert}
+:::
+
+:::{.column width="50%"}
+- These assumptions can be [relaxed with more complex models]{.alert}:
+  - [Random effects meta-analysis]{.alert}: Assumes that the true effect size varies across studies, allowing for a distribution of effect sizes rather than a single common effect
+  - [Hierarchical models]{.alert}: Can model both within-study and between-study variability
+- However, results can be heavily skewed by [publication bias]{.alert} (the "file drawer problem")
+- Techniques exist to detect this (e.g., funnel plots) but cannot fully correct for it
+- Let's see how to conduct one in practice (all of it!)
+:::
+:::
+:::
+
+# Case study: Legislature size and government spending 💰 {background-color="#2d4563"}
+
+## Step 01: Scrape data
+
+:::{style="font-size: 21px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- My colleagues and I conducted a meta-analysis of the effects of [legislature size on government spending]{.alert} 
+- All information is available at <https://github.com/danilofreire/legislature-size-meta-analysis>
+- To find the articles, we used Google Scholar (n = 1001); Microsoft Academic (n = 927); and Scopus (n = 736) and searched for the following keywords:
+- `("upper chamber size" OR "lower chamber size" OR "council size" OR "parliament size"
+OR "legislature size" OR "number of legislators" OR "legislative size") AND ("spending" OR "expenditure"
+OR "government size")`
+- We also searched all articles that cited the original work on the effects of legislature size on government spending, and ended up with [2664 records]{.alert}
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/legislature.png){width=100%}
+
+Source: [Freire et al (2022)](https://doi.org/10.1017/S0007123422000552)
+:::
+:::
+:::
+:::
+
+## Step 02: Extract data
+
+:::{style="font-size: 21px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Then, we used the [PRISMA guidelines](https://www.prisma-statement.org/) to select the articles that met our inclusion criteria:
+  - We selected only articles in English, and discarded duplicates, PhD theses, and book chapters
+  - We excluded articles by title, then by abstract, then by full text (two independent coders)
+  - The paper should (i) conduct a quantitative analysis, (ii) report data on the number of legislators, and (iii) also include data on public expenditure
+- We then extracted all ATEs and standard errors from the articles to conduct two analyses:
+  - One with the [strictest model]{.alert} and one with [all models]{.alert}
+- We ended up with 30 articles (2 included manually), with 45 estimates in the strict sample, 162 in the complete sample
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/legislature02.png){width=100%}
+
+Part of the data extraction process
+:::
+:::
+:::
+:::
+
+## Step 03: Collect moderators
+
+:::{style="font-size: 21px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- We believed that the effects of legislature size on government spending would be moderated by:
+  - [Independent variable]{.alert} (upper chamber size, lower chamber size, or council size)
+  - [Year]{.alert}
+  - [Methodology]{.alert} (OLS, RDD, IV, panel)
+  - [Publication]{.alert} (yes or no)
+  - [Institutional design]{.alert} (bicameralism, unicameralism, mixed)
+  - [Electoral system]{.alert} (majoritarian or proportional)
+- These variables are useful to estimate [meta-regression]{.alert} models, which allow us to estimate the effect of moderators on the ATE
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/legislature03.png){width=65%}
+:::
+:::
+:::
+:::
+
+## Step 04: Conduct meta-analysis
+
+:::{style="font-size: 21px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- We used the [`meta`](https://cran.r-project.org/web/packages/meta/index.html) `R` package to conduct the meta-analysis
+- Although we did estimate fixed effect models, the main models had random effects, which are more appropriate for our data
+- Instead of having $\tau = \theta + \varepsilon$ (true effect + within study error), we assumed that $\theta$ varies across studies, having a true parameter $\mu$ and a between-study error $\xi_i$: 
+
+$$\tau = \mu + \xi_i + \varepsilon_i$$
+
+- We found [a lot of heterogeneity]{.alert} in the data! 
+- But the meta-regressions also helped us understand the main drivers of the differences in the ATE 🤓
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/legislature04.png){width=100%}
+:::
+
+Here is one of the many figures we produced. As you can see, the main effect is close to zero and there is a lot of variability in the estimates
+:::
+:::
+:::
+
+## Meta-regression
+
+:::{style="font-size: 21px; margin-top: 30px; text-align: center;"}
+![](figures/legislature05.png){width=100%}
+:::
+
+## Testing for method heterogeneity
+
+:::{style="font-size: 21px; margin-top: 30px; text-align: center;"}
+![](figures/legislature06.png){width=100%}
+:::
+
+# Conclusion 📝 {background-color="#2d4563"}
+
+## Conclusion
+
+:::{style="font-size: 24px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Generalising experimental findings]{.alert} is surely challenging, as it introduces uncertainty and the potential for bias
+- It's important to distinguish between the [SATE]{.alert} (effect in the sample) and the [PATE]{.alert} (effect in the target population). Estimating the PATE requires accounting for sampling variability
+- [Convenience sampling]{.alert} complicates PATE estimation and makes standard error calculation based on random sampling assumptions inappropriate
+- The [Bayesian framework]{.alert} offers a coherent way to integrate prior knowledge with new evidence and explicitly model uncertainty about potential biases
+:::
+
+:::{.column width="50%"}
+- [Meta-analysis]{.alert} provides tools for pooling study results, but standard methods (like fixed effects) rely on strong, often unmet, assumptions (e.g., homogeneity of effects, no publication bias, no sampling bias)
+- [Statistical models]{.alert} facilitate interpolation and extrapolation but depend on correct specification 
+- Transparency about [assumptions is important]{.alert} when integrating findings or extrapolating results
+:::
+:::
+:::
+
+# Thanks very much! 😊 {background-color="#2d4563"}
+
+# See you next time! 👋 {background-color="#2d4563"}

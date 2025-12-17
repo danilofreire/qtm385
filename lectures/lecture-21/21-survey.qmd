@@ -1,0 +1,585 @@
+---
+title: DATASCI 385 - Experimental Methods
+subtitle: Lecture 21 - Survey Experiments
+author:
+  - name: Danilo Freire
+    email: danilo.freire@emory.edu
+    affiliations: Department of Data and Decision Sciences <br> Emory University
+format:
+  clean-revealjs:
+    self-contained: true
+    code-overflow: wrap
+    footer: "[Survey Experiments](https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-21/21-survey.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: knitr
+revealjs-plugins:
+  - multimodal
+editor:
+  render-on-save: true
+---
+
+# Hey, there! 🤓 {background-color="#2d4563"}
+
+# Brief recap 📚 {background-color="#2d4563"}
+
+## Mediation analysis
+
+:::{style="margin-top: 20px; font-size: 22px"}
+:::{.columns}
+:::{.column width="50%"}
+- Mediation analysis seeks to understand *how* a treatment $Z$ affects an outcome $Y$ through an intermediate variable $M$ ([causal mechanisms]{.alert})
+- Traditional [regression approaches are widespread but problematic]{.alert}:
+  - Rely on constant effects assumption
+  - Suffer from bias due to unobserved confounding between $M$ and $Y$
+- The [potential outcomes framework reveals fundamental challenges]{.alert}:
+  - Estimating natural direct/indirect effects requires observing complex potential outcomes that are inherently unobservable
+  - Randomising $Z$ alone is insufficient; strong assumptions are needed
+:::
+
+:::{.column width="50%"}
+- [Experimentally manipulating $M$]{.alert} helps estimate controlled effects but doesn't fully solve the problem and may be artificial
+- Using $Z$ as an [instrument for $M$ requires the strong exclusion restriction]{.alert} (no direct $Z \to Y$ path), often violated
+- [Ruling out mediators]{.alert} (showing $Z$ doesn't affect $M$) is a more modest but achievable goal
+- [Implicit mediation analysis]{.alert} is a pragmatic, design-based alternative:
+  - Varies treatment components experimentally
+  - Compares effects to infer which components (and likely mechanisms) matter
+  - Avoids modelling $M$ directly, relies on fewer assumptions
+:::
+:::
+:::
+
+# Today's plan 📅 {background-color="#2d4563"}
+
+## Survey experiments
+
+:::{style="font-size: 26px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Discuss [survey experiments]{.alert} as a methodological tool for understanding [attitudes, preferences, and behaviours]{.alert}
+- Examine why they've become [popular across social sciences]{.alert} and [marketing research]{.alert}
+- Analyse their [versatile applications]{.alert} from policy research to behavioural economics
+- Highlight the crucial balance between [experimental simplicity]{.alert} and [rigorous design requirements]{.alert}
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/bailenson.png){width=90%}
+
+Source: [Bailenson et al (2006)](https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-9221.2006.00505.x)
+:::
+:::
+:::
+:::
+
+# Activity! 😃 {background-color="#2d4563"}
+
+## Activity!
+
+:::{style="font-size: 40px; margin-top: 30px;"}
+- Guess the number!
+- First row is [group 1]{.alert} and second and third rows are [group 2]{.alert}
+- Group 02, [close your eyes]{.alert}! 🙈
+:::
+
+## Activity!
+### Group 01
+
+:::{style="font-size:35px; margin-top: 34px;"}
+Think about whether the population of Madrid is more or less than 500,000 people. 
+
+What do you think the population of Madrid is?
+:::
+
+## Activity!
+
+:::{style="font-size: 40px; margin-top: 30px;"}
+- Guess the number!
+- First row is [group 1]{.alert} and second and third rows are [group 2]{.alert}
+- Group 01, [now close your eyes]{.alert}! 🙈
+- Group 02, [answer the question]{.alert}!
+:::
+
+## Activity!
+### Group 02
+
+:::{style="font-size: 35px; margin-top: 34px;"}
+Think about whether the population of Madrid is more or less than 20,000,000 people. 
+
+What do you think the population of Madrid is?
+:::
+
+## Results
+
+:::{style="font-size: 30px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [The population of Madrid is approximately 3.3 million people]{.alert}
+- What did you guess?
+- What’s going on here?  
+  - A survey experiment!  
+  - Demonstrates [“anchoring” heuristic]{.alert}
+- Survey experiments are easy to analyse, but [only if designed and implemented well!]{.alert}
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; font-size: 22px;"}
+![](figures/anchoring-bias.png){width=80%}
+
+Source: <https://www.scribbr.com/research-bias/anchoring-bias/>
+:::
+:::
+:::
+:::
+
+# Survey experiments 📊 {background-color="#2d4563"}
+
+## The first survey experiment?
+
+:::{style="font-size: 30px; margin-top: 30px;"}
+:::{style="text-align: center;"}
+Hadley Cantril (1940) asks 3000 Americans either:
+:::
+
+<br>
+
+:::{.columns}
+:::{.column width="50%"}
+- Do you think the US should do more than it is now doing to help England and France?
+
+- Yes: 13%
+- No
+:::
+
+:::{.column width="50%"}
+- Do you think the US should do more than it is now doing to help England and France [in their fight against Hitler]{.alert}?
+
+- Yes: 22%
+- No
+:::
+:::
+
+:::{style="text-align: center;"}
+The "Hitler effect" is 9%!
+:::
+:::
+
+## What are survey experiments?
+
+:::{style="font-size: 24px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- A survey experiment is a research design that combines the [random assignment]{.alert} of treatments with [survey data]{.alert}
+- It is particularly used to understand [attitudes, preferences, and behaviours]{.alert}
+- Survey experiments are [popular]{.alert} because they are easy to implement and analyse, and they can be used to test causal relationships in a controlled environment
+- They can be [implemented in many ways:]{.alert}
+  - Face-to-face
+  - Telephone
+  - Online
+  - Mail, etc
+:::
+
+:::{.column width="50%"}
+- What stimulus each group receives depends on [hypotheses being tested]{.alert}
+- Three ways hypotheses lead to stimuli:
+  - [Presence/absence]{.alert}: Does the stimulus have an effect?
+  - [Levels/dose]{.alert}: Does the amount of stimulus matter?
+  - [Qualitative variations]{.alert}: Does the type of stimulus matter?
+- Survey experiments can be [between-subjects]{.alert} or [within-subjects]{.alert}
+- They can also be used to measure [sensitive topics]{.alert}, which is something we will discuss in the future
+:::
+:::
+:::
+
+## Examples
+
+:::{style="font-size: 24px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+
+### Presence/absence
+
+- [Theory:]{.alert} Negative campaigning reduces support for the party described negatively
+- [Hypothesis:]{.alert} Exposure to a negative advertisement criticising a party reduces support for that party
+- [Manipulation:]{.alert} 
+  - Control group receives no advertisement 
+  - Treatment group watches a video containing a negative ad describing a party
+- [Outcome:]{.alert} Support for the party described negatively
+:::
+
+:::{.column width="50%"}
+### Levels/dose
+
+- [Theory:]{.alert} Negative campaigning reduces support for the party described negatively
+- [Hypothesis:]{.alert} Exposure to higher levels of negative advertising criticising a party reduces support for that party. []{.alert}
+- [Manipulation:]{.alert}
+    -   Control group receives no advertisement
+    -   Treatment group 1 watches a video containing 1 negative advert describing a party
+    -   Treatment group 2 watches a video containing 2 negative adverts describing a party
+    -   etc
+:::
+:::
+:::
+
+## Examples
+### Qualitative variations
+
+:::{style="font-size: 28px; margin-top: 30px;"}
+- [Theory:]{.alert} Negative campaigning reduces support for the party described negatively
+- [Hypothesis:]{.alert} Exposure to a negative advertisement criticising a party reduces support for that party, while a positive advertisement has no effect
+- [Manipulation:]{.alert}
+  - Control group receives no advertisement
+  - Negative treatment group watches a video containing a negative ad describing a party
+  - Positive treatment group watches a video containing a positive ad describing a party
+:::
+
+# What makes a good survey experiment? 🧐 {background-color="#2d4563"}
+
+## Activity!
+
+:::{style="font-size: 30px; margin-top: 30px; text-align: center;"}
+:::{.columns}
+:::{.column width="50%"}
+- What are some criteria for a good survey experiment?
+:::
+
+:::{.column width="50%"}
+:::{.incremental}
+- Significant results?
+- Face validity
+- Coherent for respondents
+- Non-obvious to respondents
+- Simple
+- Indirect/unobtrusive
+- Validated by prior work
+- Innovative/creative
+- Ethical
+- ....
+:::
+:::
+:::
+:::
+
+## How do we know we manipulated what we think we manipulated?
+
+:::{style="font-size: 24px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Outcomes affected are consistent with theory
+- Before the study, using [pilot testing]{.alert} (or pre-testing)
+- During the study, using [manipulation checks]{.alert}
+- During the study, using [placebos]{.alert}
+- During the study, using [non-equivalent outcomes]{.alert}
+:::
+
+:::{.column width="50%"}
+- [Outcomes affected:]{.alert}
+  - True, but doesn't tell us anything if we hypothesise null effects
+
+- [Pilot testing:]{.alert}
+  - Goal: establish construct validity of manipulation 
+  - Assess whether a set of possible manipulations affect a measure of the independent variable
+- [Example:]{.alert}
+  - Goal: Manipulate the “strength” of an argument 
+  - Write several arguments 
+  - Ask pilot test respondents to report how strong each one was
+:::
+:::
+:::
+
+## Manipulation checks
+
+:::{style="font-size: 27px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Manipulation checks]{.alert} are items [added post-treatment and/or post-outcome]{.alert} that assess whether the [independent variable was affected by treatment]{.alert}
+- We typically talk about manipulations as directly setting the value of $X$, but in practice we are typically manipulating something that we think [strongly modifies $X$]{.alert}
+- Example: information manipulations aim to [modify knowledge or beliefs]{.alert}, but are necessarily [imperfect]{.alert} at doing so
+:::
+
+:::{.column width="50%"}
+- [Example:]{.alert} 
+  - Treatment 1: Supply Information 
+  - Manipulation check 1: measure beliefs 
+  - Treatment 2: Prime a set of considerations 
+  - Outcome: Measure opinion 
+  - Manipulation check 2: measure dimension salience
+- Manipulation checks should be innocuous: [not affect the treatment or outcome]{.alert}
+- Measure both what you wanted to manipulate [and what you didn’t want to manipulate]{.alert}
+:::
+:::
+:::
+
+## Placebos and non-equivalent outcomes
+
+:::{style="font-size: 27px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+### Placebos
+
+- Include an experimental condition that [does not manipulate the variable of interest]{.alert} (but might affect the outcome)
+- Example: 
+  - Study whether risk-related arguments about climate change increase support for a climate change policy 
+  - Placebo condition: control article with risk-related arguments about non-environmental issue (e.g., terrorism)
+:::
+
+:::{.column width="50%"}
+### Non-equivalent outcomes
+
+- Measures an outcome that [should not be affected by the independent variable]{.alert} 
+- Example: 
+  - Assess effect of some treatment on attitudes toward group A 
+  - Focal outcome: attitudes toward group A 
+  - Non-equivalent outcome: attitudes toward group B
+:::
+:::
+:::
+
+# Common paradigms and examples {background-color="#2d4563"}
+
+## Question wording designs
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+
+- Simplest paradigm for [presence/absence or qualitative variation]{.alert}
+- Manipulation operationalises this by asking two different questions
+- [Outcome is the answer to the question]{.alert}
+- Example: [Schuldt et al. “‘Global Warming’ or ‘Climate Change’? Whether the Planet is Warming Depends on Question Wording.](https://academic.oup.com/poq/article-abstract/75/1/115/1846776?login=false)
+
+You may have heard about the idea that the world’s temperature may have been [going up]{.alert} over the past 100 years, a phenomenon sometimes called [global warming]{.alert}. What is your personal opinion regarding whether or not this has been happening?
+
+You may have heard about the idea that the world’s temperature may have been [changing]{.alert} over the past 100 years, a phenomenon sometimes called [climate change]{.alert}. What is your personal opinion regarding whether or not this has been happening?
+:::
+
+## Results
+
+:::{style="font-size: 24px; margin-top: 30px; text-align: center;"}
+![](figures/schuldt.png){width=60%}
+:::
+
+## Another framing example
+### [Singer, E., & Couper, M. P. (2014). The effect of question wording on attitudes toward prenatal testing and abortion. Public Opinion Quarterly, 78(3), 751-760.](https://academic.oup.com/poq/article-abstract/78/3/751/1843205?login=false)
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+Today, tests are being developed that make it possible to detect serious genetic defects before a [baby is born]{.alert}. But so far, it is impossible either to treat or to correct most of them. If (you/your partner) were pregnant, would you want (her) to have a test to find out if the [baby]{.alert} has any serious genetic defects? (Yes/No)
+
+Suppose a test shows the [baby]{.alert} has a serious genetic defect. Would you, yourself, want (your partner) to have an abortion if a test shows the [baby]{.alert} has a serious genetic defect? (Yes/No)
+
+<br>
+
+Today, tests are being developed that make it possible to detect serious genetic defects [in the fetus during pregnancy]{.alert}. But so far, it is impossible either to treat or to correct most of them. If (you/your partner) were pregnant, would you want (her) to have a test to find out if the [fetus]{.alert} has any serious genetic defects? (Yes/No)
+
+Suppose a test shows the [fetus]{.alert} has a serious genetic defect. Would you, yourself, want (your partner) to have an abortion if a test shows the [fetus]{.alert} has a serious genetic defect? (Yes/No)
+:::
+
+## Results
+
+:::{style="font-size: 24px; margin-top: 30px; text-align: center;"}
+![](figures/singer-couper.png){width=60%}
+:::
+
+## Yet another framing example
+### [Haider‐Markel, D. P., & Joslyn, M. R. (2001). Gun policy, opinion, tragedy, and blame attribution: The conditional influence of issue frames. Journal of Politics, 63(2), 520-543.](https://onlinelibrary.wiley.com/doi/abs/10.1111/0022-3816.00077)
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+Concealed handgun laws have recently received national attention. Some people have argued that law-abiding citizens have the right to protect themselves. What do you think about concealed handgun laws?
+
+<br>
+
+Concealed handgun laws have recently received national attention. [Some people have argued that laws allowing citizens to carry concealed handguns threaten public safety because they would allow almost anyone to carry a gun almost anywhere, even onto school grounds.]{.alert} What do you think about concealed handgun laws?
+:::
+
+## Results
+
+:::{style="font-size: 24px; margin-top: 30px; text-align: center;"}
+![](figures/haider-markel.png){width=60%}
+:::
+
+## Question order designs
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- [Manipulation of pre-outcome questionnaire]{.alert}
+- Example: 
+  - Goal: assess influence of value salience on support for a policy 
+  - Manipulate by asking different questions: 
+  - Battery of 5 “rights” questions, or 
+  - Battery of 5 “life” questions 
+  - Measure support for legalised abortion 
+  - If answers to manipulated questions matter, we can measure the rest post-outcome
+:::
+
+## Question-as-treatment designs
+### [Transue, J. E. (2007). Identity salience, identity acceptance, and racial policy attitudes: American national identity as a uniting force. American Journal of Political Science, 51(1), 78-91.](https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1540-5907.2007.00238.x)
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+:::{.columns}
+:::{.column width="50%"}
+- How close do you feel to [your ethnic or racial group?]{.alert}
+- Some people have said that taxes need to be raised to take care of pressing national needs.  How willing would you be to have your taxes raised to improve educational opportunities for minorities?
+:::
+
+:::{.column width="50%"}
+- How close do you feel to [other Americans?]{.alert} 
+- Some people have said that taxes need to be raised to take care of pressing national needs.  How willing would you be to have your taxes raised to improve educational opportunities for minorities?
+:::
+:::
+:::
+
+## Results
+
+:::{style="font-size: 24px; margin-top: 30px; text-align: center;"}
+![](figures/transue.png){width=60%}
+:::
+
+## Knowledge and instructional designs
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+:::{.columns}
+:::{.column width="50%"}
+### Knowledge and political interest
+
+- Do you happen to remember anything special that your US Representative has done for your district or for the people in your district while he has been in Congress?
+
+- Is there any legislative bill that has come up in the House of Representatives, on which you remember how your congressman has voted in the last couple of years?
+:::
+
+:::{.column width="50%"}
+### Instructions
+
+In the next part of this study, you will be asked 14 questions about politics, public policy, and economics. Many people don’t know the answers to these questions, but it is helpful for us if you answer, even if you’re not sure what the correct answer is. We encourage you to take a guess on every question. At the end of this study, you will see a summary of how many questions you answered correctly.
+:::
+:::
+:::
+
+## Vignette designs
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Vignettes]{.alert} are short descriptions of hypothetical scenarios
+- Vignettes are probably the most common survey experimental paradigm, after question wording designs
+- Take many forms and increasingly encompass non-textual stimuli 
+- Basically limited to web-based mode
+:::
+
+:::{.column width="50%"}
+- [Gilens (1996)](https://doi.org/10.2307/2082611)
+
+- Now think about a [(black/white)]{.alert} woman in her early thirties.  She is a high school [(graduate/drop out)]{.alert} with a ten-year-old child, and she has been on welfare for the past year.  
+- How likely is it that she will have more children in order to get a bigger welfare check?  (1 = Very likely, . . . , 7 = Not at all likely)
+- How likely do you think it is that she will really try hard to find a job in the next year? (1 = Very likely, . . . , 7 = Not at all likely)
+:::
+:::
+:::
+
+## Newer vignette designs
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+Imagine that you were living in a village in another district in Uttar Pradesh and that you were voting for candidates in [(village/state/national)]{.alert} election. Here are the two candidates who are running against each other: The first candidate is named [(caste name)]{.alert} and is running as the [(BJP/SP/BSP)]{.alert} party candidate.  [(Corrupt/criminality allegation)]{.alert}. His opponent is named [(caste name)]{.alert} and is running as the [(BJP/SP/BSP)]{.alert} party candidate.  [(Opposite corrupt/criminality allegation)]{.alert}. From this information, please indicate which candidate you would vote for in the [(village/state/national)]{.alert} election.
+
+[Banerjee et al (2014)](https://www.tandfonline.com/doi/abs/10.1080/10584609.2014.914615)
+:::
+
+## Some vignette considerations
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- [Comparability across conditions and groups]{.alert}
+  - Length
+  - Readability
+  - Lexical complexity
+- [Realism]{.alert}
+- Length 
+  - Timers 
+  - Forced exposure 
+  - Mouse trackers
+- Devices 
+  - Browser-specificity 
+  - Device sizes (e.g., mobile)
+:::
+
+## Non-textual stimuli
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+:::{.columns}
+:::{.column width="30%"}
+- [Images can also work well]{.alert}
+- Subliminal primes possible, depending on software
+- Lots of recent examples of facial manipulation
+- Example:
+  - [Iyengar, S. et al (2008)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1643225)
+:::
+
+:::{.column width="70%"}
+:::{style="text-align: center;"}
+![](figures/obama.png){width=90%}
+:::
+:::
+:::
+:::
+
+## Example 
+### [Laustsen & Petersen (2015)](https://www.tandfonline.com/doi/abs/10.1080/10584609.2015.1050565)
+
+:::{style="margin-top: 30px; font-size: 26px; text-align: center;"}
+![](figures/lausten-petersen.png){width=80%}
+:::
+
+## Audio, video, and tasks
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+:::{.columns}
+:::{.column width="50%"}
+### Audio and video
+- [Problematic]{.alert} for same reasons as long texts 
+- Best practices: 
+  - Keep it short 
+  - Have the video play automatically 
+  - Disallow survey progression 
+  - Control and validate
+- Examples:
+  - Television Advertisements
+  - News Programmes
+:::
+
+:::{.column width="50%"}
+### Tasks
+
+- Task designs ask respondents to [perform a task]{.alert} 
+- Often developed for [laboratory settings]{.alert} 
+- Most common example: writing something 
+- Can be problematic: 
+  - Time-intensive 
+  - Invites drop-off 
+  - Compliance problems
+:::
+:::
+:::
+
+## Example
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+These days, Democrats and Republicans differ from one another considerably. The two groups seem to be growing further and further apart, not only in terms of their opinions but also their lifestyles.  Earlier in the survey, you said you tend to identify as a [Democrat/ Republican]{.alert}. Please take a few minutes to think about what you like about [Democrats/Republicans]{.alert} compared to the [Republicans/ Democrats]{.alert}. Think of 2 to 3 things you especially like best about [your party]{.alert}. Then think of 2 to 3 things you especially dislike about the [other party]{.alert}.  Now please write those thoughts in the space below.
+
+<br>
+
+These days, Democrats and Republicans differ from one another considerably. The two groups seem to be growing further and further apart, not only in terms of their opinions but also their lifestyles.  Earlier in the survey, you said you tend to identify as a [Democrat/ Republican]{.alert}. Please take a few minutes to think about what you like about [Democrats/Republicans]{.alert} compared to the [Republicans/ Democrats]{.alert}. Think of 2 to 3 things you especially like best about [the other party]{.alert}. Then think of 2 to 3 things you especially dislike about the [your party]{.alert}.  Now please write those thoughts in the space below.
+:::
+
+# Concluding remarks 📝 {background-color="#2d4563"}
+
+## Concluding remarks
+
+:::{style="font-size: 27px; margin-top: 30px;"}
+- [Survey experiments are great!]{.alert}
+- They are easy to implement and analyse, and there are an [almost infinite number of ways to design them]{.alert}
+- However, they require [careful design and implementation]{.alert} to ensure that the manipulation is successful and that the results are valid
+- Even [small changes in wording or framing]{.alert} can have large effects on the results
+- [Pilot testing]{.alert} and [manipulation checks]{.alert} are important
+- [Vignettes]{.alert} are a common and effective way to implement survey experiments
+- [Non-textual stimuli]{.alert} can also be effective, but require careful design
+:::
+
+# Thank you! 🙏🏽 {background-color="#2d4563"}
+
+# See you next time! 👋🏽 {background-color="#2d4563"}

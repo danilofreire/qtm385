@@ -1,0 +1,545 @@
+---
+title: DATASCI 385 - Experimental Methods
+subtitle: Lecture 17 - Texts for Discussion about Interference and Spillovers
+author:
+  - name: Danilo Freire
+    email: danilo.freire@emory.edu
+    affiliations: Department of Data and Decision Sciences <br> Emory University
+format:
+  clean-revealjs:
+    self-contained: true
+    code-overflow: wrap
+    footer: "[Discussion](https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-17/17-discussion.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: knitr
+revealjs-plugins:
+  - multimodal
+editor:
+  render-on-save: true
+---
+
+# Olá! How are you doing? 😊 {background-color="#2d4563"}
+
+# Brief recap 📚 {background-color="#2d4563"}
+
+## Brief recap 📚
+
+:::{style="margin-top: 20px; font-size: 22px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Spillovers]{.alert} are a common problem in social science research
+- They can be [positive or negative]{.alert}, and they can be [modelled explicitly]{.alert} in our analysis
+- There are several methods to deal with spillovers, such as [multi-level designs]{.alert}, [within-subject designs]{.alert}, [repeated-measures experiments]{.alert}, and [waitlist designs]{.alert}
+- Each design has its [advantages and disadvantages]{.alert}, and the choice of design should be based on the [research question]{.alert} and the [context]{.alert}
+- You can use [DeclareDesign](https://declaredesign.org/r/designlibrary/) to simulate spillover designs and pretest–posttest designs
+- The statistical analysis of waitlist designs is a little tricky, but you can use the [swCRTdesign](https://cran.r-project.org/web/packages/swCRTdesign/index.html) package in R to help you with that
+:::
+
+::: {.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/forbes.webp){width=100%}
+
+Source: [Forbes (2022)](https://www.forbes.com/councils/forbesbusinesscouncil/2022/10/14/network-effects-how-your-connections-matter/)
+:::
+:::
+:::
+:::
+
+# Today's plan 📅 {background-color="#2d4563"}
+
+## Interference and spillovers
+
+:::{style="font-size: 29px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Three readings for today:
+  - [Centola (2010)](https://www.science.org/doi/abs/10.1126/science.1185231): "The Spread of Behavior in an Online Social Network Experiment"
+  - [Paluck et al. (2016)](https://www.pnas.org/doi/abs/10.1073/pnas.1514483113): "Changing climates of conflict: A social network experiment in 56 schools"
+  - [Gerber and Green (2000)](https://doi.org/10.2307/2585837): "The Effects of Canvassing, Telephone Calls, and Direct Mail on Voter Turnout: A Field Experiment" (if time permits)
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/centola.png){width=100%}
+
+Source: [Centola (2010)](https://www.science.org/doi/abs/10.1126/science.1185231) 
+:::
+:::
+:::
+:::
+
+# Discussion 💬 {background-color="#2d4563"}
+
+## Centola (2010)
+### The Spread of Behavior in an Online Social Network Experiment
+
+:::{style="margin-top: 20px; font-size: 21px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [How do social networks affect the spread of behaviour?]{.alert}
+- Do tight-knit or loose-knit networks facilitate the spread of social behaviour?
+  - Clustered networks can spread behaviour more quickly than random networks because they have more connections and reinforce each other
+  - In contrast, weak ties can spread behaviour more widely than strong ties because they connect different clusters
+  - "Strength of weak ties" (Granovetter, 1973): paradoxical idea that weak ties can be more valuable than strong ties in spreading information
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/centola.png){width=100%}
+
+Source: [Centola (2010)](https://www.science.org/doi/abs/10.1126/science.1185231)
+:::
+
+- [Which one do you think is more important?]{.alert}
+  - If you want to [spread rumours?]{.alert}
+  - If you want to [spread a new product?]{.alert}
+:::
+:::
+:::
+
+## Research design
+
+:::{style="margin-top: 20px; font-size: 27px;"}
+- [Can you easily manipulate the network structure?]{.alert}
+- Not always, but you can use [random assignment to create different network structures]{.alert}
+- The author [created an online health community]{.alert} with 1528 participants recruited from internet forums
+- All participants were anonymous and were partnered with "health buddies" to share information about health behaviours
+- Participants made decisions about whether or not to adopt a health behaviour based on the adoption patterns of their health buddies
+- The health behaviour used for this study was the decision to register for an Internet-based health forum 
+- [What do you think of this design so far?]{.alert}
+:::
+
+## Research design
+
+:::{style="margin-top: 20px; font-size: 27px;"}
+- The author assigned participants to one of two network structures:
+  - [Clustered networks]{.alert} with highly connected participants
+  - [Random networks]{.alert} with weak ties between participants
+- Treatment was assigned before the experiment started and [participants were not aware of their network structure]{.alert}
+- The author claims the design is better than observational studies because it [eliminates confounding variables]{.alert} such as
+  - Personality traits
+  - Geographic location
+  - Advertising and pricing
+  - Changes in the networks over time
+- [Can you do the same with massive data from social media?]{.alert}
+:::
+
+## Research design
+
+:::{style="margin-top: 20px; font-size: 27px;"}
+- Diffusion was initiated by [selecting a random “seed node”,]{.alert} which sent signals to its network neighbours encouraging them to adopt a health-related behaviour
+- Every time a participant adopted the behaviour (i.e., registered for the health forum), [messages were sent to their health buddies inviting them to adopt]{.alert}
+- If a participant had multiple health buddies who adopted the behaviour, then they would receive multiple signals, one from each neighbour
+- The more neighbours who adopted, the more reinforcing signals a participant received
+- The author [measured the fraction of participants who adopted the behaviour]{.alert}
+:::
+
+## Results
+
+:::{style="margin-top: 20px; font-size: 27px; text-align: center;"}
+![](figures/centola-results.png){width=100%}
+:::
+
+## Results
+
+:::{style="margin-top: 20px; font-size: 24px; text-align: center;"}
+![](figures/centola-results2.png){width=100%}
+
+- Cumulative distribution of forum visits over time. The lower, the higher the likelihood of checking the forum
+:::
+
+## Results
+
+:::{style="margin-top: 20px; font-size: 24px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Clustered networks more effective]{.alert} in spreading behaviour than weak networks
+- On average, the behaviour reached 53.77% of the clustered networks, whereas only 38.26% of the population adopted in the random networks
+- Adoption occurred [more quickly in clustered networks]{.alert}, being about four times faster (!) than in random networks
+- Neighbourhood size seems to matter as well: networks with a greater degree ($Z = 8$) performed better than those with a lower degree ($Z = 6$)
+- Redundant signals significantly increased the likelihood of adoption too
+- [What do you make of these results?]{.alert}
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/centola-results3.png){width=55%}
+:::
+:::
+:::
+:::
+
+## Discussion
+
+:::{style="margin-top: 20px; font-size: 23px;"}
+- The author [concludes that clustered networks are more effective than random networks]{.alert} in spreading behaviour
+- But there are some limitations to this study, too
+- [Can you think of any?]{.alert}
+
+:::{.incremental}
+- Is the intervention realistic or relevant to real-world settings?
+- What about interventions that cost money or effort to adopt (e.g., getting a screening, quitting smoking, exercising)?
+- What do you think about his choice of not allowing participants to communicate with each other? Does it help reduce confounding or does it reduce external validity?
+- What about ethical considerations of manipulating social networks, mainly when dealing with health behaviours?
+
+- [Can you think of policy implications?]{.alert}
+- How can we use these findings to design better interventions for public health, marketing, or social change?
+- How can we identify influential nodes in a network to maximise the spread of behaviour?
+:::
+:::
+
+## Paluck et al. (2016)
+### Changing climates of conflict: A social network experiment in 56 schools
+
+:::{style="margin-top: 20px; font-size: 22px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [How can we change community-wide patterns of behaviour?]{.alert} (again!)
+- Focus on [adolescent school conflict]{.alert} - verbal/physical aggression, rumour-mongering, social exclusion
+- Existing interventions target [individual psychology]{.alert} (persuasion), [mass education]{.alert}, or [institutional regulation]{.alert} 
+- This study incorporates [all three approaches]{.alert}:
+  - Seed a social network with individuals demonstrating new behaviours 
+  - Rely on social influence to spread behaviour through network structures 
+  - Test whether this can shift overall school climate
+- [Key question]{.alert}: Can a small group of influential people shift a community's behavioural climate?
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/paluk.png){width=100%}
+
+Source: [Paluck et al. (2016)](https://www.pnas.org/doi/abs/10.1073/pnas.1514483113)
+:::
+:::
+:::
+:::
+
+## Motivation and research context
+
+:::{style="margin-top: 20px; font-size: 25px;"}
+- There are heated debates about [how social norms spread and change]{.alert}
+  - [Social norms]{.alert}: shared expectations about appropriate behaviour in a group 
+- Social norms emerge when they [support the survival and functioning of groups]{.alert}, or because of [arbitrary conventions]{.alert}
+- Once in place, norms can be [difficult to change]{.alert}
+- [Question]{.alert}: What mechanisms sustain social norms?
+
+:::{.incremental}
+  - [Conformity pressures]{.alert}
+  - [Fear of social sanctions]{.alert}
+  - [Cognitive biases]{.alert} (status quo bias, loss aversion)
+  - Anything else?
+
+- How are these ideas [relevant to current debates]{.alert} on political polarisation, social integration, or public health behaviours (e.g., vaccination)?
+- What role do ["social referents"]{.alert} (influential individuals) play in norm change?
+:::
+:::
+
+## Research design
+
+:::{style="margin-top: 20px; font-size: 23px;"} 
+:::{.columns}
+:::{.column width="50%"}
+- [Multilevel experiment]{.alert} (we saw them last class!) across 56 New Jersey middle schools (24,191 students aged 11-15) 
+  - [Randomised at school level]{.alert} (treatment vs. control) 
+  - [Randomised at student level within treatment schools]{.alert} (seed students) 
+- [Question]{.alert}: Which effects can we identify with this design?
+- In the treatment schools, they selected 15% of the school population blocked by gender and grade to represent diverse social groups
+- 50% of these students were randomly assigned to be "seeds" who would participate in the intervention activities
+- Parents were informed and could opt their children out. [Would you consider this ethical?]{.alert}
+:::
+
+:::{.column width="50%"}
+- Comprehensive measurement of [school social networks]{.alert} before intervention 
+- "Who do you choose to spend time with?" - measures attention in network 
+  - What are the pros of this measure? Cons?
+- Identified social referents - most connected students in each school 
+- Intervention: [Anti-conflict campaign]{.alert} driven by seed students 
+- Encouraged public stance against conflict 
+- The outcome was measured via surveys and school disciplinary records
+  - Why did they use both measures?
+:::
+:::
+:::
+
+## Intervention details
+
+:::{style="margin-top: 20px; font-size: 28px;"} 
+- [Grassroots campaign approach]{.alert}
+- Seed students identified school-specific conflict behaviours 
+- Developed slogans and posters 
+- Distributed wristbands as rewards for positive behaviour 
+- [No top-down, adult-defined problems]{.alert}: focused on student perspectives 
+- Standardised procedures with trained facilitators using scripts and activity guides 
+- High attendance at meetings (average >55% of invited students) 
+- Made meetings engaging: snacks, hands-on activities, technology
+:::
+
+## Measures
+
+:::{style="margin-top: 20px; font-size: 29px;"} 
+- [Outcomes measured subjectively and administratively]{.alert} 
+- [Subjective]{.alert}: student-reported norms about conflict (pre/post surveys) 
+- Descriptive norms: how many students participate in conflict? 
+- Prescriptive norms: how many students disapprove of conflict? 
+- [Administrative]{.alert}: school disciplinary records of peer conflict events (across the year) 
+- [Focus on disciplinary events as a key behavioural outcome]{.alert} 
+- Arguably less susceptible to reporting bias than self-reported conflict
+:::
+
+## Results
+
+:::{style="margin-top: 20px; font-size: 27px; text-align: center;"}
+![](figures/paluk-results.png){width=80%}
+:::
+
+## Results
+
+:::{style="margin-top: 20px; font-size: 27px; text-align: center;"}
+![](figures/paluk-results02.png){width=80%}
+:::
+
+## Results
+
+:::{style="margin-top: 20px; font-size: 26px;"} 
+- [Significant reduction in disciplinary reports]{.alert} in treatment schools [~30% reduction overall]{.alert} 
+- Effect stronger when seed groups contained more "social referent" students 
+- [Increased talking about conflict reduction]{.alert} and wearing wristbands in treatment schools
+- [No average differences in social norms]{.alert} between treatment and control schools initially
+- [Social referent seeds were more influential]{.alert} than other seed students 
+  - 20% social referent seeds -> 60% reduction in disciplinary events
+- Students exposed to social referent seeds more likely to: 
+  - Report friends discussing conflict reduction 
+  - Perceive stronger anti-conflict norms 
+  - Wear wristbands
+- [No peer-to-peer influence effect on discipline directly]{.alert} (climate-level effect stronger)
+:::
+
+## Interpretation
+
+:::{style="margin-top: 20px; font-size: 29px;"} 
+- [Intervention shifted school climate]{.alert} - widespread behavioural pattern 
+- [Social referents key to norm and behaviour change]{.alert} 
+- Outsized influence due to attention from peers 
+- Not just structural position, but also traits and experiences 
+- [Norms findings nuanced]{.alert}: 
+  - No overall shift in norms between schools 
+  - But within treatment schools, some norms did shift, especially via social referents 
+  - Possible "signal" effect of intervention - increased attention to conflict, leading to revised norm evaluations
+:::
+
+## Implications
+
+:::{style="margin-top: 20px; font-size: 29px;"} 
+- [Peer influence]{.alert} interventions can be effective in reducing school conflict 
+- [Importance of social referents]{.alert} in changing behaviour 
+- Target these individuals in interventions for greater impact 
+- [Highlights the usefulness of student-led initiatives]{.alert} 
+- Grassroots approach can be more effective than top-down 
+- [Methodological contribution]{.alert}: 
+- Demonstrates rigorous social network experiment in real-world setting 
+- Multilevel randomisation for causal inference in networks
+:::
+
+## Limitations
+
+:::{style="margin-top: 20px; font-size: 29px;"} 
+- [What are some potential limitations of this study?]{.alert} 
+
+:::{.incremental}
+- Generalisability to other contexts? (different types of conflict, schools, cultures) 
+- Long-term effects? 
+- Mechanism of change fully understood?
+- Reliance on disciplinary records - are these fully objective? 
+- Ethical considerations of network interventions? (manipulation of social structures?) 
+- What about the students who were not selected as "seeds" but were still part of the network? Were they affected negatively?
+:::
+:::
+
+## Gerber and Green (2000) 
+### The effects of canvassing, telephone calls, and direct mail on voter turnout: A field experiment
+
+:::{style="margin-top: 20px; font-size: 27px;"}
+- [How effective are different get-out-the-vote (GOTV) tactics?]{.alert}
+- Focus on three common methods:
+    - [Personal Canvassing]{.alert} (face-to-face)
+    - [Direct Mail]{.alert} (mailings)
+    - [Telephone Calls]{.alert} (phone banking)
+- Context: Declining voter turnout in the US
+    - Hypothesis: Decline linked to shift from personal to impersonal mobilisation
+- [Key Question]{.alert}: Is face-to-face canvassing more effective than impersonal methods in boosting voter turnout?
+:::
+
+## Motivation and research context
+
+:::{style="margin-top: 20px; font-size: 27px;"}
+- Voter turnout in US has declined over decades, with implications for democratic legitimacy
+- Political campaigns increasingly rely on impersonal mobilisation methods (mail, phone) over personal canvassing
+  - What are the pros and cons of each method?
+  - Can this shift explain other trends in social engagement?
+- [Existing evidence mixed]{.alert} on effectiveness of different GOTV methods
+- Do you believe that personal contact is more persuasive than impersonal methods? Why or why not?
+:::
+
+## Research design
+
+:::{style="margin-top: 20px; font-size: 23px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Large-scale field experiment]{.alert} in New Haven, Connecticut (1998 election)
+    - [~30,000 registered voters]{.alert} (~1/3 of the city's population!)
+    - [Random assignment at household level]{.alert} to different GOTV treatments & control
+- [2x2x4 Factorial Design]{.alert}:
+    - [Personal Canvassing]{.alert} 
+    - [Telephone Calls]{.alert}
+    - [Direct Mail]{.alert} (None, One, Two, or Three mailings)
+- [Non-partisan messages]{.alert} used for all treatments
+    - Civic duty, close election, neighbourhood solidarity appeals
+- [Outcome]{.alert}: Validated voter turnout from official records
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/gerber-green.png){width=100%}
+
+Source: [Gerber and Green (2000)](https://doi.org/10.2307/2585837)
+:::
+:::
+:::
+:::
+
+## GOTV treatment details
+
+:::{style="margin-top: 20px; font-size: 27px;"}
+- [Personal Canvassing]{.alert}:
+    - Paid canvassers (grad students) in pairs, weekends before election
+    - Targeted specific households, not entire streets. Pros and cons?
+    - Varied message appeals (civic duty, close election, neighbourhood solidarity)
+    - Contact rate: ~28%
+- [Direct Mail]{.alert}:
+    - Postcards designed by political consulting firm
+    - Different texts for each appeal type
+    - Varied number of mailings (1, 2, or 3) and message appeals
+- [Telephone Calls]{.alert}:
+    - Out-of-state telemarketing firm, calls in days before election
+    - Scripted calls, civic duty and close election appeals only
+    - Contact rate: ~32% (reached household)
+:::
+
+## Postcards
+
+:::{style="margin-top: 20px; font-size: 23px; text-align: center;"}
+:::{.columns}
+:::{.column width="50%"}
+![](figures/postcard01.png){width=100%}
+:::
+
+:::{.column width="50%"}
+![](figures/postcard02.png){width=80%}
+:::
+:::
+:::
+
+## Addressing contact rates - Instrumental variables
+
+:::{style="margin-top: 20px; font-size: 29px;"}
+-  Not everyone in treatment groups actually *received* treatment
+    - Simply comparing contacted vs. non-contacted inflates effect 
+- [Solution]{.alert}: Two-stage least squares (2SLS) regression using *intent-to-treat* as instrument
+    - Instrument: Random assignment to treatment group (yes/no)
+    - Endogenous variable: Actual contact (yes/no)
+- Random assignment predicts contact, but is uncorrelated with other reasons for turnout (no direct effect on turnout except through treatment)
+- Allows for [causal estimation of treatment effect *accounting for* non-compliance]{.alert} (non-contact)
+:::
+
+## Main effects
+
+:::{style="margin-top: 20px; font-size: 29px;"}
+- [Personal canvassing highly effective]{.alert}:
+    - +8.7 percentage points increase in turnout (2SLS estimate)
+    - ~9.8 points in multivariate model
+    - Most effective GOTV method tested
+- [Direct mail shows small effect]{.alert}:
+    - +0.6 points per mailing (multivariate model)
+    - Small but statistically significant
+    - Cumulative effect of 3 mailings ~ 2.5 points (probit)
+- [Telephone calls ineffective]{.alert}:
+    - No significant effect, slight negative effect in some models
+    - Despite professional firm and mirrored messaging
+:::
+
+## Message and cost-effectiveness
+
+:::{style="margin-top: 20px; font-size: 29px;"}
+- [Message type mattered little for personal canvassing]{.alert}:
+    - Civic duty, close election, neighbourhood solidarity appeals similarly effective (though close election slightly higher)
+    - No significant interaction effects between treatments
+- [Cost-effectiveness analysis]{.alert}:
+    - Personal canvassing: ~$8 per *additional* vote
+    - Direct mail (3 mailings): ~$40 per *additional* vote
+    - Face-to-face mobilisation significantly more cost-effective
+:::
+
+## Interpretation
+
+:::{style="margin-top: 20px; font-size: 29px;"}
+- [Supports Hypothesis]{.alert}: Personal canvassing > impersonal methods for turnout
+    - Decline in face-to-face mobilisation may contribute to turnout decline
+- [Unexpected Finding]{.alert}: Ineffectiveness of telephone calls
+    - Despite professional execution & mirroring canvassing messages
+    - Possible reasons: Routinised/scripted nature, out-of-state callers
+- What are some possible [mechanisms of personal canvassing effect?]{.alert}
+
+:::{.incremental}
+- Speculation: Salience, memorability, connection, urgency... (future research needed)
+- [Study limitations]{.alert}? Can you identify some? 
+- Non-partisan messages, specific election context, short-term effects
+:::
+:::
+
+## More limitations
+
+:::{style="margin-top: 20px; font-size: 29px;"}
+:::{.incremental}
+- How about:
+- Generalisability to other elections/contexts?
+- Focus on *turnout* only - what about vote choice/persuasion?
+- Short-term effects only - sustained impact?
+- Specific message content -  would different messages work better for mail/phone?
+- Ethical considerations of GOTV experiments? (Manipulation of voters?)
+- Hawthorne effect of canvassing? (People vote more because of the *attention*, not just the message)
+:::
+:::
+
+# Conclusion {background-color="#2d4563"}
+
+## Conclusion
+
+:::{style="margin-top: 20px; font-size: 22px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Centola (2010)]{.alert}
+    - Showed *how* network structure (clustered vs. random) impacts spillovers
+- [Paluck et al. (2016)]{.alert}
+    - Addressed interference by focusing on *network positions* (social referents) as key spillover agents
+    - Multilevel design (school & student) managed school-level vs. peer-to-peer influence spillovers
+- [Gerber & Green (2000)]{.alert}
+    -  Demonstrated differential spillovers: face-to-face (strong), mail (weak), phone (none)
+    -  IV approach key to address interference from self-selection into contact, isolating *causal* effect
+:::
+
+:::{.column width="50%"}
+- [Common thread: addressing interference]{.alert}
+    - All three papers grapple with inherent dependencies in social settings (networks, communities, voter outreach)
+    -  Highlight the need for designs and analysis that account for, or exploit, these interdependencies
+- [Beyond "simple" experiments]{.alert}
+    -  Social science experiments increasingly move beyond simple treatment/control to address complex social interactions & spillovers
+    -  These examples show innovative designs for studying influence in interconnected systems
+:::
+:::
+:::
+
+# And that's all for today! 🎉 {background-color="#2d4563"}
+
+# See you next time! 😉 {background-color="#2d4563"}

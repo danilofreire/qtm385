@@ -1,0 +1,807 @@
+---
+title: DATASCI 385 - Experimental Methods
+subtitle: Lecture 04 - Selection Bias, Variability, and Regression Analysis
+author:
+  - name: Danilo Freire
+    email: danilo.freire@emory.edu
+    affiliations: Department of Data and Decision Sciences <br> Emory University
+format:
+  clean-revealjs:
+    self-contained: true
+    code-overflow: wrap
+    footer: "[Selection Bias](https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-04/04-selection-bias.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: knitr
+revealjs-plugins:
+  - multimodal
+editor:
+  render-on-save: true
+---
+
+# Hello, everyone! 👋 <br> Nice to see you all again! 😉 {background-color="#2d4563"}
+
+# Brief recap 📚 {background-color="#2d4563"}
+
+## Last time, we saw that...
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+:::{.columns}
+:::{.column width=50%}
+- [Potential outcomes framework]{.alert} help us understand treatment effects
+- [Fundamental problem of causal inference]{.alert}: we only see one potential outcome
+- [Treatment effect]{.alert} is the difference between potential outcomes ($\tau_{i} = Y_{1,i} - Y_{0,i}$)
+- [Average causal effect]{.alert} is the goal, but simple means comparison is usually biased
+- [Selection bias]{.alert}: treated/untreated groups may differ even before treatment
+- [Bias]{.alert} does not vanish in large samples
+- [Mathematical expectation]{.alert} $E[Y]$ is the population average
+- [Law of large numbers]{.alert}: sample average converges to population average
+- [Conditional expectation]{.alert} $E[Y_i|X_i]$ is the average outcome given $X_i$
+:::
+
+:::{.column width=50%}
+- [SUTVA]{.alert} (Stable Unit Treatment Value Assumption) 
+- [Violations of SUTVA]{.alert}: spillovers, contamination
+- [External validity]{.alert}: generalising results to other settings
+- [Heterogeneous treatment effects]{.alert}: effects vary across units
+- [Compliance problem]{.alert}: people may not follow random assignment
+- [Intent-to-Treat (ITT)]{.alert} analyses address compliance
+:::
+:::
+:::
+
+## Today, we will discuss...
+
+:::{style="margin-top: 50px; font-size: 28px;"}
+:::{.columns}
+:::{.column width=50%}
+- A little more about potential outcomes
+- Measuring variability
+- Different types of selection bias, e.g.:
+  - Inappropriate controls
+  - Loss to follow-up
+  - Attrition bias
+  - Survivorship bias
+  - Post-treatment bias
+- How to use `R` and `DeclareDesign` to estimate regression models
+- [But first...]{.alert}
+:::
+
+:::{.column width=50%}
+:::{style="text-align: center; margin-top: -40px;"}
+![](figures/selection-bias.png){width=80%}
+
+Source: [xkcd](https://xkcd.com/2618/) (who else? 😄)
+:::
+:::
+:::
+:::
+
+## Funny correlation of the day! 
+
+:::{style="margin-top: 30px; font-size: 21px; text-align: center;"}
+![](figures/correlation.png){width=80%}
+:::
+
+# Let's get started! 🚀 {background-color="#2d4563"}
+
+## Potential outcomes revisited
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- Remember from last time: we have two potential outcomes for each unit
+- [We only observe one of them]{.alert}: $Y_i = Y_{1,i} \cdot D_i + Y_{0,i} \cdot (1 - D_i)$
+  - $D_i$ is the treatment indicator = 1 if treated, 0 if not
+- So we need to estimate the [average treatment effect (ATE)]{.alert}:
+  - $E[Y_{1,i} - Y_{0,i}] = E[Y_{1,i}] - E[Y_{0,i}]$
+- The problem is, [not all comparisons are valid]{.alert}
+- I mean, they can be, but only under the [heroic assumption]{.alert} that the groups are similar on average before any adjustment
+- Otherwise, we will have [selection bias]{.alert}
+- Let's see how this works in practice! 🤓
+:::
+
+## Khuzdar and Maria
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+:::{.columns}
+:::{.column width=50%}
+- [Selection bias]{.alert} occurs when the groups are systematically different before treatment
+- Using an example from [Angrist and Pischke (2021)](https://www.masteringmetrics.com/), let's say we have a student called [Khuzdar]{.alert} from Kazakhstan, who is considering studying in the U.S. and is worried about the cold weather
+- Should he get health insurance? 🤔
+- Let's imagine that, without insurance, Khuzdar has a potential outcome of $Y_{0,i} = 3$ and, with insurance, $Y_{1,i} = 4$. So the treatment effect is $\tau_i = 1$, that is, he gains 1 "health point" by getting insurance
+:::
+
+:::{.column width=50%}
+- Now, let's imagine that Khuzdar has a Chilean colleague called [Maria Moreno]{.alert}, who is also considering studying in the U.S.
+- But since she comes from chilly Santiago, she is not worried about the cold weather
+- So, without insurance, Maria has a potential outcome of $Y_{0,i} = 5$ and, with insurance, $Y_{1,i} = 5$. So the treatment effect is $\tau_i = 0$, that is, she gains no "health points" by getting insurance
+
+:::{style="text-align: center;"}
+![](figures/khuzdar-maria.png){width=80%}
+:::
+:::
+:::
+:::
+
+## Khuzdar and Maria
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+- In fact, the comparison between frail Khuzdar and hearty Maria tells us little about the causal effects of their choices!
+- Why is that? Because [they were different to begin with]{.alert}
+- Imagine that Khuzdar got insurance and Maria did not
+- Let's do our mathematical trick again: we will add and subtract $Y_{0, Khuzdar}$ from the treatment effect (they cancel each other out, right?)
+- So we have the following:
+
+:::{style="text-align: center;"}
+![](figures/selection-bias-math.png){width=80%}
+:::
+
+- What would be the result of this comparison? And what conclusion would we draw from it?
+:::
+
+## Difference in means = average treatment effect + selection bias
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- So far, so good? 🤓
+- If we assume that [the treatment has a constant effect]{.alert} (i.e., the treatment effect is the same for everyone), we can rewrite the equation as:
+
+:::{style="text-align: center;"}
+![](figures/selection-bias3.png){width=17%}
+:::
+
+- Where $\kappa$ is both the individual and average causal effect of insurance on health. This is a [simplifying assumption]{.alert} for this derivation; the core result holds even with varied effects
+- Using the constant-effects model to substitute for $Avg_n[Y_{1i}|D_i = 1]$, we have
+
+:::{style="text-align: center;"}
+![](figures/selection-bias4.png){width=50%}
+:::
+:::
+
+## How to check for selection bias?
+### Balance tests
+
+:::{style="margin-top: 30px; font-size: 19px;"}
+:::{.columns}
+:::{.column width=40%}
+- We use [balance tests]{.alert} or ([randomisation checks]{.alert}) to check if the groups are similar before treatment
+- The idea is to compare the means of the covariates for the treated and untreated groups
+- If the means are similar, it provides evidence that nothing systematic is driving the treatment effect
+- We are never 100% sure, but [we trust the random assignment]{.alert}
+- Small differences in means are acceptable, as long as they are not systematic
+- Why? Because some variation can happen only by chance
+- [100% personal opinion]{.alert}: I think they aren't always useful... (can you guess why? 🤔)
+- [Mutz et al. (2018)](https://www.tandfonline.com/doi/full/10.1080/00031305.2017.1322143) make a good case for that
+:::
+
+:::{.column width=60%}
+:::{style="text-align: center;"}
+![](figures/balance-test.png){width=80%}
+
+Angrist and Pischke (2021), pp. 20 (selected parts)
+:::
+:::
+:::
+:::
+
+# Questions? 🤔 {background-color="#2d4563"}
+
+# Different types of selection bias 🎯 {background-color="#2d4563"}
+
+## Causal diagrams and associations
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+:::{.columns}
+:::{.column width=50%}
+- [Causal diagrams]{.alert} are a great way to visualise the relationships between variables
+  - They are also called [directed acyclic graphs (DAGs)]{.alert}
+  - They are "directed" because they show the direction of the relationships, and "acyclic" because they do not have loops (one cause cannot cause itself)
+- They were introduced by [Judea Pearl](https://en.wikipedia.org/wiki/Judea_Pearl) and are widely used in [causal inference]{.alert} (quick guide [here](https://www.sciencedirect.com/science/article/pii/S0895435621002407))
+- They help us understand the [associations]{.alert} between variables and identify potential sources of bias
+- And they are super easy to draw! 🤓
+- For instance, let's illustrate a classic example of selection bias with a causal diagram (borrowed from [Hernán et al., 2019](https://doi.org/10.1097/01.ede.0000135174.63482.43))
+:::
+
+:::{.column width=50%}
+:::{style="text-align: center;"}
+![](figures/causal-diagram.png){width=80%}
+:::
+
+:::{style="text-align: left;"}
+- Figure 1 shows that the common cause $L$ (smoking) results in $E$ (carrying matches) and $D$ (lung cancer) being associated
+- Figure 2 shows how [randomisation breaks the association between $L$ and $D$]{.alert}, so the treatment effect is unbiased
+- In this case, if you know what $L$ is, you can also [control for it]{.alert} in your analysis
+:::
+:::
+:::
+:::
+
+## Some sources of selection bias
+### Losses to follow-up: The scenario
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+:::{.columns}
+:::{.column width=50%}
+- A common problem in experiments is individuals [dropping out]{.alert} before the study ends
+- This is an issue because the [treatment effect may be different for those who leave]{.alert}
+- [Example]{.alert}: A study on antiretroviral therapy for HIV-infected patients. Let's define the variables:
+  - **E (Exposure):** The antiretroviral therapy
+  - **D (Disease):** The outcome, developing AIDS
+  - **L (Measured):** Presence of other HIV symptoms (e.g., fever)
+  - **U (Unmeasured):** True level of immunosuppression
+  - **C (Censoring):** The patient drops out of the study ($C=1$)
+- Patients with greater immunosuppression (**U**) are more likely to have symptoms (**L**) and are also more likely to drop out (**C**)
+:::
+
+:::{.column width=50%}
+:::{style="text-align: center;"}
+![](figures/selective-survival.png){width=80%}
+:::
+
+:::{style="text-align: left;"}
+- The [causal diagram]{.alert} shows the relationships between these variables
+- The core problem is that dropping out (**C**) is related to both health factors and the final outcome
+:::
+:::
+:::
+:::
+
+## Some sources of selection bias
+### Losses to follow-up: Bias and a solution
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+:::{.columns}
+:::{.column width=50%}
+- [Understanding the Bias:]{.alert}
+  - In the diagram, both **L** (symptoms) and **U** (immunosuppression) cause patients to drop out (**C**). A variable that has two arrows pointing into it is called a [collider]{.alert}
+  - When we analyse only the people who complete the study, we are "conditioning on the collider"
+  - This action distorts the estimated relationship between the therapy (**E**) and the outcome (**D**), leading to [selection bias]{.alert}
+- [How can we correct for this?]{.alert}
+  - One way is to use [stratified analysis]{.alert}
+:::
+
+:::{.column width=50%}
+- [Stratification is quite simple:]{.alert}
+  - **1. Divide:** Assuming **L** is measured, we split participants into groups (strata) based on their symptoms (e.g., mild, moderate, severe)
+  - **2. Estimate:** We calculate the treatment effect separately *within each stratum*
+  - **3. Average:** We then average the stratum-specific estimates to get the overall treatment effect
+- By doing this, we control for the effect of **L**
+- [Important caveat]{.alert}: This method only corrects for bias from *measured* variables like **L**. It cannot fix bias from *unmeasured* variables like **U**
+:::
+:::
+:::
+
+## Attrition bias
+### Closely related to losses to follow-up
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+- [Attrition bias]{.alert} is a type of selection bias that occurs when individuals drop out of a study in a way that is related to the treatment or outcome
+- It is [more systematic]{.alert} than losses to follow-up, which can happen by chance (e.g., disengagement, relocation, or other factors, leading to incomplete data)
+- For example, in a clinical trial, if participants experiencing side effects disproportionately drop out of the treatment group compared to the placebo group, this difference introduces attrition bias
+- In short, attrition bias specifically addresses the bias that arises when these [departures are non-random]{.alert}
+- As with losses to follow-up, this is a type of selection bias [that can be caused by the experiment itself]{.alert}, not only by pre-existing differences between groups
+:::
+
+## Survivorship bias
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- In my view, one of the coolest examples of selection bias
+- [Survivorship bias]{.alert} is the logical error of concentrating on the people or things that made it past some selection process and overlooking those that did not
+- It is also [closely related to attrition and loss to follow-up bias]{.alert} (more commonly mentioned in observational data)
+  - Attrition bias emphasises [the process of losing data]{.alert}, while survivorship bias highlights [the exclusion of failures in analysis]{.alert}
+- For instance, imagine that you are studying the [effect of education on income]{.alert}
+- If you only look at people who have completed college, you are ignoring those who dropped out
+- This can lead to an [overestimation]{.alert} of the effect of education on income
+- Why? Because those who dropped out may have done so because they were not good students, which can affect their income
+- Have a look at this example (you may have seen it before!)
+:::
+## Survivorship bias in World War II aircraft
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- During World War II, the US military wanted to [improve the armour on its aircraft]{.alert}
+- They analysed the [bullet holes]{.alert} on returning aircraft and decided to add more armour to the areas with the most bullet holes
+- Considering the picture you see here, where would you add the armour?
+- More [here](https://en.wikipedia.org/wiki/Survivorship_bias#Military)
+- Another example: Imagine you are studying mutual fund performance, and you look at funds that are still in operation. You see that they beat the S&P 500 by 2% per year
+- What's the problem here?
+:::
+:::{.column width=50%}
+:::{style="text-align: center;"}
+![](figures/aircraft.png){width=80%}
+:::
+:::
+:::
+:::
+
+## Post-treatment bias (or overcontrol)
+
+:::{style="margin-top: 30px; font-size: 20px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Post-treatment bias]{.alert} occurs when we control for a variable that is a *consequence* of the treatment
+- This is a critical mistake because you are [controlling away one of the causal pathways]{.alert} through which the treatment works
+
+- **Example**: A job training programme
+  - **Treatment (T):** The training programme
+  - **Outcome (Y):** Finding employment
+  - **Mediator (M):** Number of job applications submitted
+
+- The training **(T)** works in two ways:
+  1.  **Directly:** It improves skills (T → Y)
+  2.  **Indirectly:** It motivates people to submit more applications **(M)**, which in turn leads to employment (T → M → Y)
+- [The number of applications is a post-treatment variable]{.alert} because it is caused by the training
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/post-treatment-bias.png){width="80%"}
+
+Source: [Elwert and Winship (2014)](https://www.annualreviews.org/content/journals/10.1146/annurev-soc-071913-043455)
+:::
+
+:::{style="text-align: left;"}
+- If we add the number of job applications **(M)** to our regression model, we are asking:
+  - *"What is the effect of training, holding the number of applications constant?"*
+- This blocks the indirect causal path. We are left with an [underestimate of the programme's total effect]{.alert}
+- Is there a statistical fix? [Not really!]{.alert}
+- The solution is theoretical: [think carefully about your causal model and do not control for mediators]{.alert} when you want to estimate the total effect
+:::
+:::
+:::
+:::
+
+## Examples of post-treatment bias
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+:::{.columns}
+:::{.column width=50%}
+### Avoidable post-treatment bias
+
+- Causal effect of party ID on the vote 
+  - Do control for race 
+  - Do not control for voting intentions five minutes before voting
+- Causal effect of race on salary in a firm 
+  - Do control for qualifications 
+  - Don’t control for position in the firm
+- Causal effect of medicine on health 
+  - Do control for health prior to the treatment decision 
+  - Do not control for side effects or other medicines taken later
+:::
+
+:::{.column width=50%}
+### Unavoidable post-treatment bias
+
+- Causal effect of democratisation on civil war; do we control for GDP?  
+  - Yes, since GDP → democratisation we must control to avoid omitted variable bias
+  - No, since democratisation → GDP, we would have post-treatment bias
+
+- Causal effect of legislative effectiveness on state failure; do we control for trade openness?
+  - Yes, since trade openness → legislative effectiveness, we must control to avoid omitted variable bias 
+  - No, since legislative effectiveness → trade openness, we would have post-treatment bias
+:::
+:::
+:::
+
+## Now it's your turn! 🤓
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- I will list some factors and you tell me if they are likely to be sources of selection bias (and why)
+  - Telephone random sampling
+  - Ascertainment: when the investigator responsible for assessing the outcome of interest is also aware of the group assignment
+  - [WEIRD samples](https://www.apa.org/monitor/2010/05/weird): Western, Educated, Industrialised, Rich, and Democratic
+  - Referral filter: when the study population is recruited through referrals, often from health care providers or NGOs
+  - When you ask socially sensitive questions in a survey
+:::
+
+# Measuring variability 📏 {background-color="#2d4563"}
+
+## Measuring variability (part 1): Standard deviation
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- Apart from averages, we are also interested in [variability]{.alert}: how spread out is our data?
+- The foundational measure is [variance]{.alert}, the average squared deviation from the mean
+- The sample variance of $Y_i$ in a sample of size $n$ is defined as:
+  - $S(Y_i)^2 = \frac{1}{n-1} \sum_{i=1}^{n} (Y_i - \bar{Y})^2$
+- Since variance is in squared units, we use its square root, the [standard deviation (SD)]{.alert}
+- The SD is a [descriptive]{.alert} measure: it summarises the variability *within* your dataset
+:::
+
+:::{.column width=50%}
+- [Example]{.alert}: Suppose you measure the IQ of 50 students
+  - You find the average IQ is $\bar{IQ} = 100$
+  - You calculate the $SD = 15$
+
+- [What does this mean?]{.alert}
+  - It describes the spread of IQs *in your sample*
+  - ["A typical student in your sample has an IQ that is about 15 points away from the sample average of 100"]{.alert}
+  - It answers the question: "How much do the individual data points differ from each other?"
+:::
+:::
+:::
+
+## Measuring variability (part 2): Standard error
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- The [standard error (SE)]{.alert} is different: it is the standard deviation of a statistic (like the sample mean)
+- It measures [how precise your sample mean is as an estimate of the true population mean]{.alert}
+- The standard error of the sample mean is:
+  - $SE(\bar{Y}) = \frac{\sigma(Y_i)}{\sqrt{n}}$
+- Since we rarely know the population SD ($\sigma$), we use the sample SD ($S$) instead:
+  - $SE(\bar{Y}) = \frac{S(Y_i)}{\sqrt{n}}$
+- The SE is about [precision]{.alert} and is used for inference (e.g., confidence intervals), while the SD is about the [variability of the data]{.alert}
+:::
+
+:::{.column width=50%}
+- [Example]{.alert}: For the same 50 students with $\bar{IQ} = 100$ and $SD = 15$
+  - The [Standard Error (SE)]{.alert} is:
+  - $SE = \frac{15}{\sqrt{50}} \approx 2.12$
+
+- [What does this mean?]{.alert}
+  - It describes the precision of your *sample average*
+  - ["If you repeated the study with another 50 students, you would expect the new sample mean to be roughly 2.12 points away from the true population mean"]{.alert}
+  - It answers the question: "How much would my sample average likely change if I took a new sample?"
+:::
+:::
+:::
+
+## The standard error of a difference in means
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+:::{.columns}
+:::{.column width=50%}
+### The concept: Precision of the treatment effect
+
+- In an experiment, we don't just care about one mean; we care about the [difference in means]{.alert} ($\bar{Y}_{1} - \bar{Y}_{0}$)
+- Just as each sample mean has its own precision (its SE), the [difference between them also has a measure of precision]{.alert}
+- The [standard error of the difference]{.alert} tells us how much we'd expect our estimated treatment effect to vary if we repeated the experiment
+- [Analogy:]{.alert} Imagine trying to measure the height difference between two platforms, but both are a bit wobbly. The uncertainty in your final measurement comes from the wobbliness of *both* platforms
+- The SE of the difference combines the uncertainty from both the treatment and control group means
+:::
+
+:::{.column width=50%}
+### The formula & its use
+
+- The uncertainty (variance) of a difference between two independent groups is the *sum* of their individual variances:
+  - $Var(\bar{Y}_{1} - \bar{Y}_{0}) = Var(\bar{Y}_{1}) + Var(\bar{Y}_{0})$
+- This leads to the formula for the standard error of the difference, which combines the variability ($S^2$) and sample size ($n$) from both groups:
+  - $SE(\bar{Y}_{1} - \bar{Y}_{0})=\sqrt{\frac{S(Y_{1})^2}{n_{1}}+\frac{S(Y_{0})^2}{n_{0}}}$
+- [Why it's crucial:]{.alert} This value is the foundation for hypothesis testing! It's the denominator in a t-test:
+  - $t = \frac{\text{Difference in means}}{\text{SE of the difference}}$, or $t = \frac{\bar{Y}_{1} - \bar{Y}_{0}}{SE(\bar{Y}_{1} - \bar{Y}_{0})}$
+- It also determines the width of the [confidence interval]{.alert} around our treatment effect
+- While your software computes this for you 🤖, knowing what's "under the hood" helps you interpret your results! 😉
+:::
+:::
+:::
+
+# Regression analysis of experiments 📊 {background-color="#2d4563"}
+
+## Regression analysis of experiments
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+- It is super easy to estimate the average treatment effect using [regression analysis]{.alert}
+- Although some areas (e.g. medicine, psychology) often use $t$-tests for [difference-in-means]{.alert}, regression is more flexible and gives you exactly the same results
+- The idea is to [regress the outcome variable on the treatment variable]{.alert} and some covariates if necessary
+- But always report the ATE without covariates first, as it is the most interpretable
+- Let's see an example using `R`! 🤓
+- We will use the `fabricatr`, `estimatr`, and `randomizr` packages, which are part of the `DeclareDesign` suite
+- More information about the packages is available [here](https://declaredesign.org/r/fabricatr/index.html), [here](https://declaredesign.org/r/randomizr/index.html), and [here](https://declaredesign.org/r/estimatr/index.html)
+- We will start slowly, don't worry, and build up from there in the next lectures 😉
+:::
+
+## Simulating data in `R`
+
+:::{style="margin-top: 30px; font-size: 20px;"}
+:::{.columns}
+:::{.column width=40%}
+- Imagine that we want to estimate the effect of a job training programme on the number of interviews that unemployed individuals get, similar to the example we discussed earlier
+- The treatment variable is `treat`, which takes the value 1 if the individual received the training and 0 otherwise
+- We will assign 1000 individuals to the treatment and control groups, with an equal probability of being assigned to each group (simple random assignment)
+- The outcome variable is `interviews`, which is the number of interviews the individual got after the training
+- The treatment effect is 5, that is, individuals who received the training got 5 more interviews than those who did not
+:::
+
+:::{.column width=60%}
+```{r}
+#| echo: true
+#| eval: true
+
+# Load the required packages
+library(fabricatr)
+library(estimatr)
+library(randomizr)
+
+# Set the seed for reproducibility
+set.seed(385)
+
+# Simulate the data
+data <- fabricate( # fabricatr
+  N = 1000, # base
+  treat = simple_ra(N, prob = 0.5), # randomizr
+  interviews = round(rnorm(N, mean = 10, sd = 2) + 5 * treat, digits = 0) # base
+)
+
+# Check the first few rows of the data
+head(data)
+```
+:::
+:::
+:::
+
+## Step-by-step: using `fabricatr` to simulate data
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- We used the `fabricate()` function from the `fabricatr` package to simulate the data
+- The package is very flexible and was built for all types of data simulations, mainly those used by social scientists (e.g. experiments, surveys)
+  - We can draw from Likert scales, create binary variables, ordinal variables, categorical variables, etc
+  - More about how to create different types of variables [here](https://declaredesign.org/r/fabricatr/articles/common_social.html)
+- The `fabricate()` function takes a series of arguments, which are the variables we want to simulate
+- It uses base `R` functions too, which makes it easy to use
+- For instance, `N = 1000` is the number of individuals in the sample and we created it using just base `R`
+- To simulate the `interviews` variable, we used the `rnorm()` function to draw from a normal distribution with mean 10 and standard deviation 2
+- We add 5 because it is the treatment effect
+- As we cannot have a fraction of an interview, we used the `round()` function to round the number of interviews to the nearest integer (`digits = 0`)
+- So far so good? 🤓
+:::
+
+## Randomising treatment assignment
+
+:::{style="margin-top: 30px; font-size: 20px;"}
+- We used `simple_ra()` for simple random assignment, which is a simple coin flip. The arguments are:
+  - `N`: the number of individuals in the sample (required)
+  - `prob`: the probability of being assigned to the treatment group (optional)
+  - `prob_each`: the probability of being assigned to each treatment group (optional)
+- We could have used the `complete_ra()` function from the `randomizr` package to randomise the treatment assignment
+- The function has a few arguments:
+  - `N`: the number of individuals in the sample (required)
+  - `m`: the number of individuals assigned to the treatment group (optional)
+  - `m_each`: the number of individuals assigned to each treatment group (optional)
+- We could also use `block_ra()` for block random assignment, which is when we divide the sample into blocks and then randomise within each block 
+- `cluster_ra()` is used for cluster random assignment, which is when we randomise at the cluster level (e.g. schools, hospitals)
+- Finally, `block_and_cluster_ra()` is used for block and cluster random assignment, which is a combination of the two
+- We will discuss these functions in further detail in the next lectures 😉
+:::
+
+## Estimating the treatment effect
+
+:::{style="margin-top: 30px; font-size: 20px;"}
+:::{.columns}
+:::{.column width=35%}
+- Now that we have the data, we can estimate the treatment effect using the `lm_robust()` function from the `estimatr` package
+- The function is similar to the `lm()` function, but it uses robust standard errors, which are more appropriate for experiments
+- Why? Because [robust standard errors correct for heteroskedasticity and clustering](https://declaredesign.org/r/estimatr/articles/mathematical-notes.html#lm_robust-notes)
+- This is a free lunch: if your data is not heteroskedastic or clustered, the robust standard errors will be the same as the regular standard errors
+- The function takes a formula as an argument, which is the outcome variable regressed on the treatment variable
+:::
+
+:::{.column width=65%}
+```{r}
+#| echo: true
+#| eval: true
+model <- lm_robust(interviews ~ treat, data = data)
+summary(model)
+```
+:::
+:::
+:::
+
+## Difference in means
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- For those who would like to estimate the difference in means using the `t.test()` function, we've got you covered!  😉
+- `estimatr` also has a function that does that, called `difference_in_means()` (what a surprise! 😂)
+- It is actually more flexible than the `t.test()` function, as it can handle unit-randomised, cluster-randomised, block-randomised, matched-pair randomised, and matched-pair clustered designs. More [here](https://declaredesign.org/r/estimatr/articles/getting-started.html#difference_in_means)
+- Here is how to use it:
+
+```{r}
+#| echo: true
+#| eval: true
+
+difference_in_means(interviews ~ treat, data = data)
+```
+
+- As you can see, the results are exactly the same as the regression model
+- Just the output looks a little different, but the interpretation is the same
+- Use whatever you feel more comfortable with! 😊
+:::
+
+## Interpreting the results
+
+:::{style="margin-top: 30px; font-size: 19px;"}
+:::{.columns}
+:::{.column width=35%}
+- The output of the `summary()` function gives us the [coefficient estimate]{.alert} of the treatment variable
+- The intercept is `10.008`, which is the average number of interviews for the control group
+- The coefficient of the treatment variable is `4.958`, which is the average treatment effect
+- The standard error of the treatment effect is `0.129`, which is the standard error of the difference in means
+- Our results are statistically significant at the 5% level, as the $p$-value is less than 0.05
+:::
+
+:::{.column width=65%}
+```{r}
+#| echo: true
+#| eval: true
+model <- lm_robust(interviews ~ treat, data = data)
+summary(model)
+```
+- The `R^2` and its adjusted version are measures of the goodness-of-fit of the model
+  - They are the proportion of the variance in the outcome variable explained by the model
+- The `F` statistic is a test of the overall significance of the model
+  - The null hypothesis is that all coefficients are zero
+  - But as we see, the treatment variable is significant
+:::
+:::
+:::
+
+## Including pre-treatment covariates in the model
+
+:::{style="margin-top: 30px; font-size: 20px;"}
+:::{.columns}
+:::{.column width=50%}
+- We can also include covariates in the model to [increase precision]{.alert}
+- In contrast with the treatment, the covariates have [no causal interpretation]{.alert}, that is, they are not affected by the treatment
+- Even with randomisation, there can be [small imbalances]{.alert} in covariates between treatment and control groups, especially in small samples
+- Including these covariates in the regression helps to adjust for any residual imbalances that may exist due to random chance, making the analysis more accurate
+- Including covariates can also help bolster the credibility of the results by demonstrating that the treatment effect persists even after controlling for relevant variables
+- But remember to include [only pre-treatment covariates]{.alert} in the model, as post-treatment covariates can introduce bias
+:::
+
+:::{.column width=50%}
+- Let's simulate a new dataset with two pre-treatment covariates: `age` and `education`
+
+```{r}
+#| echo: true
+#| eval: true
+set.seed(385)
+
+data2 <- fabricate(
+  N = 1000,
+  treat = complete_ra(N, m = 500),
+  age = round(rnorm(N, mean = 30, sd = 5)),
+  education = round(rnorm(N, mean = 12, sd = 2)),
+  interviews = round(rnorm(N, mean = 10, sd = 2) + 5 * treat)
+)
+
+head(data2)
+```
+:::
+:::
+:::
+
+## Estimating the second model
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+- We can add covariates to experimental models to increase precision
+- The same way we do in any regression:
+  - $Y_i = \alpha + \beta \text{T}_i + \gamma \text{X}_i + \epsilon_i$
+- [Freedman (2008)](https://doi.org/10.1214/07-AOAS143) demonstrated that pre-treatment covariate adjustment may bias estimates of average treatment effects in small samples
+  - In small samples, covariates and treatment assignment may not be perfectly independent
+- [Lin (2013)](https://doi.org/10.1214/12-AOAS583) proposed that if covariate correlations differ between treatment and control groups, centring and interacting covariates with the treatment variable will balance the groups
+- This adjusts for covariates separately in each group, which is equivalent to including treatment-by-covariate interactions
+  - $Y_i = \alpha + \beta \text{T}_i + \gamma \text{W}_i + \delta \text{T}_i \times \text{W}_i + \epsilon_i$
+  - Where $W_i = \text{X}_i - \bar{\text{X}}$ and $\bar{\text{X}}$ is the mean of $\text{X}_i$
+  - For ease of interpretation, we can centre the covariates to have a mean of zero
+- Anyway, worry not! 😅 Our friends at [DeclareDesign](https://declaredesign.org/r/estimatr/articles/getting-started.html#lm_lin) have done all the work for us and created a function called `lm_lin()` that does everything automatically!
+:::
+
+## Estimating the second model
+
+:::{style="margin-top: 30px; font-size: 20px;"}
+
+:::{.columns}
+:::{.column width=65%}
+```{r}
+#| echo: true
+#| eval: true
+model2 <- lm_lin(interviews ~ treat,
+                covariates = ~ age + education,
+                data = data2)
+summary(model2)
+```
+:::
+
+:::{.column width=35%}
+- The `lm_lin()` function is similar to the `lm_robust()` function, but it includes the `covariates` argument
+- We pass a simple `R` formula to it
+- As you can see, the results are pretty similar to the previous model
+# Summarise results
+- The `_c` part of the variable names indicates that the variables are centred, as recommended by Lin (2013)
+:::
+:::
+:::
+
+## Sub-group analysis
+
+:::{style="margin-top: 30px; font-size: 20px;"}
+:::{.columns}
+:::{.column width=35%}
+- We can also estimate the treatment effect for sub-groups of the population
+- This is useful when we suspect that the treatment effect may vary across known dimensions
+- For instance, we can estimate the treatment effect for people with high and low levels of education
+- We can do this by [including an interaction term between the treatment variable and the covariate of interest]{.alert}
+- We will discuss this in further detail in the next lectures, but here is how to do it
+:::
+
+:::{.column width=65%}
+```{r}
+#| echo: true
+#| eval: true
+# Create a binary subgroup (e.g., "high" vs. "low" education)
+data2$high_edu <- ifelse(data2$education > median(data2$education), 1, 0)
+
+# Fit an interaction model with covariates
+model_interaction <- lm_robust(
+  interviews ~ treat * high_edu + age + education,
+  data = data2)
+
+# Summarize results
+summary(model_interaction)
+```
+:::
+:::
+:::
+
+## Sub-group analysis: interpreting the results
+
+:::{style="margin-top: 30px; font-size: 19px;"}
+:::{.columns}
+:::{.column width=35%}
+- The output of the `summary()` function gives us the [coefficient estimate]{.alert} of the treatment variable for the high education group 
+  - It is in the last line, `treat:high_edu`
+- [Interpretation]{.alert}: The treatment effect for the high-education subgroup (`high_edu = 1`) is 0.097 larger than for the low-education subgroup 
+- Total treatment effect for `high_edu = 1`: 5.101 + 0.097 = 5.198 
+- [Significance]{.alert}: The interaction is not significant (CI: -0.395 to 0.590), meaning there’s no evidence the treatment effect differs between education subgroups
+- This is expected, as we simulated the data to have the same treatment effect for all individuals (5)
+- But it is good to know how to do it, right? 😉
+:::
+
+:::{.column width=65%}
+```{r}
+#| echo: true
+#| eval: true
+# Create a binary subgroup (e.g., "high" vs. "low" education)
+data2$high_edu <- ifelse(data2$education > median(data2$education), 1, 0)
+
+# Fit an interaction model with covariates
+model_interaction <- lm_robust(
+  interviews ~ treat * high_edu + age + education,
+  data = data2)
+
+# Summarize results
+summary(model_interaction)
+```
+:::
+:::
+:::
+
+# Cool, isn't it? 😎 {background-color="#2d4563"}
+
+# Questions? {background-color="#2d4563"}
+
+## Summary
+
+:::{style="margin-top: 30px; font-size: 20px;"}
+:::{.columns}
+:::{.column width=60%}
+- We discussed the potential outcomes framework in further detail, focusing on issues of selection bias
+- We talked about different types of selection bias, such as inappropriate controls, loss to follow-up, attrition bias, survivorship bias, and confounders
+- We also discussed how to measure variability using the standard deviation and standard error
+- Then, we talked about regression analysis of experiments, including how to simulate data, randomise treatment assignment, estimate the treatment effect, and include pre-treatment covariates in the model
+- We also introduced the `fabricatr`, `estimatr`, and `randomizr` packages, which are part of the `DeclareDesign` suite
+- Finally, we discussed sub-group analysis and how to estimate the treatment effect for different sub-groups of the population
+- I hope you enjoyed the lecture! 🤓
+- Next time, we will discuss more about hypothesis testing and confidence intervals, so stay tuned! 😉
+:::
+
+:::{.column width=40%}
+:::{style="text-align: center;"}
+![](figures/meme.jpg){width=100%}
+:::
+:::
+:::
+:::
+
+# Thank you and see you soon! 😃 {background-color="#2d4563"}

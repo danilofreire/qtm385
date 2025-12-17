@@ -1,0 +1,684 @@
+---
+title: DATASCI 385 - Experimental Methods
+subtitle: Lecture 07 - Blocking and Clustering
+author:
+  - name: Danilo Freire
+    email: danilo.freire@emory.edu
+    affiliations: Department of Data and Decision Sciences <br> Emory University
+format:
+  clean-revealjs:
+    self-contained: true
+    code-overflow: wrap
+    footer: "[Blocking and Clustering](https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-07/07-blocking.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: knitr
+revealjs-plugins:
+  - multimodal
+editor:
+  render-on-save: true
+---
+
+# Hi, there! <br> Hope all is well 😉 {background-color="#2d4563"}
+
+# Brief recap 📚 {background-color="#2d4563"}
+
+## Last time, we...
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Discussed Kalla and Broockman (2015): [Campaign Contributions Facilitate Access to Congressional Officials: A Randomized Field Experiment](https://onlinelibrary.wiley.com/doi/full/10.1111/ajps.12180)
+- They conducted a field experiment demonstrating that informing congressional offices about meeting attendees being donors significantly increased (3-4 times) the likelihood of securing meetings with policymakers
+- Their treatment was a simple email sent to congressional offices with information about the meeting attendees (donors vs. local constituents)
+- The experiment also had a good theoretical grounding, as it was based on the idea that money distorts political representation
+- The results indicate this is true, at least in the American context (at the time of the experiment)
+:::
+
+:::{.column width="50%"}
+:::{style="margin-top: 30px; font-size: 22px; text-align: center;"}
+![](figures/abstract-kalla.png){width=80%}
+
+[Article link](https://doi.org/10.1111/ajps.12180) and [replication data](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/28582)
+<br>
+:::
+:::
+:::
+:::
+
+## Last time, we...
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Also discussed another experiment by Bertrand and Mullainathan (2004): [Are Emily and Greg More Employable Than Lakisha and Jamal? A Field Experiment on Labor Market Discrimination](https://www.nber.org/papers/w9873)
+- This was a field experiment that sent out resumes with different names to test for racial discrimination in the job market
+- The results were striking: resumes with White-sounding names received 50% more callbacks than those with African-American-sounding names
+- The experiment was widely reported in the media and sparked a lot of discussion about racial discrimination
+  - [YouTube video with Mullainathan discussing discrimination by algorithms and people](https://www.youtube.com/watch?v=ys2sMv_JHqA)
+:::
+
+:::{.column width="50%"}
+- The findings replicate elsewhere, too: For instance, 14% more callbacks for German- vs. Turkish-sounding names ([Kaas and Munger (2019)](https://www.degruyter.com/document/doi/10.1111/j.1468-0475.2011.00538.x/html))
+  - But the effect disappears when recommendation letters are provided. Why? [Statistical discrimination?](https://en.wikipedia.org/wiki/Statistical_discrimination_(economics))
+- [Yemane and Reino (2019)](https://www.tandfonline.com/doi/full/10.1080/1369183X.2019.1622806#abstract) find that Latinos are also discriminated against in the U.S. labour market, but not in Spain. Why is that?
+
+:::{style="margin-top: 30px; font-size: 24px; text-align: center;"}
+![](figures/abstract-bertrand.png){width=80%}
+
+[Article link](https://www.aeaweb.org/articles?id=10.1257%2F0002828042002561&ref=exo-insight) and [replication data](http://doi.org/10.3886/E116023V1)
+:::
+:::
+:::
+:::
+
+## Today, we will...
+
+:::{style="margin-top: 50px; font-size: 26px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Understand how to improve our experiments by using blocking 
+- Learn why [blocking reduces variance and increases precision]{.alert}
+- See how blocking solves some practical issues in field experiments
+- Learn about, and how to deal with, [clustering and intra-cluster correlation]{.alert}
+- Understand why [clustering increases variance and reduces statistical power]{.alert}
+- Differences between blocking and clustering
+- [But first...]{.alert}, let's talk about your group work again!
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/blocking.png)
+
+Source: [Data Science Discovery - University of Illinois](https://discovery.cs.illinois.edu/learn/Basics-of-Data-Science-with-Python/Experimental-Design-and-Blocking/)
+:::
+:::
+:::
+:::
+
+# Group project 👥 {background-color="#2d4563"}
+
+## Group project
+
+:::{style="margin-top: 30px; font-size: 29px;"}
+- Thanks to everyone who has emailed me with their group preferences 😉
+- If you haven't emailed me yet, I will soon assign you to a group (randomly)
+- Group numbers have also been randomised to avoid any selection bias! 😂
+- I will also create the groups on Canvas in case you need to refer to it later
+- Please let me know if you have already formed a group and want to keep it!
+:::
+
+# Questions? {background-color="#2d4563"}
+
+## Group project 🤝
+### Next steps (from our previous lecture)
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- I'll give you some time to discuss your ideas and start writing your plan
+- What do you think about sending this to me [next week/in two weeks]{.alert}?
+  - Submit at most 2 paragraphs summarising an experiment that you want to develop in this course. At minimum, your summary should include a research question, why the question is important, and a rough sketch of how you plan to answer the question
+- [In two weeks]{.alert}:
+  - Write a title and abstract for a paper you imagine writing based on your proposed experiment. Assume that your findings align with your theoretical predictions. Remember to establish why the findings matter for your intended audience
+- [In three weeks]{.alert}:
+  - Outline your pre-analysis plan. Your outline should include sections on the research question, the experimental design, the data you will collect, and the analysis you will conduct
+:::
+
+# Blocking and Clustering {background-color="#2d4563"}
+
+## What is blocking?
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+:::{.incremental}
+- Blocking is a procedure that involves [grouping experimental units based on certain characteristics]{.alert}
+- These groups are called [blocks or strata]{.alert} and are formed based on variables that are expected to affect the outcome of the experiment (heterogeneous treatment effects)
+- [Within each block, units are randomly assigned]{.alert} to treatment or control groups
+- So we have ["experiments within experiments"]{.alert}!
+- This approach helps to ensure that the treatment and control groups are comparable within each block, reducing the potential for confounding variables to affect the results
+:::
+:::
+
+## Why is blocking important?
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- Blocking can also help us ensure that an [equal number of people from each group]{.alert} are assigned to the treatment and control groups
+- For instance, imagine an experiment that includes 20 people, 10 men and 10 women
+- If we randomly assign people to the treatment and control groups, we might end up with 15 women in the experiment, or even only men in our sample (although the chance of this happening is quite low)
+- [Blocking removes this risk entirely]{.alert}
+- And as groups will be more homogeneous, blocking also [reduces variance]{.alert} and [increases precision]{.alert}
+- ["Block what you can, and randomise what you cannot"]{.alert} (Gerber and Green 2012, p. 110)
+:::
+
+## One or many blocks?
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- With enough time and resources, we could create a block for every possible characteristic that might affect the outcome of the experiment
+- But this would be impractical and unnecessary
+- Instead, we should focus on the [most important characteristics]{.alert} that are likely to have the greatest impact on the outcome
+- But [how do we know which characteristics are important]{.alert} if we haven't run the experiment yet?
+- Two strategies:
+  - Use [previous research]{.alert} (quantitative or qualitative) to identify important characteristics
+  - [Pilot the experiment]{.alert} with a small sample to test for important characteristics
+:::
+
+## How does blocking help?
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- Let's say we are interested in testing the effect of a new drug on blood pressure
+- We know that age is an important factor that affects blood pressure, so we decide to block our sample by age
+- To simplify, we create two blocks: one for people under 50 and another for people over 50
+- Imagine that we have 12 people in our sample ($N$) and want to assign 6 of them ($m=6$) to the treatment group and 6 to the control group
+- How many possible ways are there to assign people to the treatment and control groups?
+
+:::{.columns}
+:::{.column width="50%"}
+```{r}
+#| echo: true
+#| eval: true
+
+# Random assignment
+choose(12, 6)
+```
+:::
+
+:::{.column width="50%"}
+```{r}
+#| echo: true
+#| eval: true
+
+# Two blocks with 6 people each
+# 3 in the treatment group
+choose(6, 3) * choose(6, 3)
+```
+:::
+:::
+:::
+
+## How does blocking help?
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+:::{.columns}
+:::{.column width="50%"}
+- The assignments that are ruled out are those in which [too many or too few units in a block are assigned to treatment]{.alert}
+- Those “extreme” assignments produce estimates that are [in the tails of the sampling distribution]{.alert}
+- The figure shows the sampling distribution of the difference-in-means estimator under complete random assignment
+- The histogram is shaded according to whether the particular random assignment is permissible under a procedure that blocks on the binary covariate $X$ (`age`, in our case)
+- After many simulations, we see that blocking [rules out by design those assignments that are not well balanced]{.alert}
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/blocking-helps.png){width=100%}
+
+Source: [Blair et al. (2023)](https://book.declaredesign.org/library/experimental-causal.html#block-randomized-experiments)
+:::
+:::
+:::
+:::
+
+## Is there any disadvantage to blocking?
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- In general, [no!]{.alert}
+- Gerber and Green argue that, _even if you create blocks at random_, you will do no worse than if you had not blocked at all (simple randomisation)
+- So there is no real disadvantage to blocking according to them
+- Others, such as [Pashley and Miratrix (2021)](https://arxiv.org/abs/2010.14078), argue that in some specific conditions (such as unthoughtful blocking), blocking will not be too beneficial, but it will not be so harmful either
+- In the vast majority of cases, you have a lot of gain from blocking and very little to lose
+- [The only risk, in fact, is analysing the data incorrectly]{.alert}
+- And that can happen! We will see how soon 😉
+:::
+
+## When is blocking useful?
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- Blocking can be particularly useful when:
+  - The [sample size is small]{.alert}
+  - There are important characteristics that are likely to affect the outcome of the experiment
+  - The [cost of blocking is low]{.alert} compared to the potential benefits
+  - When it is important to affirm that [heterogeneity is expected]{.alert} and should be explored (defense against p-hacking)
+
+- We should [not overstate its benefits]{.alert}, as much of it can also be obtained with covariate adjustment. But the decrease in variance is real!
+:::
+
+## Kalla and Broockman (2015)
+
+:::{style="margin-top: 30px; font-size: 28px; text-align: center;"}
+![](figures/kalla-blocks.png){width=50%}
+![](figures/kalla-blocks2.png){width=50%}
+:::
+
+## How to define ATE in blocked experiments?
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- If we consider the ATE at the unit level: 
+
+$$ATE = \frac{1}{N}\sum_{i=1}^N y_{i,1} - y_{i,0}$$
+
+- We could re-express this quantity equivalently using the ATE of block $j$, $ATE_j$, as follows:
+
+$$ATE = \frac{1}{J}\sum_{j=1}^J\sum_{i=1}^{N_j} \frac{y_{i,1} - y_{i,0}}{N_j} = \sum_{j=1}^J \frac{N_j}{N}ATE_j$$
+
+- And it would be logical to estimate this quantity by replacing what we can indeed calculate:
+
+$$\widehat{ATE} = \sum_{j=1}^J \frac{N_j}{N}\widehat{ATE_j}$$
+:::
+
+## How to define ATE in blocked experiments?
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- We can define the standard error of the estimator by averaging the standard errors within each block (if our blocks are sufficiently large)
+
+:::{style="text-align: center;"}
+![](figures/se.png){width=50%}
+:::
+
+- Take each block's standard error
+- Weight it by the squared proportion of that block's size
+- Add up all these weighted squared standard errors
+- Take the square root of the sum
+:::
+
+## How to define ATE in blocked experiments?
+### Let's simulate some data
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+```{r}
+#| echo: true
+#| eval: true
+set.seed(12345)
+# We have 10 units
+N <- 10
+# y0 is the potential outcome under control
+y0 <- c(0, 0, 0, 1, 1, 3, 4, 5, 190, 200)
+# For each unit, the treatment effect is intrinsic
+tau <- c(10, 30, 200, 90, 10, 20, 30, 40, 90, 20)
+# y1 is the potential outcome under treatment
+y1 <- y0 + tau
+# Two blocks: a and b
+block <- c("a", "a", "a", "a", "a", "a", "b", "b", "b", "b")
+# Z is the treatment assignment
+# (in the code we use Z instead of T)
+Z <- c(0, 0, 0, 0, 1, 1, 0, 0, 1, 1)
+# Y is the observed outcome
+Y <- Z * y1 + (1 - Z) * y0
+# The data
+dat <- data.frame(Z = Z, y0 = y0, y1 = y1, tau = tau, b = block, Y = Y)
+head(dat)
+```
+:::
+
+## How to define ATE in blocked experiments?
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- One option to estimate $ATE_j$ is just to replace it with $\widehat{ATE}$
+
+```{r}
+#| echo: true
+#| eval: true
+with(dat, table(b, Z))
+```
+
+As we can see, we have 6 units in block $a$, 2 of which are assigned to the treatment, and 4 units in block $b$, 2 of which are assigned to the treatment
+:::
+
+## Estimating ATE in blocked experiments
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- First, let's see some possible estimations
+
+```{r}
+#| echo: true
+#| eval: true
+# The ATE
+library(estimatr)
+lm_robust(Y ~ Z, data = dat)
+```
+
+```{r}
+#| echo: true
+#| eval: true
+lm_robust(Y ~ Z + b, data = dat)
+```
+
+<br>
+
+- How are they different?
+:::
+
+## Why are they different?
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- How are they different? (The first one ignores the blocks. The second one uses a different set of weights, created using fixed effects variables or indicator/dummy variables)
+
+- And we can estimate the total ATE by adjusting the weights according to the size of the blocks:
+
+```{r}
+#| echo: true
+#| eval: true
+lm_lin(Y ~ Z, covariates = ~ b, data = dat)
+```
+
+- Which one should we use? Any thoughts? 
+:::
+
+## Weighted average of block ATEs
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+:::{.columns}
+:::{.column width="50%"}
+- The [weighted average]{.alert} of the block ATEs is the best estimator 
+- The weights are the proportion of units in each block, $N_j/N$
+- If the likelihood of being assigned to the treatment group differs by block, comparing the means across all subjects will lead to a biased estimate of the ATE 
+  - Unless the probability of assignment to the treatment group is identical for every block
+- In a nutshell: when estimating the ATE in a blocked experiment, just do it the old-fashioned way! 😅
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/ates.png){width=100%}
+
+Source: [DeclareDesign (2018)](https://declaredesign.org/blog/posts/biased-fixed-effects.html)
+:::
+:::
+:::
+:::
+
+# Clustering {background-color="#2d4563"}
+
+## What is clustering?
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+:::{.columns}
+:::{.column width="50%"}
+- So far, we have only allocated individual units to treatment and control groups
+- But in some cases, we might want to allocate [whole groups of units to treatment and control conditions]{.alert}
+- Usually, the main reason why we do this is because of [practical issues]{.alert}
+  - It is [impossible]{.alert} to randomly assign individuals to treatment and control groups (TV markets, for instance)
+  - We cannot [isolate individuals]{.alert} from each other (same household, same school, etc.)
+  - We have strong priors about possible [spillover effects]{.alert}
+- However, we still measure effects at [the individual level (or any level smaller than the randomisation unit)]{.alert}
+- Let's see how that impacts our analyses 😉
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/clusters.jpeg){width=100%}
+
+Source: [TMG Research](https://tgmresearch.com/cluster-sampling.html)
+:::
+:::
+:::
+:::
+
+## Clustering
+
+:::{style="margin-top: 30px; font-size: 20px;"}
+:::{.columns}
+:::{.column width="50%"}
+- A common example is an [education experiment]{.alert} in which the treatment is randomised at the classroom level
+- All students in a classroom are assigned to either treatment or control together, as it is impossible for students in the same classroom to be assigned to different conditions (different teachers, materials, etc)
+- Assignments do not vary within the classroom
+- Clusters can be localities, like [villages, precincts, or neighbourhoods]{.alert}
+- When clusters are all the same size, the standard difference-in-means estimator we usually employ is unbiased
+- However, caution is needed when clusters have different numbers of units or when there are very few clusters, as the treatment effects could be correlated with cluster size
+- When [cluster size is related to potential outcomes, the usual difference-in-means estimator is often biased]{.alert}
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/clusters02.jpg){width=100%}
+
+Source: [Patterson et al (2022)](https://pubs.asha.org/doi/10.1044/2022_JSLHR-21-00522)
+:::
+:::
+:::
+:::
+
+## Differences between blocking and clustering
+
+:::{style="margin-top: 30px; font-size: 30px;"}
+| Aspect | Blocking | Clustering |
+|--------|----------|------------|
+| **Purpose** | To reduce variance and increase precision | Practical necessity, not choice |
+| **Unit of randomisation** | Individual units | Groups of units |
+| **Grouping** | Based on pre-treatment characteristics | Based on natural or administrative groups |
+| **Analysis** | Compare within blocks, then weight | Must account for within-cluster similarity |
+| **Example** | Block by age, then randomise individuals within age groups | Randomise schools, but measure student outcomes |
+:::
+
+## Intra-cluster correlation
+
+:::{style="margin-top: 30px; font-size: 20px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Typically, [cluster randomised trials have higher variance than individually randomised trials]{.alert}
+- Why? Because individuals within the same cluster [tend to be more similar to each other than to individuals in different clusters]{.alert}
+- How much higher variance depends on a statistic that can be hard to think about, the [intra-cluster correlation (ICC) of the outcome]{.alert} ($\rho$)
+- Intra-cluster correlation (ICC) measures [how similar individuals are within the same cluster compared to individuals in different clusters]{.alert}
+
+### Key Points:
+- Ranges from 0 to 1
+- Higher values indicate greater similarity within clusters
+- Formula: $\rho = \frac{\sigma^2_{between}}{\sigma^2_{between} + \sigma^2_{within}}$
+:::
+
+:::{.column width="50%"}
+### Intuitive Explanation:
+- **ICC = 0**: Individuals within clusters are no more similar than individuals from different clusters ($\sigma^2_{between} = 0$)
+- **ICC = 1**: All individuals within a cluster are identical to each other ($\sigma^2_{within} = 0$)
+- **Typical values**: Usually between 0.01 and 0.2 in social science research
+
+### Example:
+Imagine we're studying student test scores in 10 schools with 30 students each:
+
+- Between-school variance ($\sigma^2_{between}$) = 25
+- Within-school variance ($\sigma^2_{within}$) = 75
+- ICC = $\frac{25}{25 + 75} = 0.25$
+
+This means 25% of the total variance in test scores is due to differences between schools, and 75% is due to differences between students within the same school
+:::
+:::
+
+## Information reduction
+
+:::{style="margin-top: 30px; font-size: 18px;"}
+:::{.columns}
+:::{.column width="50%"}
+[Clustering reduces the number of possible treatment assignments]{.alert}, which reduces statistical information
+
+### Example:
+With 10 individuals (5 with black hair, 5 with other colours):
+
+**Individual Randomisation:**
+
+- Each person can be independently assigned to treatment or control
+- Total possible assignments: $\binom{10}{5} = 252$ different combinations
+
+**Cluster Randomisation:**
+
+- All individuals in a cluster receive the same treatment
+- Only 2 possible assignments:
+
+  1. Black hair cluster = treatment, Other colour cluster = control
+  2. Black hair cluster = control, Other colour cluster = treatment
+:::
+
+:::{.column width="50%"}
+- The more clustered our design, the fewer possible randomisation combinations we have, leading to less statistical information for estimating treatment effects
+
+- This is why [clustered designs typically require larger sample sizes]{.alert} to achieve the same statistical power as individually randomised experiments
+
+:::{style="margin-top: 20px; font-size: 22px; text-align: center;"}
+![](figures/power-twomeans_stcolor.svg){width=100%}
+
+Source: [Stata Guide](https://www.stata.com/features/overview/power-and-sample-size/)
+:::
+:::
+:::
+
+## Information reduction
+
+:::{style="margin-top: 30px; font-size: 19px;"}
+:::{.columns}
+:::{.column width="50%"}
+![](figures/icc01.png){width=100%}
+:::
+
+:::{.column width="50%"}
+![](figures/icc02.png){width=100%}
+:::
+:::
+:::
+:::
+
+## Design Effects in Clustered Designs
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+- The design effect (DEFF) quantifies [how much clustering increases the variance of our estimates compared to simple random sampling]{.alert}
+
+$$DEFF = 1 + (m - 1) \times \rho$$
+
+- Where $m$ = average cluster size and $\rho$ = intra-cluster correlation (ICC)
+
+- **DEFF = 1**: Clustering has no effect on variance ($\rho = 0$)
+- **DEFF > 1**: Clustering increases variance; need larger sample size
+- **DEFF < 1**: Clustering decreases variance (rare)
+
+### Example:
+- Average cluster size: 30 students per classroom
+- ICC: 0.1 (10% of total variance is between classrooms)
+- DEFF = 1 + (30 - 1) × 0.1 = 3.9
+
+This means we need nearly 4 times as many observations as in a simple random sample to achieve the same statistical power!
+:::
+## Practical Recommendations for Clustered Designs
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+### Before Conducting the Experiment:
+1. [Estimate the ICC]{.alert} from previous studies or pilot data
+2. [Calculate required sample size]{.alert} accounting for design effects
+3. [Plan for adequate cluster numbers]{.alert} (typically need at least 15-20 clusters per arm)
+4. [Consider blocking at higher levels]{.alert} to improve precision
+
+### During Analysis:
+1. [Always use clustered standard errors]{.alert} at the level of randomisation
+2. [Report both clustered and unclustered standard errors]{.alert} for comparison
+3. [Check balance across clusters]{.alert} to ensure randomisation worked
+4. [Consider heterogeneous treatment effects]{.alert} across clusters
+
+### Reporting Results:
+1. [Clearly state the unit of randomisation]{.alert}
+2. [Report the ICC and design effect]{.alert}
+3. [Describe the clustering structure]{.alert} in your methodology
+4. [Explain how standard errors were calculated]{.alert}
+:::
+
+## What to do about information reduction
+### Robust clustered standard errors
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+When dealing with clustered data, we need to adjust our standard errors to account for the within-cluster correlation
+
+- Classical standard errors assume independent observations
+- In clustered data, observations within clusters are correlated
+- This leads to underestimated standard errors and inflated Type I error rates
+
+- [Solution: Robust Clustered Standard Errors]{.alert}
+  - Adjust standard errors to account for clustering
+  - Use the "sandwich" estimator to correct for within-cluster correlation
+  - More conservative and accurate inference
+  - Implemented in the `estimatr` package in R
+:::
+
+## R example
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+```{r}
+#| echo: true
+#| eval: true
+library(estimatr)
+
+# Simulate clustered data
+set.seed(123)
+n_clusters <- 20
+n_per_cluster <- 30
+total_n <- n_clusters * n_per_cluster
+
+# Create cluster IDs
+cluster_id <- rep(1:n_clusters, each = n_per_cluster)
+
+# Treatment assigned at cluster level
+treatment <- rep(rbinom(n_clusters, 1, 0.5), each = n_per_cluster)
+
+# Create outcome with cluster effects
+cluster_effect <- rnorm(n_clusters, 0, 2)
+individual_effect <- rnorm(total_n, 0, 1)
+outcome <- 2 * treatment + rep(cluster_effect, each = n_per_cluster) + individual_effect
+
+# Create data frame
+data <- data.frame(
+  cluster_id = factor(cluster_id),
+  treatment = treatment,
+  outcome = outcome
+)
+
+# Compare standard errors
+model_naive <- lm_robust(outcome ~ treatment, data = data)
+model_clustered <- lm_robust(outcome ~ treatment, clusters = cluster_id, data = data)
+
+# Display results
+summary(model_naive)
+summary(model_clustered)
+```
+:::
+:::
+
+## Combining blocking and clustering
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+We can improve the efficiency of clustered designs by incorporating blocking at a higher level
+
+### Example:
+- [Clusters]{.alert}: Classrooms (level where treatment is assigned)
+- [Blocks]{.alert}: Schools (higher-level grouping)
+- [Blocking strategy]{.alert}: Stratify randomisation by school characteristics
+
+### Benefits:
+- Reduces variance by ensuring similar schools are distributed across treatment arms
+- Improves precision of treatment effect estimates
+- Accounts for both clustering and heterogeneity between blocks
+
+### Implementation:
+1. Group clusters into blocks based on relevant characteristics
+2. Randomise treatment within each block
+3. Analyse using appropriate clustered standard errors
+:::
+
+## Summary
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- Blocking is a technique to reduce variance and increase precision by grouping similar units before randomisation
+- It is especially useful in small samples or when important covariates are known
+- We run a series of mini-experiments within blocks, then combine results
+- Results can be estimated using weighted averages of block-specific ATEs
+- Clustering is a practical necessity when randomising groups of units together
+- It requires adjusting standard errors to account for within-cluster correlation
+- The intra-cluster correlation (ICC) quantifies similarity within clusters and impacts variance
+- Design effects from clustering often require larger sample sizes
+- Always use robust clustered standard errors when analysing clustered data
+- Combining blocking and clustering can further improve efficiency in experimental designs
+:::
+
+## Next lecture
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- We will see more on blocking and clustering in `R` with the `estimatr` package
+- Estimate models with robust clustered standard errors and see how they differ from regular standard errors
+- More on covariate adjustment
+- Learn about required sample sizes and power analysis
+- [And more!]{.alert} 😂 
+:::
+
+# Thanks very much! 😊 {background-color="#2d4563"}
+
+# See you next time! 👋 {background-color="#2d4563"}

@@ -1,0 +1,601 @@
+---
+title: DATASCI 385 - Experimental Methods
+subtitle: Lecture 19 - Texts for Discussion
+author:
+  - name: Danilo Freire
+    email: danilo.freire@emory.edu
+    affiliations: Department of Data and Decision Sciences <br> Emory University
+format:
+  clean-revealjs:
+    self-contained: true
+    code-overflow: wrap
+    footer: "[Texts for Discussion](https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-19/19-discussion.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: knitr
+revealjs-plugins:
+  - multimodal
+editor:
+  render-on-save: true
+---
+
+# Hello everyone! 👋 {background-color="#2d4563"}
+
+## DATASCI 185 - Introduction to AI Applications
+
+:::{style="margin-top: 50px; font-size: 24px;"}
+- Just a quick reminder that I am teaching [DATASCI 185 - Introduction to AI Applications]{.alert} next semester 🤖
+- The course is for everyone, no prior programming or AI experience is required
+- If you (or anyone you know) is interested, please check it out and consider enrolling!
+- A short course description: 
+  
+> This course offers a non-technical introduction to artificial intelligence and its effects on institutions, work and everyday life. The course is practical: students will learn how modern systems are designed and how to ask the right questions about data, reliability and harms. The course combines short demonstrations (no programming experience required), case studies, and project work. It is suitable for undergraduate students from any faculty who want a grounded understanding of what AI can and cannot do. 
+
+- For more information, please visit <https://atlas.emory.edu/> or email me at <danilo.freire@emory.edu> to request the syllabus or discuss further!
+:::
+
+# Brief recap 📚 {background-color="#2d4563"}
+
+## Last time we discussed
+
+:::{style="font-size: 28px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Why average treatment effects ([ATEs]{.alert}) aren't the whole story
+- Defining and understanding [treatment effect variability]{.alert}
+- Fundamental challenge: We [cannot directly observe individual treatment effects]{.alert} or their variance
+- Methods for exploring HTE:
+  - [Bounding the variance]{.alert} of treatment effects
+  - [Testing for the presence]{.alert} of heterogeneity
+:::
+
+:::{.column width="50%"}
+- Structured approaches:
+  - [Treatment-by-Covariate Interactions]{.alert} (Subgroup Analysis / CATEs)
+  - [Treatment-by-Treatment Interactions]{.alert} (Factorial Designs)
+- [Modelling HTE]{.alert} using regression
+- Pitfalls and best practices:
+  - [Multiple comparisons]{.alert}
+  - [Causal interpretation]{.alert} challenges
+:::
+:::
+:::
+
+# Today's plan 📅 {background-color="#2d4563"}
+
+## Networks, Spillovers, and Identification
+
+:::{style="font-size: 28px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- We will examine two influential papers today:
+
+- [**Paper 1: Munshi (2003)**](https://doi.org/10.1162/003355303321675455)
+  - [Topic]{.alert}: Identifying network effects in the labour market
+  - [Context]{.alert}: Mexican migrants in the U.S
+  - [Challenge]{.alert}: Endogeneity and selection bias
+  - [Method]{.alert}: Instrumental Variables (IV) using rainfall
+:::
+
+:::{.column width="50%"}
+- [**Paper 2: Miguel & Kramer (2004)**](https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1468-0262.2004.00481.x)
+  - [Topic]{.alert}: Identifying treatment impacts with externalities
+  - [Context]{.alert}: Deworming programme in Kenyan schools
+  - [Challenge]{.alert}: Standard methods underestimate effects due to spillovers (SUTVA violation)
+  - [Method]{.alert}: Randomised phase-in design
+- Our [focus]{.alert} will be on clever identification strategies when standard RCT assumptions are violated or RCTs are not feasible
+:::
+:::
+:::
+
+# Ready for some applied causal inference? 🤓 {background-color="#2d4563"}
+
+# But first, the experiment of the week 🔬 {background-color="#2d4563"}
+
+## The Experiment of the Week
+### Blocking mobile internet on smartphones improves well-being
+
+:::{style="font-size: 23px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Castello et al (2025)](https://doi.org/10.1093/pnasnexus/pgaf017) conducted a one-month field experiment to evaluate how mobile internet access affects well-being
+- The results were [highly significant]{.alert}:
+  - The RCT improved attention, subjective well-being, and mental health
+  - 91% of participants reported a positive experience (!)
+- Mediation analysis suggests that the effects are driven by how participants use their time
+- People spend more time socialising, exercising, reading, and being outdoors
+- <https://doi.org/10.1093/pnasnexus/pgaf017>
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/phones.jpg){width=70%}
+:::
+:::
+:::
+:::
+
+# Part 1: Munshi (2003) - Networks in the Modern Economy 🌐 {background-color="#2d4563"}
+
+## Introduction: The Power of Networks
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- [Do social networks improve labour market outcomes for Mexican migrants in the U.S.?]{.alert}
+- [Motivation:]{.alert}
+  - Non-market institutions (like networks) are really important to the economy, especially where markets are imperfect (e.g., [information gaps in labour markets]{.alert}).
+  - Migrant communities often rely heavily on [social ties]{.alert} for finding jobs, housing, etc. (Rees 1966, Montgomery 1991)
+  - Particularly relevant for [undocumented migrants]{.alert} who face barriers to formal channels
+- [Does a larger network (from the same origin community) lead to better employment prospects and higher-paying jobs?]{.alert}
+:::
+
+## Theoretical Motivation
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- Why networks might matter:
+  - [Information Asymmetry]{.alert}: Employers don't know worker quality; workers don't know about all job openings. Networks provide referrals
+  - [Screening/Referrals]{.alert}: Incumbent workers might refer others from their network, potentially signalling quality (Montgomery 1991)
+  - [Support]{.alert}: Networks can provide financial help, housing, advice, reducing job search costs
+- Who contributes? [Established migrants]{.alert} (longer duration, more connections, more employed)
+- Who benefits? [New arrivals]{.alert} or those who would otherwise struggle to find employment/good jobs
+- Networks could lead to [higher employment rates]{.alert} and channel members into [better (e.g., non-agricultural) jobs]{.alert}
+:::
+
+## Data: The Mexican Migration Project (MMP)
+
+:::{style="margin-top: 30px; font-size: 29px;"}
+- Conducted jointly by researchers in Mexico and the U.S. since 1982
+- Surveys households in multiple Mexican communities with high migration rates
+- Collects [retrospective life histories]{.alert}: migration patterns, work history (location, job type, employment status) year-by-year
+- An important strength is defining the social unit based on the [origin community]{.alert} in Mexico – a well-established social unit ([paisanaje]{.alert}, _origin-community_). This is arguably better than using arbitrary administrative boundaries
+- Munshi uses data from [24 communities]{.alert} across 7 Mexican states, focusing on the 15 years prior to the survey year for each community
+:::
+
+## Measuring the Network
+
+:::{style="margin-top: 30px; font-size: 30px;"}
+- [Network Definition:]{.alert} For an individual $i$ from community $c$ in year $t$, the network size ($X_{t-1}$) is measured as the [proportion of sampled individuals from community $c$ who were located in the U.S. in the *previous* year ($t-1$)]{.alert}
+- A [lagged measure]{.alert} is used ($t-1$ network size to predict $t$ outcomes) to reduce immediate simultaneity concerns
+- Network size changes over time within a community due to new migration and return migration. Munshi primarily uses this [within-community time variation]{.alert}
+- The analysis later refines this by distinguishing between [new migrants]{.alert} (in the U.S. < 3 years) and [established migrants]{.alert} (in the U.S. ≥ 3 years), based on theoretical predictions
+:::
+
+## Identification Challenge 1: Selection Bias
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- Migrants are [not a random sample of the origin community]{.alert}
+- Individuals who migrate might differ in unobserved ways (e.g., ability, motivation) that also affect their labour market success
+- $Y_{it} = \beta X_{t-1} + \alpha_i + \delta_t + \epsilon_{it}$
+  - $Y_{it}$: Labour outcome (e.g., employment)
+  - $X_{t-1}$: Network size
+  - $\alpha_i$: [Individual unobserved heterogeneity (ability)]{.alert}
+  - $\delta_t$: Year fixed effects (common shocks)
+- If higher ability ($\alpha_i$) individuals are more likely to migrate *and* get better jobs, simply regressing $Y_{it}$ on $X_{t-1}$ will yield biased estimates of $\beta$. The network effect might be confounded with it
+:::
+
+## Solution 1: Individual Fixed Effects
+
+:::{style="margin-top: 30px; font-size: 32px;"}
+- The author uses panel data (repeated observations for the same individual over time) and include [individual fixed effects]{.alert} ($\alpha_i$)
+- Fixed effects control for any [time-invariant unobserved characteristics]{.alert} of the individual (like innate ability, stable motivation)
+- The effect of the network ($\beta$) is now identified from [changes in network size *over time* for the *same individual*]{.alert}, comparing their outcomes when their network was larger versus smaller
+- [Important assumption:]{.alert} Unobserved individual factors ($\alpha_i$) are constant over the sample period (perhaps reasonable for low-skill jobs)
+- Fixed effects *do not* solve simultaneity bias!
+:::
+
+## Identification Challenge 2: Endogeneity / Simultaneity
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- Network size ($X_{t-1}$) itself might also be correlated with unobserved factors affecting current outcomes ($Y_{it}$)
+- For instance, positive economic shocks in the U.S. ($\epsilon_{it}$) could simultaneously:
+    -  Improve employment outcomes ($Y_{it}$) directly
+    -  Attract more migrants, increasing network size ($X_{t-1}$ or $X_t$)
+    -  Reduce return migration among established migrants
+- This simultaneity would lead OLS (even with fixed effects) to potentially [overestimate]{.alert} the positive effect of networks
+- Alternatively, good U.S. conditions might allow migrants to reach savings targets faster and return home, *reducing* network size, biasing estimates [downwards]{.alert}
+:::
+
+## Solution 2: Instrumental Variables (IV)
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- Thus, the author needs to find an instrument ($Z$) that satisfies two conditions:
+    1.  [Relevance]{.alert}: Correlated with the endogenous variable (network size, $X_{t-1}$)
+    2.  [Exclusion Restriction]{.alert}: Uncorrelated with the error term ($\epsilon_{it}$), meaning it only affects the outcome ($Y_{it}$) *through* its effect on the network size ($X_{t-1}$)
+- **Munshi's Instrument:** Lagged [rainfall in the migrant's *origin community* in Mexico]{.alert}
+- The rationale is that:
+    - Agriculture (often rain-fed) is a major occupation in origin communities
+    - Low rainfall (drought) likely worsens agricultural outcomes in Mexico, increasing migration to the U.S. ([push factor]{.alert}), thereby influencing network size *in subsequent years*
+:::
+
+## Assessing the Rainfall Instrument
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+- [Checking Relevance:]{.alert} Is Mexican rainfall correlated with network size in the U.S.?
+    - This is plausible: Droughts push people to migrate
+    - Munshi provides empirical evidence in the first-stage regressions (Table V), showing low rainfall increases migration, particularly affecting the stock of established migrants later on
+- [Checking the Exclusion Restriction:]{.alert} Does Mexican rainfall affect U.S. employment *only* via network size?
+    - This seems plausible too: Origin communities are far from U.S. destinations. Mexican weather shocks should be uncorrelated with U.S. labour market shocks. (Munshi reports a [correlation coefficient of 0.01]{.alert} between origin rainfall and U.S. destination rainfall)
+    - Could low rainfall affect migrant characteristics (e.g., desperation, reservation wage) directly influencing U.S. employment? Munshi argues the observed [timing (long lags)]{.alert} makes this less likely to be the primary channel for the *employment* effect
+:::
+
+## Results: Reduced Form (Rainfall & Employment)
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+:::{.columns}
+:::{.column width="50%"}
+- **Table IV** directly regresses employment (in the U.S. or Mexico) on lagged rainfall, controlling for individual FE and year FE
+- For **U.S. Employment (Column 1):**
+    - [Recent-past rainfall]{.alert} ($t$ to $t-3$) shows *no significant effect*
+    - [Distant-past rainfall]{.alert} ($t-4$ to $t-6$) shows a [negative and significant effect]{.alert}. Less rain many years ago correlates with higher current U.S. employment
+- This suggests a mechanism: Low rainfall long ago $\rightarrow$ induced migration *then* $\rightarrow$ larger pool of [*established* migrants]{.alert} *now* $\rightarrow$ better network $\rightarrow$ higher current employment for *all* migrants
+- For **Mexico Employment (Column 2):**
+    - Recent rainfall is strongly *positively* correlated with origin employment (more rain = better farming jobs), supporting the push factor idea
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/table4.png){width=100%}
+:::
+:::
+:::
+:::
+
+## Results: First Stage (Rainfall & Network Size)
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+:::{.columns}
+:::{.column width="50%"}
+- **Table V, Columns 6 & 7** regress network size measures (proportion of new / established migrants) on rainfall lags
+- The results show:
+    - [Recent-past rainfall]{.alert} (t to t-2 average) is negatively correlated with the proportion of *new* migrants (Column 6). Low recent rain $\rightarrow$ more new migrants pushed out
+    - [Distant-past rainfall]{.alert} (t-3 to t-6 average) is negatively correlated with the proportion of *established* migrants (Column 7). Low distant rain $\rightarrow$ larger stock of established migrants now
+- This empirically validates the instrument's relevance and the mechanism suggested by the reduced form
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/table5.png){width=100%}
+:::
+:::
+:::
+:::
+
+## Results: Non-Parametric Evidence
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+:::{.columns}
+:::{.column width="50%"}
+- **Figure I** provides a graphical look at the relationships
+- It plots employment (U.S.) and network size (established migrants) against distant-past rainfall, after netting out fixed effects
+- The figure visually suggests:
+    - As distant-past rainfall increases (wetter conditions in Mexico years ago), current U.S. employment tends to [decrease]{.alert}
+    - As distant-past rainfall increases, the current size of the established network tends to [decrease]{.alert}.
+- This supports a positive link between the established network size and employment outcomes
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/figure1.png){width=100%}
+:::
+:::
+:::
+:::
+
+## Results: OLS and IV Estimates (Employment)
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+:::{.columns}
+:::{.column width="50%"}
+- **Table VI** compares OLS and IV estimates of network effects on U.S. employment probability
+- The **OLS estimates (Column 1)** indicate:
+    - New migrants have a small, insignificant effect
+    - Established migrants have a [positive, significant effect]{.alert} (coefficient 0.670)
+- The **IV estimates (Column 2 - Using Rainfall Instruments)** show:
+    - New migrants remain insignificant, though the point estimate is larger
+    - The effect for established migrants becomes [much larger and remains significant]{.alert} (coefficient 1.554)
+- Further robustness checks (columns 3-11) support these patterns. Effects seem larger for women/older men/less educated, and when restricting to fresh arrivals
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/table6.png){width=100%}
+:::
+:::
+:::
+:::
+
+## Munshi (2003): Contributions & Implications
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- This study finds that
+    - [Social networks significantly improve labour market outcomes]{.alert} for Mexican migrants in the U.S., increasing both employment probability and access to better (non-agricultural) jobs
+    - [Established migrants]{.alert} are the crucial part of the network driving these positive effects
+- Methodologically, it demonstrates how to combine [IV (using a plausible natural instrument - rainfall) with fixed effects]{.alert} to identify network effects while addressing selection and endogeneity concerns
+- It highlights the important role non-market institutions play in modern economies, particularly for vulnerable populations, and shows that network size and composition matter
+:::
+
+## Points for Discussion (Munshi)
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+1.  How convincing is the rainfall instrument's [exclusion restriction]{.alert}? Could distant rainfall affect current U.S. employment through channels *other* than the measured network size (e.g., affecting savings, remittances, characteristics of the migrant pool)?
+2.  The IV estimates for established networks are much larger than OLS. Besides endogenous return migration and measurement error, what else might explain this?
+3.  What are the limitations of measuring the network as the [proportion of the sampled community]{.alert} in the U.S.? How might alternative measures change the story?
+4.  Would network effects likely differ for [high-skill migrants]{.alert}? Why or why not?
+5.  What policy insights regarding immigration or labour market integration emerge from these findings?
+:::
+
+## Issues with rainfall as an instrument?
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Mellon (2021)](https://doi.org/10.1111/ajps.12894) evaluates whether rainfall is a valid instrument for social studies
+- He uses [Cinelli and Hazlett's (2020)](https://carloscinelli.com/sensemakr/) sensitivity analysis to assess the robustness of about 200 published studies using rainfall as an instrument
+- Mellon is not very convinced that rainfall is a good instrument 😂
+- What do you think?
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/rainfall.png){width=100%}
+:::
+:::
+:::
+:::
+
+# Part 2: Miguel & Kramer (2004) - Worms 🐛 {background-color="#2d4563"}
+
+## Introduction: Health, Education, and Externalities
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [What is the impact of school-based mass deworming programmes on children's health and education (school participation, test scores)?]{.alert}
+- Intestinal worms (helminths) are extremely common in developing countries, especially among school-aged children. Associated with malnutrition, listlessness
+- [Key Problem:]{.alert} Previous studies often randomised treatment *at the individual level*. This likely *underestimates* the true benefits due to [treatment externalities (spillovers)]{.alert}
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/worms.png){width=100%}
+:::
+:::
+:::
+:::
+
+## The Problem: Treatment Externalities
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+- Worm infections spread through contact with contaminated soil/water. Treating infected children reduces the overall pool of infection in the environment
+- [Externality:]{.alert} Treating child A can benefit untreated child B if they live/play/attend school nearby, because B is less likely to get infected or re-infected
+- This creates issues for individual-level randomisation:
+    - The comparison group (untreated individuals within a treated community/school) benefits from [reduced transmission]{.alert} from the treated group
+    - The estimated treatment effect (Treated Outcome - Control Outcome) is biased downwards because the control outcome is *better* than it would be without the programme
+    - This represents a violation of the [Stable Unit Treatment Value Assumption (SUTVA)]{.alert} (but a good one!)
+:::
+
+## Research Setting and Intervention
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+:::{.columns}
+:::{.column width="50%"}
+- **Location:** Busia District, Western Kenya. Poor, densely settled farming region. High prevalence of intestinal worms ([hookworm, roundworm, whipworm, schistosomiasis]{.alert})
+- **Programme:** Primary School Deworming Project (PSDP) by NGO (ICS) and Ministry of Health
+- **Intervention:** Provision of [free deworming drugs]{.alert} (albendazole, praziquantel) to pupils in primary schools. Phased in over time
+- **Sample:** 75 rural primary schools, ~30,000 pupils
+- Schools were randomly assigned to 3 groups (25 schools each) after stratification
+- **Group 1:** Received treatment in [1998 and 1999]{.alert}
+- **Group 2:** Received treatment in [1999]{.alert} (Control in 1998)
+- **Group 3:** Control in [1998 and 1999]{.alert} (Received treatment later)
+:::
+
+:::{.column width="50%"}
+- Advantages of this design:
+    1.  Allows estimation of treatment effects by comparing outcomes across groups over time (e.g., Group 1 vs Group 2&3 in 1998). This provides a [school-level Intention-to-Treat (ITT)]{.alert}
+    2.  Random assignment at the [*school level*]{.alert} generates variation in the *local density* of treatment, enabling estimation of [cross-school externalities]{.alert}
+    3.  More ethical than a permanent control group, as all schools eventually receive treatment
+:::
+:::
+:::
+
+## Identification Strategy
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- [Overall Effect (ITT at School Level):]{.alert} Compare mean outcomes in treatment schools vs. comparison schools in a given year, controlling for baseline differences
+  $Y_{ijt} = \alpha + \beta_1 T_{1it} + \beta_2 T_{2it} + X_{ijt}\delta + u_i + \epsilon_{ijt}$
+  (Where T1, T2 indicate year 1 / year 2 treatment assignment)
+- [Cross-School Externalities:]{.alert} Exploit the [exogenous variation]{.alert} in treatment density induced by school-level randomisation
+  $Y_{ijt} = \alpha + ... + \sum_d (\gamma_d \cdot N^T_{dit}) + \sum_d (\phi_d \cdot N_{dit}) + u_i + \epsilon_{ijt}$
+  - $N^T_{dit}$: Number of [*treated* pupils]{.alert} within distance `d` of school `i`.
+  - $N_{dit}$: Total number of pupils within distance `d`.
+  - $\gamma_d$ captures the externality effect from nearby treated pupils, after controlling for overall density $\phi_d$.
+- [Within-School Externalities:]{.alert} Harder to identify experimentally due to lack of within-school randomisation. The paper uses non-experimental comparisons (e.g., untreated pupils in T schools vs C schools - Table VI), acknowledging potential selection issues
+:::
+
+## Baseline Characteristics
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+:::{.columns}
+:::{.column width="50%"}
+- **Table I** compares schools/pupils across the 3 groups before the intervention (early 1998) to check the randomisation
+- Groups should be similar on average
+- The table shows groups are broadly similar on most characteristics (enrolment, facilities, distance, assets, malaria, local density)
+- However, Group 1 pupils appear [slightly worse off]{.alert} on some measures (e.g., self-reported blood in stool, cleanliness, 1996 exam scores) despite randomisation. The authors control for these baseline covariates in regressions to improve precision and account for chance imbalances
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/table1.png){width=100%}
+:::
+:::
+:::
+:::
+
+## Treatment Compliance
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+:::{.columns}
+:::{.column width="50%"}
+- **Table III** details the proportion of eligible pupils who actually received the drugs
+- In **1998 (Group 1):** Approx. [78%]{.alert} of eligible pupils (girls < 13, all boys) received treatment. Compliance was lower for older girls (19% received, despite protocol). The main reason for non-compliance was absence on treatment day
+- In **1999 (Groups 1 & 2):** Compliance was lower (around [55-59%]{.alert} overall for eligible), partly due to requiring signed parental consent in Year 2
+- **Comparison Schools:** Very low rates (<3%) of pupils receiving deworming drugs independently
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/table3.png){width=100%}
+:::
+:::
+:::
+:::
+
+## Health Impacts (Infections)
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+- **Table V** compares infection rates in Group 1 (treated '98) vs Group 2 (control '98) based on parasitological exams in *early 1999*
+- Group 1 pupils had significantly *lower* rates of moderate-to-heavy infection (any worm) compared to Group 2 ([27% vs 52%]{.alert}, a 25 percentage point difference). Significant reductions were seen for hookworm, roundworm, and schistosomiasis
+- **Table VII (Regression)** confirms these health benefits and estimates externalities:
+    - **Within-School Externality (Col 2):** Untreated pupils in Group 1 schools had ~12 pp lower infection rates than comparison pupils ([$\beta_1$ estimate]{.alert}).
+    - **Direct Effect + Within-School (Col 2):** Treated pupils in Group 1 had ~26 pp lower infection rates ([$\beta_1 + b_2$ estimate]{.alert}).
+    - **Cross-School Externality (Col 1):** Nearby treatment pupils had significant negative effects on infection rates (esp. within 3km). Each 1000 treated pupils within 3km reduced infection risk by ~26 pp ([$\gamma_{03}$ estimate]{.alert}).
+:::
+
+## Health Impacts
+
+:::{style="margin-top: 30px; font-size: 25px; text-align: center;"}
+:::{.columns}
+:::{.column width="50%"}
+![](figures/table5m.png){width=100%}
+:::
+
+:::{.column width="50%"}
+![](figures/table6m.png){width=100%}
+:::
+:::
+:::
+
+## School Participation (Attendance)
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+:::{.columns}
+:::{.column width="50%"}
+- **Table IX (Regression)** provides more detail:
+    - **Overall ITT (Col 1):** Deworming increased participation by approx. [5.1 pp]{.alert} over the two years.
+    - **Cross-School Externality (Col 3):** Positive externality found - each 1000 treated pupils within 3km increased participation in nearby schools by approx. [4.4 pp]{.alert}.
+    - **Within-School Externality (Col 5):** Untreated pupils in treatment schools experienced ~[5.6 pp]{.alert} higher participation ($\beta_1$ estimate for Year 1).
+- Absenteeism was reduced by about [25%]{.alert}
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/table9m.png){width=100%}
+:::
+:::
+:::
+:::
+
+## Test Scores
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+:::{.columns}
+:::{.column width="50%"}
+- **Table X** examines the impact on academic test scores (English, Maths, Science-Ag) administered by the project, with scores normalised
+- The main result is [no significant difference]{.alert} in test scores between treatment and comparison schools (Column 2)
+- This result holds when restricting the sample to pupils present at baseline (Column 3)
+- Why no test score effect?
+    - Attendance gains (~7.5 pp) might be insufficient to significantly boost scores.
+    - Deworming might not improve learning *efficiency* per day in school (especially as severe anaemia was rare).
+    - Potential classroom [congestion effects]{.alert} from increased attendance?
+    - Test scores might be noisy measures of learning.
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/table10m.png){width=100%}
+:::
+:::
+:::
+:::
+
+## Cost-Effectiveness
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- Deworming drugs are extremely inexpensive (< $0.50 per child per year via PCD estimates)
+- **Health Perspective:** Cost per infection averted is estimated around [$5]{.alert} (including externalities), making it highly cost-effective by WHO standards, especially driven by schistosomiasis impact. Geohelminth treatment alone appears less cost-effective based *only* on health metrics
+- **Education Perspective:** Cost per additional year of school participation gained is approx. [$3.50]{.alert} (including externalities). This is substantially cheaper than alternative participation-boosting interventions evaluated in the area (e.g., free uniforms ~$99)
+- **Human Capital View:** Rough calculations suggest future wage benefits ([>$30]{.alert}) greatly exceed program costs ($0.49), implying a potentially high rate of return on investment
+:::
+
+## The "Worm Wars" Controversy
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+:::{.columns}
+:::{.column width="50%"}
+- This paper became highly influential, often cited by international organisations promoting mass deworming policies
+- However, its findings, particularly regarding school participation, sparked considerable debate and scrutiny
+- **Re-analyses & Critiques:**
+    - Studies like [Aiken et al. (2015, Int. J. Epidemiology)](https://academic.oup.com/ije/article/44/5/1572/2594560?login=false) & [Davey et al. (2015, Int. J. Epidemiology)](https://academic.oup.com/ije/article/44/5/1581/2594562?login=false) published re-analyses using the shared data. They questioned the original findings, citing concerns about analysis choices, potential baseline imbalances, and sensitivity to different model specifications, ultimately finding smaller or insignificant effects.
+:::
+
+:::{.column width="50%"}
+- **Defenses & Counter-Arguments:**
+    - [Hicks, Kremer, & Miguel (2015, Int. J. Epidemiology)](https://academic.oup.com/ije/article/44/5/1593/2594563?login=false) defended the original analysis, arguing the re-analyses employed inappropriate methods or misinterpreted the design, and contended that the original results were robust.
+- **Subsequent Evidence:**
+    - [Ozier (2018, JHR)](https://jhr.uwpress.org/content/53/1/157.short) reported long-term benefits (earnings, cognition) for younger siblings of treated children and those exposed to externalities *in early life*, suggesting impacts might manifest later or differently.
+- This debate highlights the importance of [replication]{.alert}, [data transparency]{.alert}, sensitivity analysis, and cautious interpretation of field experiment results, especially complex ones with potential spillover effects
+:::
+:::
+:::
+
+## Miguel & Kramer (2004): Contributions & Implications
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- This study demonstrated that:
+    - School-based deworming significantly reduced worm infections and increased school participation (~7.5 pp), though had no discernible effect on test scores.
+    - There were [large positive externalities]{.alert} (spillovers) affecting the health and participation of untreated children, both within the same school and in nearby schools. These externalities constitute a major portion of the total benefits.
+    - Deworming is a highly cost-effective intervention, particularly for boosting school participation.
+- Methodologically, it nicely illustrates the importance of accounting for externalities in program evaluation. It shows how [school-level (or cluster) randomisation]{.alert} can facilitate the identification of overall effects and the estimation of spillovers
+- A key policy insight is that ignoring externalities likely leads to under-investment in public health programmes like deworming. Full subsidies (or even payments, considering the large externalities) might be optimal
+:::
+
+## Points for Discussion (Miguel & Kramer)
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+1.  What mechanisms could explain why deworming improved school participation but not test scores in this context?
+2.  Explain how the randomised phase-in design allows the estimation of cross-school externalities. What are the key assumptions underlying the externality estimates derived from local treatment density?
+3.  The study relies significantly on NGO-collected data. What advantages and disadvantages might this have compared to using official administrative records?
+4.  In light of the "Worm Wars," how should policymakers weigh the evidence on deworming? What further research could clarify the remaining uncertainties?
+5.  How likely are these findings to generalise to regions with different epidemiological profiles (worm types, intensity) or different educational systems and costs?
+:::
+
+# Conclusion {background-color="#2d4563"}
+
+## Reflections
+
+:::{style="font-size: 21px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Munshi (2003) Takeaways:]{.alert}
+  - Networks demonstrably influence labour outcomes.
+  - Combining [FE and IV]{.alert} offers a strategy to identify causal network effects amidst selection and endogeneity.
+  - Discovering plausible [natural experiment variation]{.alert} (like rainfall) can be powerful for IV.
+- [Miguel & Kramer (2004) Takeaways:]{.alert}
+  - Externalities are often significant and substantial.
+  - Overlooking them results in biased impact estimates and potentially flawed policy decisions.
+  - [Cluster randomisation / phase-in designs]{.alert} are valuable tools for identifying overall effects and quantifying spillovers.
+:::
+
+:::{.column width="50%"}
+- [Overarching Points:]{.alert}
+  - The standard RCT framework often requires adaptation for real-world phenomena like [networks and spillovers]{.alert}.
+  - A deep understanding of the context and potential sources of bias is essential for crafting credible [identification strategies]{.alert}.
+  - Innovative research designs can yield robust causal insights even when facing observational challenges (IV) or complex interventions (externalities).
+  - The process of scientific inquiry involves scrutiny, replication, and transparency, as exemplified by the "Worm Wars."
+:::
+:::
+:::
+
+# Thanks very much! 😊 {background-color="#2d4563"}
+
+# See you next time! 👋 {background-color="#2d4563"}

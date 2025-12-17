@@ -1,0 +1,36 @@
+---
+title: "DATASCI 385 - Experimental Methods"
+subtitle: Assignment 10
+---
+
+# Instructions
+
+This assignment covers lectures 21 and 22, which discuss survey experiments and techniques for measuring sensitive questions. The objective is to apply the concepts discussed in the lectures in a practical exercise. If you have any questions about the assignment, feel free to email me at <danilo.freire@emory.edu>.
+
+Good luck!
+
+# Questions 
+
+1. In the context of survey experiments, what does it mean for a manipulation to have "construct validity"? How can pilot testing help ensure construct validity of a manipulation?
+
+2. Imagine you are designing a survey experiment to study the effect of "fake news" headlines on political attitudes. Propose two different survey experiment paradigms (vignette design, question wording, etc) that you could use to manipulate exposure to fake news. For each paradigm, describe the manipulation and discuss its strengths and weaknesses in the context of studying fake news effects.
+
+3. Now imagine you are studying a highly sensitive topic like domestic violence perpetration using a survey experiment. Which of the sensitive question techniques discussed in Lecture 22 (list experiment, RRT, endorsement experiment, conjoint analysis) do you think would be least ethically problematic and most methodologically appropriate for this topic? Justify your choice, considering both ethical and methodological factors.
+
+4. Many survey experiments, especially those using online platforms, rely on convenience samples. Discuss the potential implications of using convenience samples (vs. probability samples) for the external validity of survey experiment findings, particularly when studying sensitive topics or seeking to generalise to specific populations. How can researchers mitigate the limitations of convenience samples in survey experiments?
+
+5. In the context of survey experiments, what are some potential ethical concerns related to the use of deception in experimental manipulations? How can researchers balance the need for deception to achieve valid experimental results with the ethical obligation to obtain informed consent from participants?
+
+6. Compare and contrast "list experiments" and "conjoint analysis" as methods for studying sensitive topics. In what situations might one be preferred over the other?
+
+7. List experiments rely on the "no design effects" assumption, that is, that the inclusion of the sensitive item does not change responses to the control items. Describe a scenario where this assumption might be violated in a study measuring prejudice using a list experiment. What would be the consequences for the interpretation of the results? 
+
+8. In lecture 22, we discussed [an article by Chapkovski et al. (2022)](https://journals.sagepub.com/doi/full/10.1177/20531680221108328) which used a list experiment to measure preference falsification regarding support for Russians in the Ukraine War. A slightly modified version of the database can be found here: <https://github.com/danilofreire/qtm385/blob/main/assignments/10-assignment/data.csv>. The dependent variable is called `nlist`, and the treatment variable is called `treat`. The number of control items ($J$) is 3. `female`, `fortyplus`, `edu`, `tv`, `playeremployment` are covariates describing whether the respondent is female, whether they are over 40 years old, whether they have a university education, whether they watch Russian TV channels, and whether the respondent is employed.
+
+The `list` package can be used to estimate the treatment effect, and the `ictreg()` function can be applied to perform the analysis. More information is described at <https://list.sensitivequestions.org/articles/getting-started.html>.
+
+Using a linear model, estimate the prevalence of the sensitive item. This is obtained by regressing `nlist` on a constant and `treat` as the treatment variable. The result is the prevalence of the sensitive item. What is the estimated prevalence? (Note: the prevalence here is slightly different from the prevalence in the article because we are using a modified version of the dataset.)
+
+9. Now, estimate a similar model, but including the covariates. Which covariates are correlated with the sensitive item?
+
+10. Finally, estimate a model controlling for ceiling and floor effects. As an example, see the last model on this page: <https://list.sensitivequestions.org/articles/getting-started.html>. What happens to the coefficients?

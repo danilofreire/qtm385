@@ -1,0 +1,538 @@
+---
+title: "Welcome to DATASCI 385 - Experimental Methods"
+subtitle: "Lecture 01: Introduction"
+author:
+  - name: Danilo Freire
+    orcid: 0000-0002-4712-6810
+    email: danilo.freire@emory.edu
+    affiliations: "Department of Data and Decision Sciences <br> Emory University"
+format:
+  clean-revealjs:
+    self-contained: true
+    footer: "[Introduction](https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-01/01-introduction.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: knitr
+editor:
+  render-on-save: true
+---
+
+```{r setup, include=FALSE}
+# figures formatting setup
+options(htmltools.dir.version = FALSE)
+library(knitr)
+opts_chunk$set(
+  prompt = T,
+  fig.align="center", #fig.width=6, fig.height=4.5, 
+  # out.width="748px", #out.length="520.75px",
+  dpi=300, #fig.path='Figs/',
+  cache=T, #echo=F, warning=F, message=F
+  engine.opts = list(bash = "-l")
+  )
+
+## Next hook based on this SO answer: https://stackoverflow.com/a/39025054
+knit_hooks$set(
+  prompt = function(before, options, envir) {
+    options(
+      prompt = if (options$engine %in% c('sh','bash', 'zsh')) '$ ' else 'R> ',
+      continue = if (options$engine %in% c('sh','bash', 'zsh')) '$ ' else '+ '
+      )
+})
+
+# Set CRAN mirror
+options(repos = c(CRAN = "https://cran.rstudio.com/"))
+
+if (!require("fontawesome", character.only = TRUE)) {
+  install.packages("fontawesome", dependencies = TRUE)
+  library(fontawesome, character.only = TRUE)
+}
+```
+
+# Welcome to DATASCI 385 <br> Experimental Methods! 🎉 {background-color="#2d4563"}
+
+## Lecture overview
+### Today's agenda
+
+:::{style="margin-top: 60px;"}
+:::
+
+:::{.incremental}
+- Introduction
+- Motivation
+- Class logistics
+- Assignments and grading
+- Set up for next class
+:::
+
+## Course materials
+### Important links
+
+::: {style="font-size: 24px;"}
+`r fa('github')` Course repository: <https://github.com/danilofreire/datasci385>
+
+`r fa('globe')` Course website: <https://danilofreire.github.io/datasci385>
+
+All course materials, including lectures, code, discussions, assignments, and project guidelines, are available on our [GitHub repository](https://github.com/danilofreire/datasci385)
+
+We will use Canvas for course administration, including submitting assignments, accessing grades, and receiving announcements
+
+Please take some time to get to know both platforms, and reach out if you have any questions
+
+::: {.callout-note}
+Please remember to check the course repository regularly for updates and announcements!
+:::
+:::
+
+# Nice to meet you! 😊 {background-color="#2d4563"}
+
+## Instructor
+### A bit about me
+
+:::: {.columns}
+::: {.column}
+<img src="figures/profile.jpg" alt="Danilo Freire" width="200" height="200" align="center"/>
+
+::: {style="font-size: 26px;"}
+`r fa('envelope')` [danilo.freire@emory.edu](mailto:danilo.freire@emory.edu)
+
+`r fa('globe')` <https://danilofreire.github.io/>
+
+`r fa('github')` <https://github.com/danilofreire/>
+:::
+:::
+
+::: {.column}
+::: {style="font-size: 28px;"}
+`r fa('chalkboard-user')` Visiting Assistant Professor in the [Department of Data and Decision Sciences](https://quantitative.emory.edu)
+
+`r fa('graduation-cap')` MA from the Graduate Institute Geneva, PhD from King's College London, Postdoc at Brown University, Senior Lecturer at the University of Lincoln, UK
+
+`r fa('book-open')` Research interests: computational social science, experimental methods, policy evaluation, political violence, organised crime
+:::
+:::
+::::
+
+## {background-image="figures/neymar.jpg" background-size="100%"}
+
+## {background-image="figures/carnaval.jpg" background-size="100%"}
+
+## {background-image="figures/sp.jpg" background-size="100%"}
+
+## {background-image="figures/montblanc.jpg" background-size="100%"}
+
+## {background-image="figures/buzz.webp" background-size="100%"}
+
+## {background-image="figures/moonwatch.jpg" background-size="100%"}
+
+## What about you? (time permitting!)
+
+:::{style="margin-top: 60px;"}
+:::
+
+Now it's your turn! 😉
+
+Please introduce yourself! 👋
+
+Tell us your name, your major, one thing you really like, and something we don't know about your city or country! 🌍
+
+## My teaching philosophy
+
+:::{style="margin-top: 60px;"}
+:::
+
+- I love teaching and aim to make learning fun 
+- Classes where students participate are the best
+- Hands-on activities help you learn better
+- I am always available to help and answer questions. [And I mean it]{.alert}
+- Your feedback helps me improve my teaching. Please let me know what is working and what is not
+
+## Teaching assistants
+
+:::{style="margin-top: 60px;"}
+:::
+
+- The teaching assistant for this course is Jooha Lee. You can reach out to him at <jooha.lee@emory.edu>
+
+- Jooha will help with grading assignments throughout the course (under my supervision)
+ 
+- We are here to help you! So feel free to ask questions during class, office hours, or via email 😃
+
+## Office hours
+### What for and what not
+
+:::{style="margin-top: 60px;"}
+:::
+
+- What office hours are meant for:
+  - Applying tools in practice
+  - Discussion of issues related to the assignments
+  - Boosting your knowledge of data science
+
+:::{.fragment .fade-in}
+- What these sessions are [not]{.alert} meant for: 
+    - Solving the assignments for you
+    - Developing your coding or stats skills for you
+:::
+
+## Class etiquette
+
+:::{style="margin-top: 60px; font-size: 26px;"}
+:::
+
+:::: {.columns}
+::: {.column width=70%}
+- Learning a new topic can be tough and push you out of your comfort zone. If the course pace is too fast, let us know. I expect your commitment, but [I do not want anyone to fail]{.alert}
+- You are all keen on experimental methods, but your backgrounds vary. That is great! Some sessions might be more engaging than others. If you are bored, [help others]{.alert} or explore new data science areas
+- [Always be respectful]{.alert} to each other
+- [Ask questions]{.alert} whenever you need to!
+:::
+
+::: {.column width=30%}
+![](figures/stupid-questions.jpg)
+:::
+::::
+
+# Questions? {background-color="#2d4563"}
+
+# What are randomised controlled trials? 🎲🧪 {background-color="#2d4563"}
+
+## Randomised controlled trials (RCTs): diagram
+
+:::{style="margin-top: 50px; font-size: 22px; text-align: center;"}
+![](figures/rct.png){width="70%"}
+
+Source: [Liakos et al. (2024)](https://journals.sagepub.com/doi/abs/10.1177/15347346241236385?journalCode=ijla)
+:::
+
+## What are randomised controlled trials (RCTs)?
+
+:::{style="margin-top: 50px; font-size: 22px;"}
+:::{.columns}
+:::{.column width=50%}
+- **Randomised controlled trials (RCTs)** are a type of scientific experiment that aim to [reduce bias when testing a new treatment or intervention]{.alert}
+- In its simplest form, an RCT consists of [a control group and a treatment group]{.alert}, with the treatment group randomly receiving the intervention and the control group not receiving it
+- They are often used in medicine, psychology, and social sciences to evaluate the effectiveness of new treatments or interventions
+- It is easy to take them for granted, [but these trials have transformed our understanding of cause and effect]{.alert}
+- They are [the best tool we have]{.alert} to illuminate what is unknown or uncertain, and [to discern whether something works and how well it works]{.alert}
+:::
+
+:::{.column width=50%}
+:::{style="text-align: center;"}
+![](figures/rct-xkcd.png){width="100%"}
+From [xkcd](https://xkcd.com/2530/)
+:::
+:::
+:::
+:::
+
+## History of experiments
+### Francesco Petrarch
+
+:::{style="margin-top: 50px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- [Petrarch (1394)](https://www.jameslindlibrary.org/articles/petrarchs-letter-to-boccaccio-on-the-proud-and-presumptuous-behaviour-of-physicians/): "_I solemnly affirm and believe, if a hundred or a thousand of men of the same age, same temperament and habits, together with the same surroundings, were attacked at the same time by the same disease, that if the one half followed the prescriptions of doctors of the variety of those practicing at the present day, and that the other half took no medicine but relied on Nature’s instincts, I have no doubt as to which half would escape_"
+:::
+
+:::{.column width=50%}
+:::{style="text-align: center; margin-text: -50px;"}
+![](figures/petrarch.webp){width="60%"}
+:::
+:::
+:::
+:::
+
+## History of experiments
+### James Lind
+
+:::{style="margin-top: 50px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- In 1747, Scottish naval surgeon James Lind sought to cure scurvy during a sea voyage
+- Lind implemented [the first (non-randomised) experiment]{.alert} comparing two treatments across six pairs of sailors
+- One effective treatment involved [administering two oranges and one lemon daily]{.alert} to sailors
+- To ensure consistency, Lind aimed for [similarity among participants]{.alert}: "_The cases were as similar as I could have them. They all in general had putrid gums, the spots and lassitude, with weakness of their knees. They lay together in one place, being a proper apartment of the sick in the fore-hold; and had one diet common to all._"
+:::
+
+:::{.column width=50%}
+:::{style="text-align: center; margin-text: -50px;"}
+![](figures/lind.webp){width="90%"}
+:::
+:::
+:::
+:::
+
+## History of experiments
+
+:::{style="margin-top: 50px; font-size: 23px;"}
+:::{.columns}
+:::{.column width=50%}
+- The [first random assignment of treatment and control]{.alert} happened in Nuremberg, 1835, to assess homeopathic medicine (yes, it’s been ongoing for a while!)
+- In 1884, Peirce and Jastrow conducted the [first psychological experiment]{.alert} using randomisation to study sensory perception
+- This approach later became [standard practice]{.alert} in experimental psychology and social sciences
+- In 1947, the Medical Research Council carried out the [first RCT to evaluate streptomycin for tuberculosis]{.alert}
+- Results showed streptomycin was effective, and the [RCT became the gold standard for evaluating medical treatments]{.alert}
+:::
+
+:::{.column width=50%}
+:::{style="text-align: center;"}
+![](figures/bmj.png){width="100%"}
+:::
+:::
+:::
+:::
+
+## Recent examples: Banerjee, Duflo, and Kremer
+
+:::{style="margin-top: 50px; font-size: 24px; text-align: center;"}
+![](figures/banerjee.png){width="45%"}
+:::
+
+## Recent examples: Card, Angrist, and Imbens
+
+:::{style="margin-top: 30px; font-size: 24px; text-align: center;"}
+![](figures/kai.png){width="45%"}
+:::
+
+## Types of Experiments
+
+:::{style="margin-top: 50px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- [Lab experiments]{.alert}: Conducted in controlled environments
+- [Field experiments]{.alert}: Conducted in real-world settings
+- [Natural experiments]{.alert}: Use naturally occurring events as treatments
+- [Quasi-experiments]{.alert}: Use non-randomised designs
+
+<br>
+
+- Why are natural/quasi-experiments not as reliable as RCTs?
+:::
+
+:::{.column width=50%}
+:::{style="text-align: center;"}
+![](figures/natural.png){width="100%"}
+
+[Sekhon and Titiunik (2012)](https://www.cambridge.org/core/journals/american-political-science-review/article/abs/when-natural-experiments-are-neither-natural-nor-experiments/E8A67829C2EEBC429CDD671B4C9313F9)
+:::
+:::
+:::
+:::
+
+# Questions? {background-color="#2d4563"}
+
+# Causality 🔍🔗 {background-color="#2d4563"}
+
+## Correlation versus causation
+
+:::{style="margin-top: 50px; font-size: 24px; text-align: center;"}
+![](figures/correlation_causation_example1.png){width="90%"}
+
+Source: [Tyler Vigen](https://www.tylervigen.com/spurious-correlations)
+:::
+
+## Correlation versus causation
+
+:::{style="margin-top: 50px; font-size: 24px; text-align: center;"}
+![](figures/correlation_causation_example2.png){width="90%"}
+
+Source: [Tyler Vigen](https://www.tylervigen.com/spurious-correlations)
+:::
+
+## Correlation versus causation
+
+:::{style="margin-top: 50px; font-size: 24px; text-align: center;"}
+![](figures/correlation_causation_example3.jpg){width="90%"}
+
+Source: [Tyler Vigen](https://www.tylervigen.com/spurious-correlations)
+:::
+
+## Correlation versus causation
+
+:::{style="margin-top: 50px; font-size: 24px; text-align: center;"}
+![](figures/correlation.png){width="90%"}
+
+From [xkcd](https://xkcd.com/552/)
+:::
+
+## David Hume and causality
+
+:::{style="margin-top: 50px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- [David Hume (1739)](https://www.gutenberg.org/ebooks/9662): "_We may define a cause to be an object followed by another, and where all the objects similar to the first are followed by objects similar to the second. Or in other words where, if the first object had not been, the second never had existed._"
+- Three concepts worth noting:
+  - [Temporal sequence]{.alert}: The cause must precede the effect
+  - [Covariation]{.alert}: The cause and effect must vary together
+  - [Non-spuriousness]{.alert}: The relationship must not be due to a third variable
+:::
+
+:::{.column width=50%}
+:::{style="text-align: center;"}
+![](figures/hume.jpg){width="70%"}
+:::
+:::
+:::
+:::
+
+## Five principles of causality
+
+:::{style="margin-top: 50px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- A more modern take involves 5 principles:
+  - [Relationship]{.alert}: There must be a relationship between the cause and effect 
+  - [Direction (temporality)]{.alert}: The cause must precede the effect 
+  - [Nonconfounding]{.alert}: The relationship must not be due to a third variable 
+  - [Mechanism]{.alert}: There must be a plausible mechanism linking the cause and effect 
+  - [Appropriate level of analysis]{.alert}: The relationship must happen (and be measured) at the appropriate level of analysis
+:::
+
+:::{.column width=50%}
+:::{style="text-align: center;"}
+![](figures/balls.jpg){width="100%"}
+:::
+:::
+:::
+:::
+
+## Causality terminology
+
+:::{style="margin-top: 50px; font-size: 24px;"}
+:::{.incremental}
+- [Unit]{.alert}: The entity to which the treatment is applied
+- [Treatment]{.alert}: The intervention applied to the unit
+- [Outcome]{.alert}: The variable of interest
+- [Potential outcomes]{.alert}: The outcome that would be observed under different treatments
+- [Causal effect]{.alert}: The difference between potential outcomes
+- [Average treatment effect]{.alert}: The average causal effect across units
+- [Random assignment]{.alert}: The process of randomly assigning treatments to units
+- [Confounding]{.alert}: The presence of a third variable that affects the treatment and outcome
+- [Compliance]{.alert}: The extent to which units follow the treatment assigned
+- [Heterogeneity]{.alert}: The extent to which the treatment effect varies across units
+- [Internal validity]{.alert}: The extent to which the results are due to the treatment
+- [External validity]{.alert}: The extent to which the results can be applied to other settings
+- [Statistical power]{.alert}: The probability of detecting an effect if it exists
+:::
+:::
+
+# Questions? {background-color="#2d4563"}
+
+# Course overview and logistics `r emo::ji('open_book')` `r emo::ji('books')` `r emo::ji('computer')` {background-color="#2d4563"}
+
+## Course objectives
+
+<br>
+
+:::: {.columns}
+::: {.column width="50%"}
+::: {style="font-size: 22px;"}
+- [Design rigorous experiments]{.alert} with proper randomisation procedures and sample sizing calculations
+- Create [pre-analysis plans (PAP)]{.alert} and apply appropriate statistical methods for experimental analysis
+- Produce [reproducible reports]{.alert} using [Quarto](https://quarto.org/)
+- [Evaluate experimental designs]{.alert}, identifying potential limitations 
+- Manage [unexpected data challenges]{.alert}, such as attrition and non-compliance
+- Understand [ethical considerations]{.alert} in experimental design
+- Develop [analytical skills]{.alert} through practical problem sets and discussion sessions
+:::
+:::
+
+::: {.column width="50%"}
+![](figures/science.png)
+:::
+::::
+
+## Textbooks
+
+:::{style="margin-top: 50px; font-size: 24px; text-align: center;"}
+:::{.columns}
+:::{.column width="50%"}
+### Required: Alan Gerber and Donald Green - Field Experiments
+
+![](figures/gerber_green.jpg){width="50%"}
+:::
+
+:::{.column width="50%"}
+### Recommended: Douglas C. Montgomery - Design and Analysis of Experiments
+
+![](figures/design.jpg)
+:::
+:::
+
+Lots of additional readings are included [in the syllabus](https://github.com/danilofreire/datasci385/blob/main/syllabus.pdf) 😊
+:::
+
+## Key tools
+
+:::{style="margin-top: 50px; font-size: 26px;"}
+[R](https://www.r-project.org/) or [Python](https://www.python.org/) for data analysis, [GitHub](https://github.com) for version control, and [Quarto](https://quarto.org/) for reproducible reports
+
+::: {.columns}
+::: {.column width="33%"}
+![](figures/r.jpg){width=80%}
+:::
+
+::: {.columns}
+::: {.column width="33%"}
+![](figures/github.png){width=80%}
+:::
+
+::: {.column width="33%"}
+:::{style="margin-top: 70px;"}
+![](figures/quarto.png){width=100%}
+:::
+:::
+:::
+:::
+
+Guides: <https://danilofreire.github.io/datasci385/guides.html>
+:::
+
+## Logistics
+### Course information
+
+:::{style="margin-top: 40px;"}
+:::
+
+::: {style="font-size: 28px;"}
+- [Syllabus:]{.alert} Available on our [course repository](https://github.com/danilofreire/datasci385/blob/main/syllabus.pdf) and [website](https://danilofreire.github.io/datasci385/syllabus.html). The course is designed to be self-contained. The syllabus includes links to slides and code we will use in class, along with recommended readings, and problem sets. I will upload slides throughout the term as we progress
+- [Schedule:]{.alert} Lectures are on Mondays and Wednesdays from 5:30 to 6:45 pm in the Psychology Building, Room 220
+- [Office Hours:]{.alert} I'm available to meet you [at any time.]{.alert} Please reach out some time in advance and we can schedule a meeting
+- [Materials:]{.alert}
+    - Course repository: <https://github.com/danilofreire/datasci385>
+    - Canvas
+:::
+
+## Assignments
+### How you will be graded
+
+::: {style="margin-top: 40px;"}
+:::
+
+- [Problem sets]{.alert}: Ten of them, due on Wednesdays at 11:59 pm (50%)
+- [Pre-Analysis Plan]{.alert}: Due mid-term (20%)
+- [Final project]{.alert}: Due on the last day of class (30%)
+- [Late policy]{.alert}: 10% off per day late
+- [Collaboration]{.alert}: You can discuss assignments with your classmates, but you must write your own code and submit your own work. AI is allowed
+- [Academic integrity]{.alert}: Please refer to the syllabus for the university's policy on academic integrity
+
+## Next class
+
+:::{style="margin-top: 60px;"}
+:::
+
+::: {style="font-size: 30px;"}
+- [Research design process]{.alert}: Formulate good research questions, develop strong hypotheses, and design experiments
+- [Theory and experiments]{.alert}: Link theory to experiments and how to test hypotheses using RCTs (and which ones to use)
+- [EGAP research design form]{.alert}: Think systematically about your research design and how to implement it
+- [Preparation]{.alert}: Read the syllabus, familiarise yourself with the course website and repository, and read the texts and the slides for our next class 😉
+
+:::{.fragment .fade-in}
+... **and that's all for today!** 🎉
+:::
+:::
+
+# Questions? {background-color="#2d4563"}
+
+# Thank you very much for your attention! 🙏🏻 <br><br> Have a great day! 😊 {background-color="#2d4563"}

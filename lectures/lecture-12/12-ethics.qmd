@@ -1,0 +1,626 @@
+---
+title: DATASCI 385 - Experimental Methods
+subtitle: Lecture 12 - Ethics in Experimental Research
+author:
+  - name: Danilo Freire
+    email: danilo.freire@emory.edu
+    affiliations: Department of Data and Decision Sciences <br> Emory University
+format:
+  clean-revealjs:
+    self-contained: true
+    code-overflow: wrap
+    footer: "[Ethics](https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-12/12-ethics.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: knitr
+revealjs-plugins:
+  - multimodal
+editor:
+  render-on-save: true
+---
+
+# Hello, everyone! <br> Nice to see you! 😉 {background-color="#2d4563"}
+
+# Brief recap 📚 {background-color="#2d4563"}
+## Last class
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+:::{.columns}
+::::{.column width="50%"}
+- [Attrition]{.alert}: Loss of participants before study completion
+- Two main types:
+  - [Random attrition]{.alert}: Missingness unrelated to treatment/outcome
+  - [Non-random/Systematic attrition]{.alert}: Missingness correlates with variables
+- Impacts include reduced [statistical power]{.alert}, potential [selection bias]{.alert}, and compromised [generalisability]{.alert}
+- [RAND HIE example]{.alert}: Health insurance experiment where higher dropout in cost-sharing plans (25%) vs. free care (8%) potentially biased results
+:::
+
+:::{.column width="50%"}
+- Analysis methods:
+  - [Inverse probability weighting]{.alert} (IPW): Upweights observations similar to missing ones
+  - [Extreme bounds analysis / Manski bounds]{.alert} (EBA): Evaluates sensitivity by assuming best/worst case scenarios
+  - [Lee bounds]{.alert}: Narrows bounds using monotonicity assumption
+- [R implementation]{.alert}: `attritevis` package for visualising and analysing attrition patterns
+:::
+:::
+:::
+
+# Today's plan 📅 {background-color="#2d4563"}
+
+## Ethics in experimental research
+### What should we consider when conducting experiments?
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [A brief history]{.alert} of research ethics
+- [Ethical considerations]{.alert} in experimental research
+- [Informed consent]{.alert}
+- [Deception]{.alert} in experiments
+- [Ethical review]{.alert} boards
+- [Ethical guidelines]{.alert} for research
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/xkcd.png){width=65%} 
+
+Source: [XKCD](https://xkcd.com/1390/)
+:::
+:::
+:::
+:::
+
+# A brief history of research ethics 📜 {background-color="#2d4563"}
+
+## In the beginning...
+### ...there was no ethical oversight!
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Early research often proceeded with [little formal ethical oversight]{.alert}
+- Harmful experiments on humans were conducted [without consent or consideration for subject well-being]{.alert}
+- The focus was exclusively on [scientific advancement]{.alert}, sometimes at the expense of [human rights]{.alert}
+- Examples of unethical research existed throughout history, but the [scale and inhumane nature]{.alert} of some events in the 20th century prompted change
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/stanford-prison.jpg){width=100%}
+
+More on the [Stanford Prison Experiment](https://en.wikipedia.org/wiki/Stanford_prison_experiment)
+:::
+:::
+:::
+:::
+
+## The Tuskegee Syphilis Study (1932-1972)
+
+:::{style="margin-top: 30px; font-size: 19px;"}
+:::{.columns}
+:::{.column width="50%"}
+- The [Tuskegee Study of Untreated Syphilis]{.alert} was a clinical study conducted between 1932 and 1972 by the U.S. Public Health Service, the Centers for Disease Control and Prevention, and the Tuskegee Institute in Alabama
+- The goal was to observe the natural progression of untreated syphilis in rural African Americans who thought they were receiving free health care from the U.S. government
+- 399 men had syphilis, 201 did not, and [none were informed of their diagnosis or the study's true purpose]{.alert}
+- The study was [terminated in 1972]{.alert} after its unethical nature was exposed (40 years later!)
+- By the end of the study, [28 participants had died of syphilis, 100 were dead of related complications,]{.alert} 40 of their wives had been infected, and 19 of their children were born with congenital syphilis
+- Participants did not receive treatment even after penicillin became the standard of care in 1947
+- In 1997, President Bill Clinton [apologised on behalf of the U.S. government]{.alert} for the study
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/tuskegee.jpg){width=100%}
+
+More on the [Tuskegee Syphilis Study](https://en.wikipedia.org/wiki/Tuskegee_Syphilis_Study)
+:::
+:::
+:::
+:::
+
+
+## The Nuremberg Code (1947) 
+### Some principles we still follow today
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width="50%"}
+- The [Nuremberg Code]{.alert} was a set of research ethics principles for human experimentation created as a result of the Nuremberg Trials at the end of World War II
+- Why? [Well, I am quite sure you know the reason...]{.alert}
+- The code established [10 principles]{.alert} for the conduct of human experiments:
+- Voluntary consent
+- Beneficence towards participants
+- Avoidance of unnecessary suffering
+- No experiments without prior animal testing
+- Avoidance of unnecessary physical and mental suffering
+:::
+
+:::{.column width="50%"}
+- No experiments if death or disabling injury is expected
+- Risks should not exceed benefits
+- Proper preparation and facilities
+- Qualified scientists
+- Participants can withdraw at any time
+- The experimenter must be prepared to stop the experiment at any time
+- Full text [here](https://research.unc.edu/human-research-ethics/resources/ccm3_019064/)
+:::
+:::
+:::
+
+## The Belmont Report (1979)
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+:::{.columns}
+:::{.column width="50%"}
+- The [Belmont Report]{.alert} was written by the National Commission for the Protection of Human Subjects of Biomedical and Behavioural Research
+- The background was the [Tuskegee Syphilis Study]{.alert} and other unethical research
+- The report outlines [three fundamental ethical principles]{.alert} for research involving human subjects:
+  - Respect for persons
+  - Beneficence
+  - Justice
+- These principles are the basis for the [Common Rule]{.alert}, which governs federally funded research in the U.S.
+  - The Common Rule requires [institutional review boards]{.alert} to review research proposals
+- The report also introduced the concept of [informed consent]{.alert}
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/belmont-report.png){width=100%}
+
+Full text of the [Belmont Report](https://www.hhs.gov/ohrp/sites/default/files/the-belmont-report-508c_FINAL.pdf)
+:::
+:::
+:::
+:::
+
+# Ethical considerations in experimental research 😇 {background-color="#2d4563"}
+
+## Ethical research is good research
+
+:::{style="margin-top: 30px; font-size: 30px;"}
+- Ethical considerations are [strongly linked to the quality of research]{.alert}
+- More specifically, ethical practices [reduce attrition]{.alert} and [improve data quality]{.alert}
+- How so? 
+  - Participants who feel respected are more likely to [provide accurate and complete information]{.alert}
+  - Participants deceived about study purpose might [intentionally skew responses]{.alert}
+  - Damaged relationships with communities can hinder future research and interventions
+  - Example: The Tuskegee Study led to deep mistrust of medical institutions
+:::
+
+## Respect for persons
+### Autonomy and protection
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Experiments are by definition [interventional]{.alert}, meaning participants are exposed to treatments or conditions
+- So individuals have the right to choose [whether or not to participate in research]{.alert}
+- This is known as [informed consent]{.alert} and should include information on:
+  - Study purpose
+  - Procedures
+  - Risks and benefits
+  - Compensation
+  - Confidentiality
+  - Right to withdraw
+:::
+
+:::{.column width="50%"}
+- Consent can be [written or oral]{.alert}, depending on the study
+- Oral consent is common in [phone surveys]{.alert}, [field experiments]{.alert}, or when [written consent is impractical]{.alert} (e.g. due to literacy issues)
+- Special considerations for [vulnerable populations]{.alert} (e.g. children, prisoners, individuals in economic hardship)
+- What to do in those situations?
+  - Use independent [advocates or representatives]{.alert} to assist vulnerable individuals 
+  - [Seek the individual's agreement]{.alert} as much as possible 
+  - Use [age-appropriate language]{.alert} to obtain assent
+:::
+:::
+:::
+
+## Example of informed consent form
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+**Informed Consent Form for Participation in a Research Study**
+
+**Study Title:** Understanding Community Opinions on Local Park Improvements
+
+**Principal Investigator:** [Researcher's Name], [Researcher's Affiliation], [Contact Information - Email and/or Phone Number]
+
+**1. Purpose of this Research:**
+
+We are conducting a research study to understand what people in our community think about possible improvements to [Name of Local Park]. We want to learn your opinions to help make the park better for everyone.
+
+**2. What you will be asked to do:**
+
+If you agree to participate, we will ask you to answer some questions in a short interview. This interview will take about 20-30 minutes.  We will ask you about your use of the park, and your thoughts on different ideas for making it better, like adding new play equipment, walking paths, or picnic areas.
+
+**3. Potential Risks and Benefits:**
+
+-   **Risks:**  We do not expect any major risks from participating in this study. You might feel slightly tired from answering questions. You can skip any question you do not want to answer.
+-   **Benefits:** Your participation will help us understand community needs and preferences for park improvements. This could lead to a better park for you and everyone in our community. You will not receive direct personal benefit other than contributing to this knowledge.
+
+**4. Confidentiality:**
+
+Your answers will be kept private. We will not use your name or any information that could directly identify you in our report.  All the information we collect will be combined with answers from other people to understand overall community opinions.  Your individual responses will be kept secure and only seen by the research team.
+
+**5. Voluntary Participation and Right to Withdraw:**
+
+Your participation in this research is completely voluntary. You can choose not to participate at all. If you agree to participate, you can change your mind and stop at any time without penalty or negative consequences.  Your decision will not affect your relationship with [Researcher's Affiliation] or your access to community services.
+
+**6. Questions:**
+
+If you have any questions about this research, please feel free to ask me now or at any time during the study. You can also contact [Researcher's Name] at [Contact Information - Email and/or Phone Number] if you have questions later.
+
+---
+
+**Consent Statement:**
+
+By signing below, you are confirming that:
+
+*   You have read and understood this consent form.
+*   You have had the opportunity to ask questions and have received satisfactory answers.
+*   You voluntarily agree to participate in this research study.
+
+---
+
+**Participant Name (Printed):** _______________________________
+
+**Participant Signature:** _______________________________
+
+**Date:** _______________
+
+**Researcher Name (Printed):** _______________________________
+
+**Researcher Signature:** _______________________________
+
+**Date:** _______________
+
+:::
+
+## Anonymity and confidentiality
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Anonymity means, by definition, that all identifying information about subjects is destroyed after the study]{.alert}; as it provides the greatest protection to those subjects
+
+- [Sometimes anonymity is not possible]{.alert}
+  - Example: elite interviews
+- But bear in mind that promises of confidentiality from researchers to subjects can be [overridden by court orders]{.alert}
+
+- For example: Boston College and oral history tapes of Northern Ireland's Troubles (<https://www.bbc.com/news/uk-northern-ireland-27238797>)
+
+- [What would you do in this situation?]{.alert}
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/ira.gif){width=100%}
+
+Members of the Irish Republican Army (IRA) in Northern Ireland
+:::
+:::
+:::
+:::
+
+# Institutional Review Boards (IRBs) 🏛️ {background-color="#2d4563"}
+
+## What are IRBs?
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+- [Institutional Review Boards]{.alert} (IRBs) are committees that review research proposals to ensure they meet ethical standards
+- IRBs are [required for federally funded research]{.alert} in the U.S. and in many other countries
+- They are composed of [scientists, ethicists, and community members]{.alert} who evaluate the risks and benefits of research
+- There is a [formal (standard) application]{.alert} for the approval of research with human beings
+- [This is not optional]{.alert}. You cannot interact with human research subjects before this is approved
+- The board may determine that your research can continue, but it is the board that decides this (not you)
+- You are obliged to [inform the board]{.alert} about "adverse events" in the research
+:::
+
+## What do IRBs consider?
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- Description of the population of subjects, how they will be recruited, how they will be compensated (if they are), the context of the research and what you will do in it
+- Consent form and standard elements necessary to explain the research to the study subjects
+- The data collection instrument (survey questionnaire, etc.)
+- Statement of the expected benefits and risks, including how the results will be disseminated
+- How subjects can ask questions and report any problems to the review committee and/or you in real time
+- How you will ensure the confidentiality, anonymity, and security of the data
+:::
+
+## Ethical Review Committees Outside the U.S.
+
+:::{style="margin-top: 30px; font-size: 29px;"}
+- In some countries, the ethical review committee is located in a [ministry of technology/science]{.alert} and will be more accustomed to dealing with medical research than with social science research
+- Universities and research institutes or organisations often have their own [ethical review committees]{.alert}
+- Prepare to [explain your research a little more]{.alert}
+- Perhaps you could plan a meeting over coffee to contextualise social science research for a member of a medical review committee
+- Knowledge of the [local language]{.alert} and [legislation]{.alert} is very important
+:::
+
+## Two recent examples of controversial research
+### Facebook's emotional contagion study
+
+:::{style="margin-top: 30px; font-size: 27px; text-align: center;"}
+![](figures/facebook.png){width=70%}
+
+Source: [Kramer et al. (2014)](https://www.pnas.org/doi/10.1073/pnas.1320040111)
+:::
+
+## Two recent examples of controversial research
+### Protests in Hong Kong
+
+:::{style="margin-top: 30px; font-size: 27px; text-align: center;"}
+![](figures/hong-kong.png){width=65%}
+
+Source: [Bursztyn et al. (2021)](https://www.aeaweb.org/articles?id=10.1257/aeri.20200261)
+:::
+
+## Beneficence: "Do no harm, maximise benefit"
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Two key points: 
+  - [Do no harm]{.alert} (non-maleficence) 
+  - [Maximise benefits, minimise risks]{.alert} (beneficence)
+
+- [Risk-benefit assessment]{.alert} is important for every study and [it is your responsibility]{.alert} to ensure that the benefits of the research outweigh the risks 
+- Consider "equipoise" ([Freedman 1987](https://pubmed.ncbi.nlm.nih.gov/3600702/)): Genuine uncertainty about the best approach 
+- [Knowledge gain]{.alert} is great, but only if research is credible and well-designed
+- [Sometimes it is better not to run the experiment at all!]{.alert}
+:::
+
+:::{.column width="50%"}
+:::{style="margin-top: -20px; text-align: center;"}
+![](figures/equipoise.png)
+:::
+:::
+:::
+:::
+
+## Do parachutes save lives?
+### One of my favourite papers ever 😂
+
+:::{style="margin-top: 30px; font-size: 27px; text-align: center;"}
+![](figures/parachutes.png){width=80%}
+
+Source: [Yeh et al. (2018)](https://www.bmj.com/content/363/bmj.k5094)
+:::
+
+# Adaptive research design 🔄 {background-color="#2d4563"}
+
+## Adaptive randomisation
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Adaptive randomisation]{.alert} is a technique that allows researchers to adjust the allocation of participants to different treatment groups based on interim results
+- That is, the [randomisation probabilities]{.alert} can be adjusted during the study, usually to include [more people in the group that is performing better]{.alert}
+- No more 50/50 randomisation!
+- This procedure is quite popular [in clinical trials]{.alert} and can be used to [maximise the benefits]{.alert} of the research
+- But it requires that the [best solution be found quickly]{.alert} and that the [researchers are able to adapt]{.alert} to the new information
+:::
+
+:::{.column width="50%"}
+::::{style="text-align: center; margin-top: -30px;"}
+![](figures/vac-02.png){width=100%}
+![](figures/vac-03.png){width=100%}
+
+Source: [Dr Neil Stone (X)](https://x.com/DrNeilStone)
+:::
+:::
+:::
+:::
+
+
+## Adaptive randomisation
+### An example
+
+:::{style="margin-top: 30px; font-size: 27px; text-align: center;"}
+![](figures/adaptive.png){width=80%}
+
+Source: [Pallman et al. (2018)](https://bmcmedicine.biomedcentral.com/articles/10.1186/s12916-018-1017-7)
+:::
+
+## Adaptive randomisation
+### An example
+
+:::{style="margin-top: 30px; font-size: 27px; text-align: center;"}
+![](figures/adaptive.webp){width=80%}
+
+Source: [Pallman et al. (2018)](https://bmcmedicine.biomedcentral.com/articles/10.1186/s12916-018-1017-7)
+:::
+
+
+## Justice: Fair distribution of burdens and benefits
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Justice in [participant selection]{.alert} is another ethical principle to consider
+  - Who is asked to participate? Who is excluded?
+- [Who bears risks? Who benefits?]{.alert}
+  - Is distribution of risks and benefits equitable?
+  - Avoid disproportionate burden on vulnerable
+- The concept is quite complex because [the idea of justice is not universal]{.alert}
+  - Equality, need, merit, societal contribution
+:::
+
+:::{.column width="50%"}
+- [Randomisation can promote justice]{.alert}, as it ensures:
+  - Equal expected inclusion in research
+  - Equal expected access to intervention
+  - Promotes procedural fairness: everyone has an equal chance and there is no favouritism
+- [Limitations of randomisation]{.alert}
+  - Doesn't address broader societal inequalities: [should everyone have equal chance?]{.alert}
+  - May not be "just" if some populations are over-researched (India, Kenya, etc)
+:::
+:::
+:::
+
+## Implementing justice in practice
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Inclusive research]{.alert}
+  - Target populations experiencing the problem
+  - Focus on those who benefit from knowledge
+  - Avoid convenience samples of less relevant groups
+  - Example: Health disparities in minority groups
+- [Avoid exclusion]{.alert} for convenience
+  - Resist excluding groups due to logistics/cost
+  - Exclusion biases data, perpetuates inequities
+  - Example: Accommodating participants without internet access
+:::
+
+:::{.column width="50%"}
+- [Consider Heterogeneous Effects]{.alert}
+  - Power the study to detect subgroup impacts
+  - Understand equity implications
+- [Carefully Justify Sampling]{.alert}
+  - Ethical reasons for oversampling subgroups
+  - Oversampling for convenience is unethical
+  - Provide ethical rationale, IRB review
+:::
+:::
+:::
+
+## Another example for discussion
+
+:::{style="margin-top: 30px; font-size: 27px; text-align: center;"}
+![](figures/bribes.png){width=80%}
+
+Source: [Bertrand et al. (2006)](https://www.nber.org/system/files/working_papers/w12274/w12274.pdf)
+:::
+
+# Research staff ethics 🧑‍🔬 {background-color="#2d4563"}
+
+## Ethical considerations for research staff
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Belmont principles focus on [participants, not staff]{.alert}
+- Research staff also face [ethical risks and burdens]{.alert}
+- Ignoring staff well-being is [unethical and harms research]{.alert}
+- [Physical risks]{.alert}: Violence, accidents, health hazards
+  - Example: Enumerators in high-crime areas
+:::
+
+:::{.column width="50%"}
+- [Psychological risks]{.alert}: Emotional burden, secondary trauma
+  - From sensitive topics (trauma, poverty)
+  - Example: Surveyors interviewing abuse survivors
+- [Staff well-being is crucial]{.alert}
+  - For ethical research and data quality
+  - Burnt-out staff make more errors, leave projects
+:::
+:::
+:::
+
+## Protecting Research Staff in Practice
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Safety training]{.alert}
+  - Prepare for worst-case scenarios
+  - De-escalation techniques, emergency procedures
+  - Example: Responding to aggressive respondents
+- [Debriefing and support]{.alert}
+  - Regular sessions for processing emotional burden
+  - Counselling access for secondary trauma/burnout
+  - Supportive team environment
+  - Example: Weekly team meetings for surveyors
+:::
+
+:::{.column width="50%"}
+- [Clear communication]{.alert}
+  - Explain study rationale, protocols to staff
+  - Address moral dilemmas, staff concerns
+  - Equip staff to explain study to participants
+  - Example: Workshops explaining randomisation ethics
+- [Fair compensation and working conditions]{.alert}
+  - Fair wages, benefits, reasonable workload
+  - Prevent burnout, ensure well-being
+:::
+:::
+:::
+
+## Another example for discussion
+
+:::{style="margin-top: 30px; font-size: 27px; text-align: center;"}
+![](figures/ebola.png){width=80%}
+
+Source: [The PREVAIL II Writing Group (2016)](https://www.nejm.org/doi/full/10.1056/NEJMoa1604330)
+:::
+
+# Community ethics 🏘️ {background-color="#2d4563"}
+
+## Ethical considerations for the community
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Ethics extends beyond [direct participants too!]{.alert}
+- Consider [broader community impacts]{.alert}
+- Research can have [intended and unintended consequences]{.alert} for communities
+- [Spillovers]{.alert}: Research affects non-participants
+  - Can be positive or negative
+  - Example: Job program increasing competition
+- [Confidentiality Agreements]{.alert} in group settings
+  - Protect information about non-participants
+:::
+
+:::{.column width="50%"}
+- [Minimise Public Interventions]{.alert}
+  - Conduct activities discreetly
+- [Spillover Measurement]{.alert}
+  - Design research to capture community effects
+  - Collect data from participants and non-participants
+  - Example: Health intervention, community health outcomes
+- [Reconsider study]{.alert} if negative spillovers are likely and unmeasurable/unmitigable
+:::
+:::
+:::
+
+## Last example
+
+:::{style="margin-top: 30px; font-size: 27px; text-align: center;"}
+![](figures/india.png){width=80%}
+
+Source: [Banerjee et al. (2008)](https://www.jstor.org/stable/40282658)
+:::
+
+# Conclusion 🎓 {background-color="#2d4563"}
+
+## Conclusion
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Ethical conduct is [integral to good research]{.alert}
+  - Not just compliance, but core aspect
+- [Respect, Beneficence, Justice]{.alert} are essential principles
+  - Practical guides for ethical decision-making
+  - Apply principles throughout research
+- Anticipate challenges, plan for mitigation
+- Ongoing reflection and dialogue needed
+- Think of adaptive research designs!
+:::
+
+:::{.column width="50%"}
+- Ethical research leads to:
+  - [Better data]{.alert} (validity, reliability)
+  - [Stronger partnerships]{.alert} (trust, cooperation)
+  - [Greater positive impact]{.alert} (sustainable change)
+:::
+:::
+:::
+
+# And that's all for today! 🎉 {background-color="#2d4563"}
+
+# Thank you! 🙏 {background-color="#2d4563"}

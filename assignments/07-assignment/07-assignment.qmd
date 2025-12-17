@@ -1,0 +1,47 @@
+---
+title: "QTM 385 - Experimental Methods"
+subtitle: Assignment 07
+---
+
+# Instructions
+
+Please find 10 questions related to our recent classes below. The questions cover Quarto, DeclareDesign, research ethics, and natural experiments. Please answer all questions and export the file as a PDF or HTML file. Make sure to include both the code and the output in the document.
+
+If you have any questions about the assignment, feel free to email me at <danilo.freire@emory.edu>.
+
+Good luck!
+
+# Questions 
+
+1.  Explain what literate programming is and why it is beneficial for experimental research. How does Quarto facilitate literate programming?
+
+2. Outline the steps you would take to create a PDF document from a Quarto file. What software or installations are typically required for PDF output? Please include examples of code that you would use to create a PDF document from a Quarto file. They are a YAML header, a Markdown cell, a code cell, and the render command. Wrap your code in a `verbatim` block to prevent it from being executed.
+
+3. List and briefly describe the six core components of a DeclareDesign study. Explain how these components help structure the design process. 
+
+4. This task is divided into two parts, both focusing on designing a 3-arm experiment for political mobilisation using a modified version of the [`multi_arm_designer` function from `DesignLibrary`](https://declaredesign.org/r/designlibrary/reference/multi_arm_designer.html). Please answer the following questions, providing code and explanations.
+
+Design a 3-arm experiment to test the effectiveness of different get-out-the-vote (GOTV) messages on voter turnout:
+
+*   **Arm 1: Control** (No Message)
+*   **Arm 2: Civic Duty Message**
+*   **Arm 3: Social Pressure Message**
+
+Assume a baseline voter turnout of 30% (standard deviation = 10%) in the Control Arm. Hypothesise the following average turnout rates for the treatment arms:
+
+*   **Arm 2: Civic Duty:** 50% (standard deviation = 20%)
+*   **Arm 3: Social Pressure:** 60% (standard deviation = 20%)
+
+Set the sample size to `N = 500` and use default values for other arguments of `multi_arm_designer`. Create the design in R. Diagnose the design and briefly justify your sample size choice based on whether the power to detect the treatment effects seems adequate from the initial diagnosis.
+
+5. In this question, you will need to modify your design with [`expand_design()`](https://declaredesign.org/r/declaredesign/reference/expand_design.html) for different sample sizes. Create a design for 3 different sample sizes: `N = 1000`, `N = 2000`, and `N = 3000`. Diagnose each design and compare the results. Justify your choice of sample size.
+
+6. Now, instead of using `DesignLibrary`, let's recreate the experiment from question 04 using the `DeclareDesign` package with `N = 5000`. Use the functions `declare_population()`, `declare_potential_outcomes()`, `declare_inquiries()`, `declare_assignment()`, `declare_reveal()`, and `declare_estimator()`. An example can be seen [on this page](https://declaredesign.org/r/designlibrary/articles/multi_arm.html). Analyse the design and comment on the sample size.
+
+7. What is meant by a "true natural experiment"? Provide an example of a research scenario that could be considered a true natural experiment and explain why.
+
+8. Explain the ethical considerations that are particularly relevant when conducting quasi-experiments, even though they may arise from situations where randomisation is not ethical. Provide examples of ethical considerations that researchers should be mindful of when designing and conducting quasi-experiments.
+
+9. Imagine that a group of researchers must study drug decriminalisation effects. They could randomly assign cities to keep or change drug laws (RCT), but this forces some areas to maintain harmful policies. Alternatively, they could analyse cities that choose decriminalisation themselves (quasi-experimental), though other factors affecting results are harder to rule out. Argue which approach balances ethics and evidence better, explaining how to strengthen your chosen method's weaknesses through careful analysis and honesty about limitations.
+
+10. What is the role of qualitative data in experimental and quasi-experimental research? How can these data be used to complement the analysis of quantitative data?

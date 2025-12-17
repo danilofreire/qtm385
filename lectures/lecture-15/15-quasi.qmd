@@ -1,0 +1,513 @@
+---
+title: DATASCI 385 - Experimental Methods
+subtitle: Lecture 15 - Natural and Quasi-Experiments
+author:
+  - name: Danilo Freire
+    email: danilo.freire@emory.edu
+    affiliations: Department of Data and Decision Sciences <br> Emory University
+format:
+  clean-revealjs:
+    self-contained: true
+    code-overflow: wrap
+    footer: "[Quasi-Experiments](https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-15/15-quasi.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: knitr
+revealjs-plugins:
+  - multimodal
+editor:
+  render-on-save: true
+---
+
+# Hello, everyone! 😊 {background-color="#2d4563"}
+
+# Brief recap 📚 {background-color="#2d4563"}
+
+## Pre-analysis plans
+### Core Components
+:::{style="font-size: 24px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [7-section structure]{.alert}: Introduction, Hypotheses, Population, Intervention, Outcomes, Analysis, Implementation (EGAP template)
+- [Key historical roots]{.alert}: FDA Modernization Act of 1997, reproducibility crisis
+- [Important elements]{.alert}:
+  - Clear [primary/secondary hypotheses]{.alert} with theoretical basis
+  - [Power analysis]{.alert} for sample size determination
+  - [Ethical safeguards]{.alert} for vulnerable populations
+:::
+
+:::{.column width="50%"}
+- [PAPs increase transparency]{.alert} and reduce publication bias
+- [PAPs can (and should!) be flexible]{.alert}
+- Some scholars say [PAPs are overrated]{.alert}, but they do help with credibility
+- Best practices for writing PAPs:
+  - Use [OSF/AEA/EGAP registries]{.alert} to host your PAP
+  - Include [randomisation code]{.alert} snippets
+  - Pre-specify [attrition handling]{.alert} methods
+  - You can use [DeclareDesign](https://declaredesign.org/){.alert} to do all that!
+  - [Share your PAP]{.alert} with collaborators and reviewers!
+:::
+:::
+:::
+
+## Implementation challenges
+
+:::{style="font-size: 23px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="40%"}
+- [PAPs are not perfect]{.alert}: 50% of researchers spend more than 2 weeks writing them
+- Common pitfalls:
+  - [Over-specification]{.alert} of analysis paths
+  - [Underpowered designs]{.alert} due to sample constraints
+  - [Non-compliance]{.alert} with treatment protocols
+- Solutions:
+  - [Pre-registered flexibility]{.alert} for exploratory analysis
+  - [Sensitivity analyses]{.alert} for robustness checks
+  - Clear [attrition management]{.alert} strategies
+:::
+
+:::{.column width="60%"}
+:::{style="margin-top: -30px; text-align: center;"}
+![](figures/pap.png){width=80%}
+
+Source: <https://egap.org/resource/10-things-to-know-about-pre-analysis-plans/>
+:::
+:::
+:::
+:::
+
+# Today's plan 📅 {background-color="#2d4563"}
+
+## When experiments are not possible
+
+:::{style="font-size: 21px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- The [experimental ideal]{.alert} is not always feasible
+  - [Ethical constraints]{.alert}, [logistical challenges]{.alert}, [political barriers]{.alert}
+- [Natural experiments]{.alert}: When "nature" (broadly speaking) does the randomisation
+  - [Examples]{.alert}: Earthquakes, hurricanes, pandemics, lottery wins
+- [Quasi-experiments]{.alert}: Broader term than natural experiments, sometimes we can control the treatment but not the assignment
+  - [Examples]{.alert}: School vouchers, minimum wage laws, health interventions, policy changes
+  - [Methods to estimate causal effects]{.alert}: Difference-in-differences, regression discontinuity, instrumental variables
+- They are [somewhere between observational and experimental studies]{.alert}, and have received increased attention in recent decades
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/koreas.jpg){width=80%}
+:::
+:::
+:::
+:::
+
+# The experimental ideal and its limits 🌟 {background-color="#2d4563"}
+
+## Why we should think about observational studies with RCTs in mind
+
+:::{style="font-size: 21px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- As you already know by now, RCTs have the highest internal validity among all research designs
+- Since the treatment is isolated from other factors, we can be more confident about the causal effect
+- But RCTs are not always feasible, and sometimes they are not ethical or practical
+  - [Example]{.alert}: Testing the effects of smoking on health outcomes, or of poverty on child development
+- In these cases, we need to think creatively about how to estimate causal effects
+- Yet, [the logic of RCTs should guide our thinking]{.alert} in observational studies
+  - [Random assignment]{.alert}, [control groups]{.alert}, [pre-treatment equivalence]{.alert}, [selection bias]{.alert}
+:::
+
+:::{.column width="50%"}
+- [Natural and quasi-experiments]{.alert} are attempts to [approximate the conditions of an RCT when true randomisation is not possible]{.alert}
+- They are ["second-best" in terms of internal validity]{.alert} compared to a well-executed RCT
+- But they are often the best available or only feasible options
+- [Both RCTs and natural/quasi-experiments are driven by the same goal]{.alert}: to establish causal relationships
+- The core logic of experiments, that is, [of counterfactuals and potential outcomes]{.alert}, is the same
+- Natural and quasi-experiments often have [higher external validity]{.alert} than RCTs, as they are closer to real-world conditions
+- But we only use [observational data]{.alert} 
+:::
+:::
+:::
+
+# Natural experiments 🌍 {background-color="#2d4563"}
+
+## Definition
+
+:::{style="font-size: 25px; margin-top: 30px;"}
+- [Natural experiments]{.alert} are situations where the assignment of treatment is determined by nature or other factors outside the control of the researcher
+- They are [quasi-experimental]{.alert} designs that mimic the random assignment of treatments in experimental studies
+- In many ways, they are the "[gold standard]{.alert}" (so to speak!) for causal inference in observational studies
+- There are mainly [two kinds of natural experiments]{.alert}:
+  - [True natural experiments]{.alert}: When the treatment is [indeed randomly assigned]{.alert}
+  - [As-if natural experiments]{.alert}: When the treatment is [assigned by a procedure]{.alert} that we claim is as good as random for practical purposes
+  - [Examples of true natural experiments]{.alert}: Natural disasters, weather changes, lottery wins
+  - [Examples of as-if natural experiments]{.alert}: Eligibility rules, policy changes, roll-out of new technologies
+:::
+
+## True natural experiments
+
+:::{style="font-size: 27px; margin-top: 30px;"}
+- [True natural experiments]{.alert} are rare but great opportunities for causal inference
+- They can be analysed in [the same way as RCTs]{.alert}, with [treatment and control groups]{.alert} and [pre-treatment equivalence]{.alert}
+- The same concerns about [internal validity]{.alert} apply to true natural experiments
+  - [Attrition]{.alert}
+  - [Non-compliance]{.alert} 
+  - [Contamination]{.alert}
+- However, the researcher needs to make [stronger assumptions]{.alert} about the assignment mechanism in true natural experiments 
+- Yet often it is indeed the case that the assignment is random
+:::
+
+## Example 01: Charter schools
+
+:::{style="font-size: 21px; margin-top: 30px; text-align: center;"}
+![](figures/lottery.webp){width=70%}
+:::
+
+## Angrist et al. (2013)
+### Explaining charter school effectiveness
+
+:::{style="font-size: 21px; margin-top: 30px; text-align: center;"}
+![](figures/angrist.png){width=70%}
+
+Source: <https://www.aeaweb.org/articles?id=10.1257/app.5.4.1>
+:::
+
+## Research question and challenge
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Research question]{.alert}: What is the *causal effect* of attending charter schools in Massachusetts on student test scores?
+- [The challenge]{.alert}: Students who choose to attend charter schools are likely to be different from those who don't
+    -  Maybe more motivated families, different prior academic preparation, etc.
+    -  This is [selection bias!]{.alert}
+-  We need a way to isolate the causal effect of charter schools, not just correlation
+:::
+
+:::{.column width="50%"}
+- [The clever idea]{.alert}:  Many charter schools are oversubscribed and use lotteries to decide who gets in
+- [Instrumental Variable (IV) Approach]{.alert}:  Use a lottery win as an instrument to estimate the causal effect of charter attendance.
+-  Lottery win $\rightarrow$ Charter Attendance $\rightarrow$ Test Scores
+-  Lottery win is related to charter attendance, but ideally *only* affects test scores through charter attendance.
+:::
+:::
+:::
+
+## Estimation strategy
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Equation (1)]{.alert}: Outcome equation (What we want to explain)
+
+$Y_{igt} = \alpha_{2t} + \beta_{2g} + \sum_{j} \delta_{j} d_{ij} + X_{i}' \theta + \tau S_{igt} + \epsilon_{igt}$
+
+-  $Y_{igt}$: Test score for student *i*, grade *g*, year *t*
+-  $S_{igt}$: Years spent in charter school (our treatment)
+-  $\tau$:  [Causal effect of charter attendance]{.alert} (what we want to find!)
+-  Lots of control variables (year ($\alpha_{2t}$) and grade ($\beta_{2g}$) fixed effects, dummies for combinations of charter school lotteries ($d_{ij}$), demographic characteristics ($X_i$), etc.) to account for other factors
+:::
+
+:::{.column width="50%"}
+- [Equation (2)]{.alert}: First Stage (How the lottery affects attendance)
+
+$S_{igt} = \alpha_{1t} + \beta_{1g} + \sum_{j} \kappa_{ij} d_{ij} + X_{i}' \mu + \pi Z_{i} + \eta_{igt}$
+
+-  $Z_i$:  Dummy variable = 1 if student *i* won the charter lottery (our instrument)
+-  $\pi$:  Effect of lottery win on charter attendance (should be positive and strong)
+
+- [In Plain English]{.alert}:
+
+1. **First Stage:** Check if winning the lottery actually increases charter school attendance (it should!)
+2. **Second Stage:** Use the *lottery win* (which is random) to predict charter school attendance, and then see how this *predicted* attendance affects test scores
+:::
+:::
+:::
+
+## Results
+
+:::{style="font-size: 24px; margin-top: 30px; text-align: center;"}
+![](figures/angrist-results01.png){width=70%}
+:::
+
+## Results
+
+:::{style="font-size: 24px; margin-top: 30px; text-align: center;"}
+![](figures/angrist-results02.png){width=80%}
+:::
+
+##  "As-If" randomness: The core assumption of natural experiments
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+- The validity of most natural/quasi-experiments hinges on the assumption of ["as-if" randomness]{.alert}
+- We need to argue for the [plausibility that the natural assignment mechanism is exogenous]{.alert}
+    - Independent of other factors that influence the outcome
+- Consider:
+    - Is the "natural" assignment process truly [independent of confounding variables]{.alert}?
+    - Could individuals or groups have [influenced the "assignment"]{.alert} to treatment or control?
+    - Is there evidence of [pre-existing differences]{.alert} between the groups "naturally" assigned to different conditions?
+- Requires careful [justification and scrutiny]{.alert} of the assignment process
+- Not always perfect randomness, but [sufficient approximation for causal inference]{.alert} in many cases
+:::
+
+## Example 02: Ferwerda and Miller (2014)
+### Political Devolution and Resistance to Foreign Rule: A Natural Experiment
+
+:::{style="font-size: 21px; margin-top: 30px; text-align: center;"}
+![](figures/ferwerda.png){width=80%}
+
+Source: [Ferwerda, J., & Miller, M. A. (2014). Political devolution and resistance to foreign rule: A natural experiment. *American Political Science Review*, 108(3), 642–660. doi:10.1017/S0003055414000240](https://doi.org/10.1017/S0003055414000240)
+:::
+
+## Theory and "as-if" randomness
+
+:::{style="font-size: 24px; margin-top: 30px; text-align: center;"}
+:::{.columns}
+:::{.column width="50%"}
+![](figures/ferwerda-theory.png){width=100%}
+:::
+
+:::{.column width="50%"}
+![](figures/ferwerda-randomness.png){width=100%}
+:::
+:::
+:::
+
+## Results
+
+:::{style="font-size: 24px; margin-top: 30px; text-align: center;"}
+![](figures/ferwerda-results.png){width=80%}
+:::
+
+## Criticism of the natural experiment approach
+### Kocher and Monteiro (2016)
+
+:::{style="font-size: 24px; margin-top: 30px; text-align: center;"}
+![](figures/kocher01.png){width=80%}
+
+Source: <https://doi.org/10.1017/S1537592716002863>
+:::
+
+## Kocher and Monteiro (2016)
+
+:::{style="font-size: 24px; margin-top: 30px; text-align: center;"}
+:::{.columns}
+:::{.column width="50%"}
+![](figures/kocher02.png){width=80%}
+:::
+
+:::{.column width="50%"}
+![](figures/kocher03.png){width=80%}
+:::
+:::
+:::
+
+# Quasi-experiments 📊 {background-color="#2d4563"}
+
+## Quasi-experiments: A broader toolkit for approximation
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- Quasi-experiments encompass a [wider range of designs]{.alert} that lack full random assignment by the researcher
+- Often involve some researcher manipulation of the research design, but not direct treatment randomisation
+- Includes natural experiments as a subset, but also encompasses designs where researchers [actively construct comparison groups]{.alert}
+- Key feature: [strategic use of design and statistical techniques]{.alert} to address confounding and selection bias
+- Examples of Quasi-Experimental Designs (we also use them to analyse natural experiments!):
+    - [Regression Discontinuity Design (RDD)]{.alert}
+    - [Difference-in-Differences (DID)]{.alert}
+    - [Instrumental Variables (IV)]{.alert}
+    - [Matching Methods]{.alert}
+:::
+
+## Regression discontinuity design (RDD)
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- RDD exploits sharp or fuzzy discontinuities in treatment assignment based on a [threshold or cutoff score]{.alert}
+- Units are assigned to treatment or control based on whether they fall above or below a specific cutoff point on a [continuous assignment variable (running variable)]{.alert}
+- Compares units [just above the threshold to units just below]{.alert}
+  - For the linear case, $Y = \beta_{0} + \beta_{1}X + \beta_{2}(X > X_{0}) + \epsilon$
+- Logic: Units very close to the cutoff are likely to be [very similar in all other respects]{.alert}, except for treatment status
+- Cutoff creates a [local "as-if" randomisation]{.alert} around the threshold
+- RDD estimates the [treatment effect at the discontinuity point]{.alert}
+- Key Assumption: [Continuity]{.alert}
+    - Potential outcomes are continuous functions of the assignment variable at the cutoff
+    - No other discontinuous changes at the cutoff point besides the treatment
+:::
+
+## RDD: Visualising the discontinuity
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+:::{.columns}
+:::{.column width="60%"}
+:::{style="text-align: center;"}
+![](figures/rdd.gif){width=80%}
+
+Source: [Nick Huntington-Klein](https://www.nickchk.com/causalgraphs.html)
+:::
+:::
+
+:::{.column width="40%"}
+- [X-axis]{.alert}: Assignment/running variable 
+- [Y-axis]{.alert}: Outcome variable
+- [Vertical dashed line]{.alert}: Cutoff threshold
+- Treatment assigned for [D >= Cutoff]{.alert}
+- [Continuity assumption]{.alert}: Smooth relationship between X and Y, except for the treatment effect at the cutoff
+- [Fuzzy RDD]{.alert}: When treatment assignment is not perfectly determined by the cutoff (some non-compliance)
+- [Manipulation]{.alert} of assignment variable can invalidate RDD
+- [Local Average Treatment Effect (LATE)]{.alert}: RDD estimates the effect for those near the cutoff
+- Extrapolation beyond the cutoff is [generally not recommended]{.alert}
+:::
+:::
+:::
+
+## Example 03: Mignozzetti et al. (2024)
+
+:::{style="font-size: 21px; margin-top: 30px; text-align: center;"}
+![](figures/mignozzetti.png){width=70%}
+
+Source: [Mignozzetti, U., et al. (2024). Legislature size and welfare: Evidence from Brazil, American Journal of Political Science](https://doi.org/10.1111/ajps.12843)
+:::
+
+## Mignozzetti et al. (2024)
+
+:::{style="font-size: 21px; margin-top: 30px; text-align: center;"}
+![](figures/mignozzetti-rdd.png){width=100%}
+:::
+
+## Mignozzetti et al. (2024)
+
+:::{style="font-size: 21px; margin-top: 30px; text-align: center;"}
+![](figures/mignozzetti-results.png){width=100%}
+:::
+
+## Difference-in-Differences (DID): Leveraging policy changes
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- Core Idea: Compare changes in outcomes [over time between a treatment group and a control group]{.alert}
+- Exploits naturally occurring events or policy changes that affect one group but not another
+- Relies on comparing the [difference in changes]{.alert} (hence "difference-in-differences")
+    - Change in outcome for treatment group - Change in outcome for control group
+- Aims to isolate the treatment effect from:
+    - [Pre-existing differences]{.alert} between groups (captured by baseline differences)
+    - [Common trends over time]{.alert} (assumed to affect both groups similarly)
+- Key Assumption: [Parallel Trends]{.alert}
+    - In the absence of treatment, the treatment and control groups would have followed similar trends in outcomes
+:::
+
+
+## DID: Visualising the parallel trends
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+:::{.columns}
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/did.gif){width=80%}
+
+Source: [Nick Huntington-Klein](https://www.nickchk.com/causalgraphs.html)
+:::
+:::
+
+:::{.column width="50%"}
+- [Equation]{.alert}: $Y_{it} = \alpha + \beta T_{i} + \gamma D_{t} + \delta (T_{i} \times D_{t}) + \epsilon_{it}$
+    - $Y_{it}$: Outcome for unit *i* at time *t*
+    - $T_{i}$: Treatment indicator (1 if treated, 0 otherwise)
+    - $D_{t}$: Time indicator (1 if post-treatment, 0 otherwise)
+    - $\delta$: DID estimator (difference-in-differences)
+  
+- [Many extensions]{.alert} to the basic DID design:
+    - [Multiple time periods]{.alert}
+    - [Multiple treatment groups]{.alert}
+    - [Difference-in-Difference-in-Differences (DDD)]{.alert}
+    - [Synthetic Control Methods]{.alert}
+:::
+:::
+:::
+
+## Example 04: Card and Krueger (1994)
+
+:::{style="font-size: 21px; margin-top: 30px; text-align: center;"}
+![](figures/card.png){width=70%}
+
+Source: [Card, D., & Krueger, A. B. (1994). Minimum Wages and Employment: A Case Study of the Fast-Food Industry in New Jersey and Pennsylvania. The American Economic Review, 84(4), 772-793.](https://www.mattblackwell.org/files/teaching/CarKru94.pdf)
+:::
+
+## Card and Krueger (1994)
+
+:::{style="font-size: 21px; margin-top: 30px; text-align: center;"}
+![](figures/card-results.png){width=80%}
+:::
+
+# Threats to validity and mitigation strategies {background-color="#2d4563"}
+
+##  Major threats to validity in quasi-experiments
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- [Confounding (selection bias):]{.alert}
+    - Pre-existing differences between treatment and control groups that are related to both treatment and outcome
+    - Can bias estimates in any quasi-experimental design
+- [Violation of key assumptions:]{.alert}
+    - Parallel trends assumption in DID may not hold
+    - Continuity assumption in RDD may be violated
+    - Instrument validity assumptions (relevance and exclusion) in IV may be questionable
+    - Selection on observables assumption in Matching may be false
+- [Measurement error:]{.alert} Can attenuate or bias estimates in any design
+- [Spillover effects/interference:]{.alert} Treatment effects in one group can affect outcomes in the control group, violating stable unit treatment value assumption (SUTVA)
+- [Attrition and missing data:]{.alert} Differential attrition between treatment and control groups can introduce bias
+:::
+
+## Strategies for strengthening validity
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- [Careful design choice:]{.alert} Select the most appropriate quasi-experimental design given the research question and context
+- [Robustness checks and sensitivity analyses:]{.alert}
+    - Test the sensitivity of findings to violations of key assumptions
+    - Conduct placebo tests, falsification tests, and alternative specifications
+- [Control variables:]{.alert} Include relevant covariates to control for observable confounding
+- [Assumption checks and justification:]{.alert}
+    - Clearly state and justify the assumptions of the chosen design
+    - Provide evidence to support the plausibility of assumptions (e.g., pre-treatment trends for DID, density tests for RDD, instrument relevance tests for IV)
+- [Triangulation:]{.alert} Use multiple methods and data sources to corroborate findings
+- [Transparency:]{.alert} Be transparent about design limitations and assumptions in reporting results
+:::
+
+## Ethics beyond randomisation
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- While quasi-experiments often arise from ethical constraints on randomisation, ethical considerations remain important
+- Be transparent about the [limitations of the design and assumptions]{.alert} being made
+- Quasi-experimental findings may be [more easily misinterpreted]{.alert} than RCT results - emphasize responsible communication
+- Consequences: Consider potential [unintended consequences]{.alert} of studying natural events or policy changes, especially if findings inform future interventions
+- Maintain ethical standards in data collection, storage, and analysis, especially when using sensitive data
+- Even in observational settings, consider ethical guidelines for data collection and participant interaction
+- Ethical review boards may still be involved in quasi-experimental research, especially if it involves human subjects data
+:::
+
+# Conclusion 🌟 {background-color="#2d4563"}
+
+## Key takeaways
+
+:::{style="font-size: 22px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Natural and quasi-experiments]{.alert} are valuable tools for causal inference when RCTs are not feasible
+- [Natural experiments]{.alert} use natural assignment mechanisms to mimic randomisation
+- [Quasi-experiments]{.alert} encompass a broader range of designs that lack full random assignment
+- [RDD, DID, IV, and Matching]{.alert} are common quasi-experimental designs
+- [Validity threats]{.alert} in quasi-experiments include confounding, assumption violations, measurement error, and attrition
+- [Strategies for strengthening validity]{.alert} include careful design choice, robustness checks, control variables, assumption checks, triangulation, and transparency
+- [Ethical considerations]{.alert} remain important in quasi-experimental research
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/natural.jpg){width=50%}
+
+Source: <https://doi.org/10.1017/CBO9781139084444>
+:::
+:::
+:::
+:::
+
+# Thanks very much! 😊 {background-color="#2d4563"}
+
+# See you next time! 👋 {background-color="#2d4563"}

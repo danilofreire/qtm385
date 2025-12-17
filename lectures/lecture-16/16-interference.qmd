@@ -1,0 +1,676 @@
+---
+title: DATASCI 385 - Experimental Methods
+subtitle: Lecture 16 - Interference 
+author:
+  - name: Danilo Freire
+    email: danilo.freire@emory.edu
+    affiliations: Department of Data and Decision Sciences <br> Emory University
+format:
+  clean-revealjs:
+    self-contained: true
+    code-overflow: wrap
+    footer: "[Interference](https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-16/16-interference.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: knitr
+revealjs-plugins:
+  - multimodal
+editor:
+  render-on-save: true
+---
+
+# Hello! How are you doing? 😊 {background-color="#2d4563"}
+
+# Brief recap 📚 {background-color="#2d4563"}
+
+## Brief recap 📚
+
+:::{style="margin-top: 20px; font-size: 22px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Natural experiments framework
+  - [True vs "as-if" randomness]{.alert} in treatment assignment
+  - Core assumption: [exogeneity of assignment mechanism]{.alert}
+  - Examples: Lottery-based charter school studies, border discontinuity designs
+
+- Quasi-experimental approaches
+  - [Regression discontinuity (RDD)]{.alert}: Leveraging threshold-based assignment
+  - [Difference-in-differences (DID)]{.alert}: Utilising parallel trends assumption
+
+- Methodological challenges
+  - [Selection bias]{.alert} in observational data
+  - [SUTVA violations]{.alert} from treatment spillovers
+  - [Power limitations]{.alert} in natural variation contexts
+:::
+
+::: {.column width="50%"}
+- Empirical examples
+  - Angrist et al. (2013): School lottery IV analysis
+  - Card & Krueger (1994): Minimum wage DID study
+  - Mignozzetti et al. (2024): RDD in legislative analysis
+
+- Validation strategies
+  - [Placebo tests]{.alert} for assumption verification
+  - [Pre-treatment trend analysis]{.alert} for DID
+  - [Robustness checks]{.alert} for sensitivity assessments
+
+- Ethical considerations
+  - [Responsible communication]{.alert} of limitations
+  - [Secondary data ethics]{.alert} compliance
+  - [Policy impact assessments]{.alert} for natural experiments
+:::
+:::
+:::
+
+# Today's plan 📅 {background-color="#2d4563"}
+
+## Interference and spillovers
+
+:::{style="font-size: 26px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [SUTVA violations]{.alert} happen quite often
+- So it is better to [model interference explicitly]{.alert}
+- We will see how to deal with spillovers using [multi-level designs]{.alert}, [spatial spillovers]{.alert}, [within-subject designs]{.alert}, [repeated-measures experiments]{.alert}, and [waitlist designs]{.alert}
+- We will also discuss the [assumptions]{.alert} behind these designs and how to [estimate treatment effects]{.alert} in these cases
+- Let's get started! 😎
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/hotspots.jpg){width=100%}
+
+Source: <https://www.caliper.com/Maptitude/Crime/default.htm>
+:::
+:::
+:::
+:::
+
+# Interference {background-color="#2d4563"}
+
+## Interference 
+### When treatment effects spill over
+
+:::{style="margin-top: 20px; font-size: 24px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Remember [SUTVA]{.alert}?
+  - [Stable Unit Treatment Value Assumption]{.alert}
+- The [stable]{.alert} part means that [potential outcomes for any unit are unaffected by the treatment status of other units]{.alert}
+- As you can imagine, this [poses risks to causal identification]{.alert}
+- This happens quite often in [social and public health interventions]{.alert}:
+  - [Peer effects]{.alert} in education
+  - [Contagion]{.alert} in public health
+  - [Spillovers]{.alert} in policy evaluations
+  - [Network effects]{.alert} in marketing and technology
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/dag.png){width=100%}
+
+Source: [Aronow et al. (2021)](https://arxiv.org/pdf/2001.05444)
+:::
+:::
+:::
+:::
+
+## A motivating example
+
+:::{style="margin-top: 20px; font-size: 26px;"}
+- Imagine you are trying to improve school grades
+- You think that [awarding a prize to students]{.alert} will help motivate them
+- You randomly assign students to treatment and control groups
+- You find a [positive effect]{.alert} of the programme on test scores
+- But you also find that [depending on who gets the treatment]{.alert}, the [effect varies]{.alert}
+
+:::{style="margin-top: 50px; text-align: center;"}
+
+| Student | Grades if Alice wins prize | Grades if Bob wins prize | Grades if Charlie wins prize | Grades if no prize awarded |
+|---|---|---|---|---|
+| Alice | 10 | 5 | 7 | 7 |
+| Bob | 5 | 5 | 5 | 5 |
+| Charlie | 9 | 5 | 9 | 9 |
+:::
+:::
+
+## Example
+
+:::{style="margin-top: 20px; font-size: 21px;"}
+- You find that the results [vary depending on who wins the prize]{.alert}
+- Let's calculate the ATEs in this case?
+
+:::{style="margin-top: 50px; text-align: center;"}
+
+| Student | Grades if Alice wins prize | Grades if Bob wins prize | Grades if Charlie wins prize | Grades if no prize awarded |
+|---|---|---|---|---|
+| Alice | 10 | 5 | 7 | 7 |
+| Bob | 5 | 5 | 5 | 5 |
+| Charlie | 9 | 5 | 9 | 9 |
+:::
+
+:::{style="margin-top: 20px;"}
+:::
+
+- If we simply calculate the ATE using the last column as $Y_{i}(0)$ and the column corresponding to $i$'s award as $Y_{i}(1)$, we have: $\frac{((10 - 7) + (5 - 5) + (9 - 9))}{3} = 1$
+- [However...]{.alert} if we randomise the treatment, we have these results:
+- If Alice wins the prize, the ATE is $10 - \frac{5+9}{2} = 3$
+- If Bob wins the prize, the ATE is $5 - \frac{5+5}{2} = 0$
+- If Charlie wins the prize, the ATE is $9 - \frac{7+5}{2} = 3$
+- The average of these three is $2$, which is [different from the first calculation]{.alert}
+:::
+
+## Not all spillovers are bad!
+
+:::{style="margin-top: 20px; font-size: 23px;"}
+:::{.columns}
+:::{.column width="50%"}
+- As we have seen, many social phenomena are [interdependent]{.alert}
+- But some are explicitly [designed to leverage spillovers]{.alert}
+  - [Contamination]{.alert}: The effect of being vaccinated on one’s probability of contracting a disease depends on whether others are vaccinated
+  - [Network effects]{.alert}: The value of a product or service increases as more people use it (social media, telecommunication)
+  - [Hot-spots policing]{.alert}: The effect of increased police presence in one area can reduce crime in nearby areas
+  - [Deterrence]{.alert}: The effect of a harsher punishment on one individual can deter others from committing crimes
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/collazos.png){width=90%}
+
+Source: [Collazos et al. (2021)](https://link.springer.com/article/10.1007/s11292-019-09390-1)
+:::
+:::
+:::
+:::
+
+# How to deal with interference? (good and bad!) {background-color="#2d4563"}
+
+## How to deal with interference?
+
+:::{style="margin-top: 20px; font-size: 26px;"}
+- Interference can be a nuisance, but also an [opportunity]{.alert}
+- So it is a good idea to [model it explicitly]{.alert} in our analysis
+- In this case, we wouldn't need to assume "no spillovers", but rather ["not modelled spillovers"]{.alert}
+- [Good design]{.alert} can help us leverage spillovers to our advantage
+- There are several methods to do this:
+  - [Clustered randomisation]{.alert} (this one you already know!)
+  - [Multi-level designs]{.alert} (e.g., schools within districts)
+  - [Within-subject designs]{.alert} (e.g., repeated measures)
+  - [Waitlist designs]{.alert} (e.g., staggered rollouts)
+- Let's see them in more detail 😎
+:::
+
+## Multi-level designs
+
+:::{style="margin-top: 50px; font-size: 29px;"}
+- Multi-level designs are [nested]{.alert} experiments
+- This means that we have [multiple levels of randomisation]{.alert}
+- For example, in a [school-based intervention]{.alert}:
+  - Schools are randomised to treatment or control
+  - Within schools, students are also randomised
+- Political interventions can also be nested:
+  - We randomise the treatment at the district level
+  - Then we randomise the treatment again at the voter level
+- But we need to [expand our potential outcomes notation]{.alert} to account for this...
+:::
+
+## An example
+### Get-out-to-vote campaign
+
+:::{style="margin-top: 20px; font-size: 23px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Imagine we are running an experiment to test the effect of a get-out-to-vote campaign on voter turnout
+- We have a [multi-level design]{.alert}:
+  - [Households]{.alert} are randomised to treatment or control
+  - Within households, [individuals]{.alert} are also randomised
+- Focus on [two-voter households]{.alert} where residents share addresses
+- Random assignment groups:
+  - [5,000 households: both voters targeted]{.alert}
+  - [5,000 households: neither targeted]{.alert}
+  - [10,000 households: one randomly targeted]{.alert}
+:::
+
+:::{.column width="50%"}
+- Creates four 10,000-person groups:
+  - [Mail received by both]{.alert}
+  - [Neither receives mail]{.alert}
+  - [Mail with untreated housemate]{.alert}
+  - [Untreated with treated housemate]{.alert}
+- So we have:
+  - [Two-stage randomisation]{.alert} (household then individual)
+  - Expandable to [additional levels like postcode]{.alert}
+:::
+:::
+:::
+
+## An example
+### Get-out-to-vote campaign
+
+:::{style="margin-top: 20px; font-size: 26px; text-align: center"}
+```{mermaid}
+graph TD
+    A["Household<br/>Randomisation"] --> B["Both voters<br/>treated"]
+    A --> C["Neither voter<br/>treated"]
+    A --> D["One voter<br/>treated"]
+    
+    B --> E["Y₁₁:<br/>Combined effects"]
+    C --> F["Y₀₀:<br/>Baseline"]
+    D --> G["Y₁₀:<br/>Spillover to untreated"]
+    D --> H["Y₀₁:<br/>Direct effect"]
+    
+    style A fill:#e1f5fe,stroke:#01579b,stroke-width:2px,width:170px,height:80px,font-size:18px
+    style B fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,width:200px,height:80px,font-size:18px
+    style C fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,width:200px,height:80px,font-size:18px
+    style D fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,width:160px,height:80px,font-size:18px
+    style E fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px,width:250px,height:80px,font-size:18px
+    style F fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px,width:180px,height:80px,font-size:18px
+    style G fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px,width:250px,height:80px,font-size:18px
+    style H fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px,width:200px,height:80px,font-size:18px
+```
+:::
+
+## An example
+### Get-out-to-vote campaign
+
+:::{style="margin-top: 20px; font-size: 26px;"}
+- [Potential outcomes depend on both own and housemate's treatment status]{.alert}
+- Revised notation system accounts for [dual treatment influences]{.alert} ($Y_{ab}$) where:
+  - `a` = [housemate's treatment status (0=control, 1=treated)]{.alert}
+  - `b` = [own treatment status (0=control, 1=treated)]{.alert}
+
+| Notation | Housemate | Self | Interpretation |
+|----------|-----------|-----|----------------|
+| $Y_{00}$ | Control   | Control | [Baseline outcome]{.alert} |
+| $Y_{01}$ | Control   | Treated | [Direct treatment effect]{.alert} |
+| $Y_{10}$ | Treated   | Control | [Spillover effect]{.alert} |
+| $Y_{11}$ | Treated   | Treated | [Combined effects]{.alert} |
+
+- Key assumption: [Strict household containment]{.alert}
+  - Outcomes only affected by [within-household interventions]{.alert}
+  - No interference from [external treatment assignments]{.alert}
+:::
+
+## Defining causal effects
+
+:::{style="margin-top: 20px; font-size: 26px;"}
+- From the [four potential outcomes]{.alert}, some interesting estimands emerge:
+  - $Y_{01} - Y_{00}$: [Direct effect]{.alert} of treatment when housemate is untreated
+  - $Y_{11} - Y_{10}$: [Treatment effect]{.alert} when housemate receives mail
+  - $Y_{10} - Y_{00}$: [Spillover effect]{.alert} on untreated with treated housemate
+  - $Y_{11} - Y_{01}$: [Spillover interaction]{.alert} among treated pairs
+
+- Critical considerations:
+  - Effects depend on [housemate's treatment status]{.alert}
+  - Estimands capture [combined influences]{.alert} of:
+    - Direct intervention impacts
+    - Communication spillovers
+    - Shared resource effects
+  - Does _not_ isolate specific [mechanisms]{.alert} behind spillovers
+:::
+
+## Implementation challenges
+### Practical considerations
+
+::: {style="margin-top: 20px; font-size: 24px;"}
+::: {.columns}
+::: {.column width="50%"}
+- Common implementation hurdles:
+  - [Treatment contamination]{.alert} between groups
+  - [Differential attrition]{.alert} across conditions
+  - [Compliance monitoring]{.alert} complexities
+  - [Resource allocation]{.alert} for multi-level tracking
+
+- Ethical considerations:
+  - [Informed consent]{.alert} for network members
+  - [Privacy protections]{.alert} for household data
+  - [Equity implications]{.alert} of spillover effects
+:::
+
+::: {.column width="50%"}
+- Design limitations to address:
+  - [Sample size requirements]{.alert} for cluster effects
+  - [Measurement challenges]{.alert} for indirect impacts
+  - [Temporal aspects]{.alert} of spillover timing
+  - [Correct estimation of standard errors]{.alert}, as subjects are probably correlated in many ways
+
+```{=html}
+<div class="alert">
+<strong>Note:</strong> Pre-registration is crucial for complex designs
+</div>
+```
+:::
+:::
+:::
+
+# Spatial spillovers {background-color="#2d4563"}
+
+## Spatial spillovers
+
+:::{style="margin-top: 20px; font-size: 26px;"}
+- So far, we have [weakened the SUTVA assumption]{.alert} by considering interference in a small setting (households)
+- Sometimes, spillovers are not confined to specific units, but [spread across space]{.alert}
+- This is particularly common in [urban settings]{.alert}:
+  - [Crime]{.alert} in adjacent neighbourhoods
+  - [Pollution]{.alert} in nearby areas
+  - [Economic development]{.alert} in neighbouring regions
+  - [Health outcomes]{.alert} in surrounding communities
+- While it seems tempting to just include a measure of proximity in our models, it is not that simple...
+  - Not easy to be very precise about spillover effects
+  - Not valid when spillovers are not spatially confined (e.g., pollution)
+  - Physical proximity does not always make sense (e.g., social networks, phones)
+:::
+
+## Motivating example
+
+:::{style="margin-top: 20px; font-size: 23px;"}
+- Imagine you want to improve healthcare in five villages
+- Assume also that the proper distance between villages is known, so this is not a spatial problem
+- Subjects reside in villages A, B, C, D and F, and E is unoccupied
+- [Only one village will receive the treatment]{.alert}, which is a new healthcare facility
+- There are [three types of potential outcomes:]{.alert}
+  - $Y_{01}$: Healthcare level of village X if it receives the treatment
+  - $Y_{10}$: Healthcare level of village X if the adjacent village receives the treatment
+  - $Y_{00}$: Healthcare level of village X if village X or its neighbours do not receive the treatment
+
+:::{style="margin-top: 20px; text-align: center;"}
+![](figures/villages.png){width=90%}
+:::
+:::
+
+## Potential outcomes
+
+:::{style="margin-top: 20px; font-size: 24px;"}
+:::{style="text-align: center;"}
+| Village | Untreated ($Y_{00}$) | Adjacent village treated ($Y_{10}$) | Treated ($Y_{01}$) |
+|---|---|---|---|
+| A | 0 | 2 | 0 |
+| B | 6 | 2 | 10 |
+| C | 0 | 4 | 4 |
+| D | 6 | 6 | 6 |
+| F | 6 | NA | 3 |
+:::
+
+- Notice that [some villages can never have some outcomes]{.alert}
+- [Village E is unoccupied]{.alert}, so it is not included in the analysis
+- NA indicates that [Village F can never be adjacent to a treated village]{.alert}
+- In this case, location F can never manifest a $Y_{10}$ outcome 
+- As this potential outcome can never be observed, we exclude F from the definition of the average treatment effect $E[Y_{10} - Y_{00}]$
+:::
+
+## Potential outcomes
+
+:::{style="margin-top: 20px; font-size: 26px;"}
+- Second, the [probability of assignment to each treatment condition varies from one observation to the next]{.alert}
+- For instance, village A has a 0.20 probability of being exposed to spillovers from B, whereas village B has a 0.40 probability because of A and C
+- As we have seen previously, when the treatment assignment probabilities vary across units, we should [weight observations by inverse probability of assigned experimental condition]{.alert}, excluding subjects with zero probability (e.g., F)
+
+
+:::{style="margin-top: 20px; text-align: center;"}
+| Village | A | B  | C | D | F | Pr(assignment to control) | Pr(assignment to spillover) | Pr(assignment to treatment) |
+|---|---|---|---|---|---|---|---|---|
+| 1 | $Y_{01}$ | $Y_{10}$ | $Y_{00}$ | $Y_{00}$ | $Y_{00}$ | 0.6 | 0.2 | 0.2 |
+| 2 | $Y_{10}$ | $Y_{01}$ | $Y_{10}$ | $Y_{00}$ | $Y_{00}$ | 0.4 | 0.4 | 0.2 |
+| 3 | $Y_{00}$ | $Y_{10}$ | $Y_{01}$ | $Y_{10}$ | $Y_{00}$ | 0.4 | 0.4 | 0.2 |
+| 4 | $Y_{00}$ | $Y_{00}$ | $Y_{10}$ | $Y_{01}$ | $Y_{00}$ | 0.6 | 0.2 | 0.2 |
+| 5 | $Y_{00}$ | $Y_{00}$ | $Y_{00}$ | $Y_{00}$ | $Y_{01}$ | 0.8 | 0   | 0.2 |
+:::
+:::
+
+## Calculating $Y_{01} - Y_{00}$ and $Y_{10} - Y_{00}$
+### Average and spillover effects
+
+:::{style="margin-top: 20px; font-size: 21px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Now we can calculate the average treatment effect in the presence of spillovers
+- We need to [weight the observations]{.alert} by the inverse probability of assignment to the treatment condition
+- Imagine that [Village D is treated]{.alert}
+- Villages A, B and F have $Y_{00}$ as the potential outcome, as they are not directly affected by spillovers
+- Village C, in contrast, is not included in the calculation because it does not have a $Y_{00}$ potential outcome (untreated), but expresses a $Y_{10}$ potential outcome instead (spillover effect)
+- The weighted difference-in-means estimator of $E[Y_{01} - Y_{00}]$ adjusts for the fact that the probabilities of being untreated are 0.60, 0.40, and 0.80 for Villages 1, 2, and 5, respectively
+:::
+
+:::{.column width="50%"}
+- So the effect is:
+
+$$
+\hat{E}[Y_{01} - Y_{00}] = \frac{\frac{6}{0.2}}{\frac{1}{0.2}} - \frac{\frac{0}{0.6} + \frac{6}{0.4} + \frac{6}{0.8}}{\frac{1}{0.6} + \frac{1}{0.4} + \frac{1}{0.8}} = 1.85.
+$$
+
+- If we wanted to [estimate the spillover effect]{.alert}, we would calculate $E[Y_{10} - Y_{00}]$ instead
+- Village D is treated, so we would exclude it from the calculation
+- Village F is also excluded as it cannot be adjacent to a treated village
+
+$$
+\hat{E}[Y_{10} - Y_{00}] = \frac{\frac{4}{0.4}}{\frac{1}{0.4}} - \frac{\frac{0}{0.6} + \frac{6}{0.4}}{\frac{1}{0.6} + \frac{1}{0.4}} = 0.40.
+$$
+:::
+:::
+:::
+
+# Within-subject designs and repeated-measures experiments {background-color="#2d4563"}
+
+## Within-subject designs
+
+:::{style="margin-top: 20px; font-size: 22px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Within-subject designs]{.alert} are a type of study that [repeatedly measures the same subjects]{.alert} over time and [randomisation occurs at a certain point in time]{.alert}
+- The good thing about this design is that it [controls for individual differences]{.alert} that could confound the results
+- This type of experiment is rather uncommon in the social sciences, but it is [quite common in psychology]{.alert}
+- Instead, social scientists usually rely on [interrupted time-series designs]{.alert} to study the effects of interventions
+- This is similar to a [regression discontinuity in time]{.alert}
+- Let's see how they work... (and why they are a bit problematic)
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/its.png){width=90%}
+
+Source: <https://ds4ps.org/pe4ps-textbook/docs/p-020-time-series.html>
+:::
+
+- The problem with this design is that it is [hard to establish causality]{.alert}
+- [Confounding factors]{.alert} can affect the results, as something may [change at the same time as the intervention]{.alert}
+:::
+:::
+:::
+
+## Within-subject designs
+### Assumptions
+
+:::{style="margin-top: 20px; font-size: 26px;"}
+- The key assumption in within-subject designs is that [the intervention is the only thing that changes]{.alert}
+- Therefore, we need to make [two additional assumptions]{.alert}:
+  - [No-anticipation]{.alert}: Subjects do not know when the intervention will occur, so they cannot change their behaviour in anticipation
+  - For example, if we are studying the effect of a new policy on crime rates, we need to make sure that criminals do not know when the policy will be implemented
+  - [No persistence]{.alert}: Potential outcomes in one period are unaffected by treatments administered in prior periods
+  - This is a bit tricky, as we are assuming that the effect of the treatment [disappears after a certain period]{.alert}
+  - Experimenters often include ["washout periods" between experimental sessions]{.alert} so as to allow the previous
+period's effects to dissipate
+:::
+
+## Variations of repeated-measures experiments
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- [Clifford et al. (2021)](https://doi.org/10.1017/S0003055421000241) evaluate how different "pre-post" designs can improve experimental estimates, mainly by reducing standard errors
+- Regular experiments ("post only") have relatively low precision because [the outcome is measured just once]{.alert}
+- This is particularly problematic when the outcome is [noisy]{.alert} or if the experiment involves [multiple treatment arms, moderators, or small treatment effects]{.alert}
+- Pre-post designs measure the outcome prior to the experimental manipulation at point $t_0$ and after the manipulation at point $t_1$ (as we've just seen)
+-  The pre-post design [can also be a between-subjects design]{.alert} if [some respondents are never exposed to the treatment]{.alert}; respondents difference scores are compared between groups
+:::
+
+## Variations of time-series experiments
+
+:::{style="margin-top: 20px; font-size: 22px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Some scholars worry that measuring the outcome prior to the experiment could [alter estimated treatment effects]{.alert}
+- This is true in some cases: [the no-persistence assumption is likely violated]{.alert} when the treatment gives information or training, for example
+- The [quasi-pre-post design]{.alert} is a variation of the pre-post design that tries to avoids this problem by providing a [similar, but not identical, treatment]{.alert} in the pretest phase
+  - For instance, a training session on a related but different topic
+- The authors decided to test these designs in a [replication of six studies]{.alert} to see how they perform in practice
+- If different designs yield largely the same results, researchers can be more confident in the external validity of these findings and choose designs based [on other features, like precision]{.alert}
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/pre-post.png){width=100%}
+
+Source: [Clifford et al. (2021)](https://doi.org/10.1017/S0003055421000241)
+:::
+:::
+:::
+:::
+
+## Variations of time-series experiments
+### Replication of six studies
+
+:::{style="margin-top: 20px; font-size: 26px; text-align: center;"}
+![](figures/clifford01.png){width=60%}
+:::
+
+## Variations of time-series experiments
+### Standard errors
+
+:::{style="margin-top: 20px; font-size: 26px; text-align: center;"}
+![](figures/clifford02.png){width=60%}
+:::
+
+# Waitlist designs {background-color="#2d4563"}
+
+## Waitlist designs
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+- The final type of design we will discuss today is the [waitlist design]{.alert}, also known as the [stepped-wedge design]{.alert}
+- Their scientific value comes from their [ability to track treatment effects among several subjects as they play out over time]{.alert}
+- Waitlists play a diplomatic role because they [overcome the problem of withholding treatment from a control group]{.alert} (remember our ethics discussion?)
+- In this design, every subject is treated eventually; [random assignment determines when they receive treatment]{.alert}
+- It is a [hybrid between a within-subject and a between-subject design]{.alert}, and it is [widely used in public health interventions]{.alert} (e.g., vaccine rollouts)
+:::
+
+## Waitlist designs
+
+:::{style="margin-top: 20px; font-size: 23px; text-align: center;"}
+![](figures/sw.png){width=80%}
+
+Source: [Hemming et al. (2014)](https://doi.org/10.1136/bmj.h391)
+:::
+
+## Example: TV advertising and candidate support
+
+:::{style="margin-top: 20px; font-size: 23px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Imagine you are a political consultant and you want to test the [effect of TV advertising on candidate support]{.alert}
+- Ads are aired during [three weeks]{.alert}, and outcomes (support for the gubernatorial candidate as gauged by opinion polls) are [assessed at the end of each week]{.alert}
+- Eight media markets are randomly assigned to [one of four conditions]{.alert}:
+  - [Two media markets]{.alert} are randomly assigned to air ads for three weeks starting in [week 1]{.alert}
+  - [Two markets]{.alert} air ads for two weeks starting in [week 2]{.alert}
+  - [Two markets]{.alert} air ads for one week starting in [week 3]{.alert}
+  - And [two markets air no ads at all]{.alert}
+:::
+
+:::{.column width="50%"}
+- There are just [three relevant potential outcomes]{.alert}: 
+  - $Y_{00}$: untreated during preceding and current periods
+  - $Y_{01}$: untreated during the preceding period but treated during the current period
+  - $Y_{11}$: treated in both the preceding and current periods
+  - Given the design, we never observe the potential outcome $Y_{10}$ because media markets never cease to run ads once they start
+:::
+:::
+:::
+
+## Advertising waitlist experiment’s random assignments and observed outcomes
+
+:::{style="margin-top: 20px; font-size: 26px; text-align: center;"}
+:::{.columns}
+:::{.column width="33%"}
+**Assigned treatment**
+
+| Market | Week 1 | Week 2 | Week 3 |
+|---|---|---|---|
+| 1 | 01 | 11 | 11 |
+| 2 | 00 | 00 | 01 |
+| 3 | 00 | 01 | 11 |
+| 4 | 00 | 00 | 01 |
+| 5 | 00 | 00 | 00 |
+| 6 | 01 | 11 | 11 |
+| 7 | 00 | 00 | 00 |
+| 8 | 00 | 01 | 11 |
+:::
+
+:::{.column width="34%"}
+**Observed outcomes**
+
+| Market | Week 1 | Week 2 | Week 3 |
+|---|---|---|---|
+| 1 | 7 | 9 | 4 |
+| 2 | 7 | 5 | 7 |
+| 3 | 1 | 2 | 10 |
+| 4 | 4 | 3 | 10 |
+| 5 | 3 | 3 | 3 |
+| 6 | 10 | 8 | 10 |
+| 7 | 2 | 3 | 4 |
+| 8 | 3 | 1 | 3 |
+:::
+
+:::{.column width="33%"}
+**Probabilities of assignment to treatment condition**
+
+| Treatment Condition | Week 1 | Week 2 | Week 3 |
+|---|---|---|---|
+| Pr(00) | 0.75 | 0.50 | 0.25 |
+| Pr(01) | 0.25 | 0.25 | 0.25 |
+| Pr(11) | 0 | 0.25 | 0.50 |
+:::
+:::
+:::
+
+## Estimating the immediate effect of TV advertising
+
+:::{style="margin-top: 20px; font-size: 26px;"}
+- The immediate treatment effect is $Y_{01} - Y_{00}$, that is, the effect of being treated in the current period but not in the preceding period
+- We just need to take the numbers from the tables and apply inverse probability weighting again
+
+$$
+\begin{aligned}
+\widehat{E}[Y_{01} - Y_{00}] &= \frac{\frac{7 + 10}{0.25} + \frac{2 + 1}{0.25} + \frac{7 + 10}{0.25}}{\frac{2}{0.25} + \frac{2}{0.25} + \frac{2}{0.25}} \\
+&- \frac{\frac{7 + 1 + 4 + 3 + 2 + 3}{0.75} + \frac{5 + 3 + 3 + 3}{0.50} + \frac{3 + 4}{0.25}}{\frac{6}{0.75} + \frac{4}{0.50} + \frac{2}{0.25}} = 2.72.
+\end{aligned}
+$$
+:::
+
+## Estimating the cumulative effect of TV advertising
+
+:::{style="margin-top: 20px; font-size: 26px;"}
+- Finally, we will estimate the cumulative effect of TV advertising, which is $Y_{11} - Y_{00}$, that is, the effect of being treated in both the preceding and current periods
+- We do the same thing again, but now we consider the $Y_{11}$ potential outcomes
+- However, we must restrict our attention to the second and third weeks, because this type of treatment cannot occur
+in the first week
+
+$$
+\begin{aligned}
+\widehat{E}[Y_{11} - Y_{00}] &= \frac{\frac{9 + 8}{0.25} + \frac{4 + 10 + 10 + 3}{0.50}}{\frac{2}{0.25} + \frac{4}{0.50}} \\
+&- \frac{\frac{5 + 3 + 3 + 3}{0.50} + \frac{3 + 4}{0.25}}{\frac{4}{0.50} + \frac{2}{0.25}} = 4.13.
+\end{aligned}
+$$
+:::
+
+## Conclusion
+
+:::{style="margin-top: 20px; font-size: 28px;"}
+- [Spillovers]{.alert} are a common problem in social science research
+- They can be [positive or negative]{.alert}, and they can be [modelled explicitly]{.alert} in our analysis
+- There are several methods to deal with spillovers, such as [multi-level designs]{.alert}, [within-subject designs]{.alert}, [repeated-measures experiments]{.alert}, and [waitlist designs]{.alert}
+- Each design has its [advantages and disadvantages]{.alert}, and the choice of design should be based on the [research question]{.alert} and the [context]{.alert}
+- You can use [DeclareDesign](https://declaredesign.org/r/designlibrary/) to simulate spillover designs and pretest–posttest designs
+- The statistical analysis of waitlist designs is a little tricky, but you can use the [swCRTdesign](https://cran.r-project.org/web/packages/swCRTdesign/index.html) package in R to help you with that
+
+:::
+
+# And that's all for today! 🎉 {background-color="#2d4563"}
+
+# See you next time! 😉 {background-color="#2d4563"}

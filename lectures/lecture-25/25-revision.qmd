@@ -1,0 +1,679 @@
+---
+title: DATASCI 385 - Experimental Methods
+subtitle: Lecture 25 - Course Revision
+author:
+  - name: Danilo Freire
+    orcid: 0000-0002-4712-6810
+    email: danilo.freire@emory.edu
+    affiliations: Department of Data and Decision Sciences <br> Emory University
+format:
+  clean-revealjs:
+    self-contained: true
+    code-overflow: wrap
+    footer: "[Course Revision](https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-25/25-revision.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: knitr 
+editor:
+  render-on-save: true
+---
+
+# Welcome back! 🤓 <br> Course revision session 📚 {background-color="#2d4563"}
+
+## Course evaluation
+
+:::{style="margin-top: 30px; font-size: 34px;"}
+- Please take a moment to complete the course evaluation form!
+- Your feedback is important for improving the course in the future
+- If there's anything you liked about the course, please share it too!
+- Please go to Canvas and select Account → Profile → Course Evaluations
+- Thank you for your time and input! 🙏
+:::
+
+## Data Science Club workshop
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+:::{.columns}
+:::{.column width="50%"}
+- The Emory Data Science Club is hosting a GitHub portfolio workshop tomorrow!
+- The speaker is... *drumroll*... me! 🥁
+- If you're interested in using GitHub to better showcase your projects, come join us!
+- When: Tomorrow (Tuesday) at 6 PM
+- Where: Math and Science Center in room W301
+- Presentation slides: <https://github.com/danilofreire/dsc-2025/>
+- All are welcome! 🎉
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/workshop.png){width=80%}
+:::
+:::
+:::
+:::
+
+## Connecting the dots
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+:::{.columns}
+:::{.column width="50%"}
+- We have covered [a lot of ground in experimental methods]{.alert} this semester! 🥳
+- Today, we will review [some key concepts and methods]{.alert} from the course
+- The aim is to see how different topics link together
+- And feel free to ask me questions about the group project, or anything else! 😉
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/meme02.jpg){width="70%"}
+![](figures/meme03.png){width="50%"}
+:::
+:::
+:::
+:::
+
+# Foundations 🏗️ {background-color="#2d4563"}
+
+## The research design process (Lec 02)
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width="60%"}
+- Good research questions produce [knowledge people care about]{.alert}, solving problems or helping policy
+- Research questions should be [clear, specific, and answerable]{.alert}
+- [No experiment is theory-free]{.alert}, even if not explicitly stated
+- [Operationalisation]{.alert} involves translating abstract concepts (e.g., social isolation) into measurable variables (e.g., frequency of social interactions)
+  - [Construct validity]{.alert} ensures the measure accurately reflects the concept
+- Credible designs yield practical answers, are transparent via pre-registration ([PAPs]{.alert}), and are replicable
+:::
+
+:::{.column width="40%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/keynes01.jpg){width="100%"}
+![](figures/keynes02.jpg){width="100%"}
+
+Recommended reading: [Esther Duflo - The Economist as Plumber (2017)](https://www.nber.org/papers/w23213)
+:::
+:::
+:::
+:::
+
+## The MIDA framework (Lec 02 cont)
+
+:::{style="font-size: 24px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="55%"}
+- The [MIDA framework]{.alert} provides a structure for declaring and diagnosing any research design:
+    - [M]{.alert}odel: Assumptions about how the world works (potential outcomes, relationships)
+    - [I]{.alert}nquiry: The specific question (estimand) we want to answer (e.g., ATE)
+    - [D]{.alert}ata Strategy: How data are generated (sampling, treatment assignment)
+    - [A]{.alert}nswer Strategy: The estimator used to answer the inquiry from the data (e.g., difference-in-means, regression)
+- Using MIDA in code (with `DeclareDesign`) allows simulating the design to understand its properties (bias, power, etc.) *before* implementation
+:::
+
+:::{.column width="45%"}
+::: {style="text-align: center; margin-top: -30px;"}
+![](figures/mida.svg){width="100%"}
+
+Source: [DeclareDesign](https://declaredesign.org/)
+:::
+:::
+:::
+:::
+
+## Potential outcomes & causality (Lec 03)
+
+:::{style="font-size: 24px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="60%"}
+- The [Potential Outcomes (PO)]{.alert} framework is what we use for defining causal effects
+    - For each unit $i$, there's an outcome if treated ($Y_i(1)$) and an outcome if untreated ($Y_i(0)$)
+    - The individual treatment effect is $\tau_i = Y_i(1) - Y_i(0)$
+- The [Fundamental Problem of Causal Inference]{.alert} states we only observe *one* potential outcome per unit ($Y_i = Y_i(1)Z_i + Y_i(0)(1-Z_i)$)
+- Causality is inherently a [missing data problem]{.alert}
+- Our goal is often to estimate population averages, like the Average Treatment Effect ([ATE]{.alert}): $ATE = E[Y_i(1) - Y_i(0)]$
+:::
+
+:::{.column width="40%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/potential_outcomes.png){width="100%"}
+
+[Wikipedia: Jorge Luis Borges - The garden of forking paths](https://en.wikipedia.org/wiki/The_Garden_of_Forking_Paths)
+:::
+:::
+:::
+:::
+
+## Selection bias & SUTVA (Lec 03 cont)
+
+:::{style="font-size: 20px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="40%"}
+- [Selection bias]{.alert} arises when comparing groups that differ systematically *before* treatment (e.g., sicker people choosing hospitals), biasing simple comparisons
+- [Randomisation breaks the link between potential outcomes and treatment receipt]{.alert}, making groups comparable on average (in expectation) on all pre-treatment characteristics
+- This allows [unbiased ATE estimation]{.alert} via difference-in-means
+- [SUTVA]{.alert} (Stable Unit Treatment Value Assumption):
+    - [No interference]{.alert} between units (one unit's treatment doesn't affect another's outcome)
+    - [Consistent treatment value]{.alert} (the treatment is the same for all units receiving it)
+:::
+
+:::{.column width="60%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/dag-1.png){width="100%"}
+
+a) [Confounding]{.alert}: Underlying illness ($Z$) causes both taking a specific drug ($X$) and experiencing a bad outcome ($Y$)
+b) [Mediation]{.alert}: Smoking ($X$) causes lung damage ($Z$), which then leads to breathing difficulties ($Y$)
+c) [Collision]{.alert}: A student's talent ($X$) influences their grades ($Y$); both talent ($X$) and grades ($Y$) influence getting a scholarship ($Z$) – selecting only scholarship winners ($Z$) distorts the observed talent-grade relationship
+:::
+:::
+:::
+:::
+
+## Selection bias (Lec 04)
+
+:::{style="font-size: 21px; margin-top: 20px;"}
+1. Start with the observed difference in means:
+   $E[Y_i|Z_i=1] - E[Y_i|Z_i=0]$
+2. Substitute observed outcomes with potential outcomes based on treatment status:
+   $= E[Y_i(1)|Z_i=1] - E[Y_i(0)|Z_i=0]$
+3. Add and subtract the counterfactual for the treated group ($E[Y_i(0)|Z_i=1]$):
+   $= E[Y_i(1)|Z_i=1] - E[Y_i(0)|Z_i=1] + E[Y_i(0)|Z_i=1] - E[Y_i(0)|Z_i=0]$
+4. Group the terms: $= \{ E[Y_i(1)|Z_i=1] - E[Y_i(0)|Z_i=1] \} + \{ E[Y_i(0)|Z_i=1] - E[Y_i(0)|Z_i=0] \}$
+5. Identify the components: $= ATT + \text{Selection Bias}$
+   - Where [ATT]{.alert} is the Average Treatment Effect on the Treated
+   - And [Selection Bias]{.alert} is $\{ E[Y_i(0)|Z_i=1] - E[Y_i(0)|Z_i=0] \}$, which is the difference in the *potential untreated outcomes* between those who selected treatment and those who did not
+6. Under randomisation, $ATT = ATE$, and the [selection bias term averages to zero]{.alert}
+
+- [Balance tests]{.alert} check pre-treatment covariate balance; useful diagnostic, but doesn't guarantee balance on *unobservables*
+- Beware common biases like [attrition bias]{.alert}, [survivorship bias]{.alert}, and [post-treatment bias]{.alert} (controlling for mediators)
+:::
+
+## Hypothesis testing: Neyman vs Fisher (Lec 05)
+
+:::{style="font-size: 26px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="50%"}
+### Neyman Approach (ATE)
+- Focuses on estimating the average effect in the population
+- Tests hypotheses like $H_0: ATE = 0$ vs $H_a: ATE \neq 0$
+- Uses test statistics (e.g, $t$-stat = estimate / SE) and $p$-values; rejects $H_0$ if $p$-value < $\alpha$
+- Confidence Intervals provide a range of plausible values for the ATE
+- Relies on [large sample approximations]{.alert} (Central Limit Theorem)
+- Considers Type I ($\alpha$) and Type II ($\beta$) errors; [Power = 1 - $\beta$]{.alert}
+:::
+
+:::{.column width="50%"}
+### Fisher Approach (Randomisation Inference)
+- Uses the random assignment process itself as the basis for inference
+- Tests the [sharp null hypothesis]{.alert} ($H_0: Y_i(1) = Y_i(0)$ for *all* $i$)
+- Simulates all possible random assignments under $H_0$ to build a reference distribution
+- The $p$-value is the proportion of simulated statistics as extreme as the observed one
+- Requires fewer assumptions (no normality) and yields exact $p$-values; good for small samples (uses `ri2` package)
+:::
+:::
+:::
+
+## Randomisation inference details (Lec 05 cont)
+
+:::{style="font-size: 21px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="50%"}
+- The core idea of RI is to ask: "_Assuming the treatment had absolutely no effect on anyone (the sharp null), how likely were we to get a difference-in-means as large as the one we actually observed, just by the random chance of assignment?_"
+- We generate the [randomisation distribution]{.alert} by:
+  - Assuming $H_0$ is true, so $Y_i(1)=Y_i(0)=Y_i^{obs}$ for all $i$
+  - Recalculating the difference-in-means (or other test statistic) for many (or all) possible ways the units could have been randomly assigned to $Z=1$ and $Z=0$ 
+  - Plotting these simulated differences
+- The $p$-value is the fraction of simulated differences that are as large or larger in magnitude than our actual observed difference
+- This avoids assumptions about the distribution of outcomes needed for t-tests
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/ri.jpg){width="80%"}
+
+Source: [Myself (2020) 😂](https://journals.sagepub.com/doi/full/10.1177/2053168020914444)
+:::
+:::
+:::
+:::
+
+## Key experimental findings (Lec 06)
+
+:::{style="font-size: 23px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Discussed influential studies applying experimental methods:
+    - [Kalla & Broockman (2015)]{.alert}: Used a field experiment (blocked randomisation) to show revealing donor status significantly increased political access to US congressional officials
+    - [Bertrand & Mullainathan (2004)]{.alert}: Employed a correspondence study (field experiment) randomising names on CVs, finding significant callback gaps favouring White-sounding names in the US labour market
+    - [Chattopadhyay & Duflo (2004)]{.alert}: Leveraged a natural experiment (randomised council seat reservations in India) showing female leaders prioritised different public goods (water vs roads) compared to male leaders
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/bertrand.png){width="100%"}
+
+Source: [Data Collada (2016)](https://datacolada.org/51)
+:::
+:::
+:::
+:::
+
+# Design Challenges & Solutions 🛠️ {background-color="#2d4563"}
+
+## Blocking and clustering (Lec 07 & 08)
+
+:::{style="font-size: 22px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="50%"}
+### Blocking
+- [Group units by pre-treatment covariates]{.alert} ($X$) related to outcome ($Y$); randomise *within* blocks
+- Increases precision (removes between-block variance), ensures balance on $X$
+- Include block fixed effects or use interaction estimators (`lm_lin`)
+
+### Clustering
+- [Treatment assigned at group level]{.alert} (village, school); outcomes measured at individual level
+- Often necessary due to practical constraints or spillovers
+- **Challenge:** [Intra-Cluster Correlation (ICC)]{.alert} violates independence ($\rho = \frac{\sigma^2_{between}}{\sigma^2_{between} + \sigma^2_{within}}$)
+:::
+
+:::{.column width="50%"}
+### Clustering Consequences & Power
+- Use [Cluster-Robust Standard Errors (CRSE)]{.alert} (`estimatr::lm_robust(..., clusters = ...)`), requires sufficient clusters
+- Power analysis must account for ICC; driven more by [number of clusters]{.alert}
+- Improve designs via [pair-matching or blocking at the cluster level]{.alert}
+
+:::{style="text-align: center; margin-top: 20px;"}
+![](figures/icc.png){width="80%"} 
+
+Source: [NIH Collaboratory (2020)](https://dcricollab.dcri.duke.edu/sites/NIHKR/KR/Intraclass_Correlation_Coefficient_Cheat_Sheet_March_15_2020.pdf)
+:::
+:::
+:::
+:::
+
+## Power analysis principles (Lec 08 cont)
+
+:::{style="font-size: 26px;"}
+- [Statistical power]{.alert} is the probability of correctly rejecting a false null hypothesis (detecting a true effect)
+- Conventionally aim for power $\ge 0.80$
+- Power depends on:
+    - [Effect size:]{.alert} Larger effects are easier to detect
+    - [Sample size ($N$):]{.alert} Larger $N$ increases power
+    - [Significance level ($\alpha$):]{.alert} Lower $\alpha$ reduces power
+    - [Outcome variance ($\sigma^2$):]{.alert} Lower variance increases power
+    - [Proportion treated:]{.alert} Power is maximised with equal group sizes (50/50 split)
+    - [Design features:]{.alert} Blocking increases power; clustering decreases power (must use $n_{ESS}$)
+- Conduct power analysis *before* the experiment using tools like `DeclareDesign` or power calculators, making reasonable assumptions about effect size and variance
+:::
+
+## One-sided non-compliance (Lec 09)
+
+:::{style="font-size: 23px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Some assigned to treatment ($Z=1$) don't receive it ($D=0$), but control compliance ($Z=0 \implies D=0$) is perfect
+- [Compliers]{.alert} ($D_i(1)=1, D_i(0)=0$) and [Never-takers]{.alert} ($D_i(1)=0, D_i(0)=0$)
+- [Intent-to-Treat (ITT)]{.alert} effect ($E[Y|Z=1] - E[Y|Z=0]$) estimates the effect of *assignment*; it's unbiased but diluted
+- [Complier Average Causal Effect (CACE/LATE)]{.alert} ($E[Y_i(1) - Y_i(0) | D_i(1)>D_i(0)]$) estimates the effect of treatment *on compliers*
+- Estimation uses [Instrumental Variables]{.alert} (IV) / 2SLS, with assignment ($Z$) as instrument for treatment receipt ($D$)
+- $CACE = ITT_Y / ITT_D$
+- Requires relevance, exclusion, independence assumptions
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: 50px; font-size: 35px;"}
+|          | Wᵢ(0) = 0   | Wᵢ(0) = 1    |
+|----------|-------------|--------------|
+| Wᵢ(1)=0  | never-taker | defier       |
+| Wᵢ(1)=1  | complier    | always-taker |
+
+Table: Compliance types
+:::
+:::
+:::
+:::
+
+## Two-sided non-compliance (Lec 10)
+ 
+:::{style="font-size: 23px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Non-compliance occurs in both arms: some $Z=1$ don't get $D=1$; some $Z=0$ *do* get $D=1$ (e.g., control group finds alternative access)
+- Adds potential for [Always-takers]{.alert} ($D_i(1)=1, D_i(0)=1$) and [Defiers]{.alert} ($D_i(1)=0, D_i(0)=1$)
+- Observed groups become mixtures of compliance types
+- Requires the [Monotonicity Assumption]{.alert} (assume no Defiers) to identify CACE; this implies $D_i(1) \ge D_i(0)$ for all $i$
+- Estimation still uses IV/2SLS ($CACE = ITT_Y / ITT_D$)
+- Always-takers don't bias the IV estimate under monotonicity
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/defiers.png){width="100%"}
+
+Source: [Facure (2022)](https://matheusfacure.github.io/python-causality-handbook/09-Non-Compliance-and-LATE.html)
+:::
+:::
+:::
+:::
+
+## Attrition: missing outcome data (Lec 11)
+
+:::{style="font-size: 23px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="55%"}
+- Attrition involves [missing outcome data post-randomisation]{.alert} (e.g., participants drop out)
+- Bias occurs if attrition is [non-random]{.alert} (differential attrition related to treatment or potential outcomes)
+- Handling Options:
+    - Assume MCAR (unlikely); analyse complete cases (reduces power)
+    - Assume MAR / Conditional Ignorability ($MIPO|X$): Missingness depends only on *observed* pre-treatment $X$; use [Inverse Probability Weighting (IPW)]{.alert} to upweight observed units similar to missing ones
+    - Assume MNAR: Missingness depends on unobservables; use [Bounds Analysis]{.alert} to estimate range of possible ATEs under worst-case ([Manski bounds]{.alert}) or monotonicity assumptions ([Lee bounds]{.alert})
+:::
+
+:::{.column width="45%"}
+::: {style="text-align: center; margin-top: 80px;"}
+![](figures/missing.png){width="100%"}
+
+Source: [McElreath on X (2019)](https://x.com/rlmcelreath/status/1101435108995805185)
+:::
+:::
+:::
+:::
+
+## Ethics in research design (Lec 12)
+
+:::{style="font-size: 23px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="55%"}
+- Ethical conduct is integral to good science
+- Core Principles from the Belmont Report:
+    - [Respect for Persons:]{.alert} Requires informed consent, autonomy, and protection for vulnerable groups
+    - [Beneficence:]{.alert} Involves minimising harm and maximising potential benefits through careful risk-benefit assessment; Equipoise (genuine uncertainty) is key
+    - [Justice:]{.alert} Demands fair participant selection and equitable distribution of research burdens/benefits
+- Practical implementation involves [Institutional Review Boards (IRBs)]{.alert}, clear consent processes, data protection, and considering staff/community well-being
+- [Adaptive designs]{.alert} can enhance ethics by allocating more participants to effective treatments sooner
+:::
+:::{.column width="45%"}
+::: {style="text-align: center; margin-top: -40px;"}
+![](figures/belmont.jpg){width="70%"}
+
+Source: [Belmont Report (1979)](https://www.hhs.gov/ohrp/regulations-and-policy/belmont-report/read-the-belmont-report/index.html)
+:::
+:::
+:::
+:::
+
+## Six components of a `DeclareDesign` study (Lec 13)
+
+:::{style="font-size: 23px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="55%"}
+- DeclareDesign formalises research plans using six key components, specified using `declare_*` functions:
+    - [Population:]{.alert} Defines units and their characteristics (`declare_model`)
+    - [Potential outcomes:]{.alert} Specifies how outcomes depend on treatments (`declare_model`)
+    - [Sampling strategy:]{.alert} How units are selected (`declare_sampling`)
+    - [Assignment:]{.alert} How units are assigned to treatment (`declare_assignment`)
+    - [Estimand:]{.alert} The target quantity of interest (`declare_inquiry`)
+    - [Estimator:]{.alert} The procedure/model used for estimation (`declare_estimator`)
+- The `DesignLibrary` package provides pre-built templates for common designs
+:::
+:::{.column width="45%"}
+::: {style="text-align: center; margin-top: -30px;"}
+![](figures/declare_design.jpg){width="70%"}
+
+Source: [DeclareDesign](https://declaredesign.org/)
+:::
+:::
+:::
+:::
+
+## Pre-analysis plans (PAPs) in practice (Lec 14)
+
+:::{style="font-size: 26px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="50%"}
+- PAPs detail the research plan (hypotheses, design, analysis) *before* data analysis
+- Aim to increase transparency, reduce bias ([p-hacking, HARKing]{.alert}), enhance credibility
+- Stemmed from reproducibility crisis
+- [Main components]{.alert}: Motivation, Hypotheses, Population/Sampling, Intervention, Outcomes/Covariates, Randomisation, Analysis Plan (estimators, SEs, power, missing data, subgroups), Implementation details
+- Should distinguish confirmatory (pre-specified) from exploratory analyses
+:::
+:::{.column width="50%"}
+- [Pros]{.alert}: Credibility, transparency, limits researcher degrees of freedom
+- [Cons]{.alert}: Time-consuming, potentially inflexible (mitigated by allowing pre-specified exploratory analysis or clear justifications for deviations)
+- Registries like OSF, AEA, EGAP host PAPs
+- SOPs (Standard Operating Procedures) offer a potentially more flexible alternative but are less common
+:::
+:::
+:::
+
+# Advanced Methods & Applications 🔬 {background-color="#2d4563"}
+
+## Natural & quasi-experiments (Lec 15)
+
+:::{style="font-size: 23px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Used when RCTs aren't feasible/ethical, leveraging "as-if" random assignment
+- Natural Experiments rely on assignment outside researcher control (e.g, lotteries); require strong exogeneity arguments
+- Quasi-Experiments are a broader category; common designs include:
+    - [Regression Discontinuity (RDD)]{.alert}: Exploits sharp cut-off rules (e.g., Mignozzetti et al); assumes continuity of potential outcomes at the cut-off
+    - [Difference-in-Differences (DID)]{.alert}: Compares changes over time for treated vs control (e.g., Card & Krueger); assumes [parallel trends]{.alert} in the absence of treatment
+- Validity depends heavily on the plausibility of underlying assumptions
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/rdd.png){width="80%"}
+
+![](figures/did.png){width="80%"}
+:::
+:::
+:::
+:::
+
+## Interference & spillovers (Lec 16)
+
+:::{style="font-size: 25px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Interference occurs when one unit's treatment affects another's outcome (a [SUTVA violation]{.alert}); common in social/network settings
+- Standard ATE estimates become biased
+- Requires expanding potential outcomes notation (e.g, $Y_{i}(Z_i, Z_{-i})$)
+- Designs to address/estimate interference:
+    - [Clustered randomisation:]{.alert} Randomise at a level high enough to contain spillovers
+    - [Multi-level designs:]{.alert} Randomise at multiple levels (e.g., household & individual) to separate direct/indirect effects
+:::
+:::{.column width="50%"}
+::: {style="text-align: center; margin-top: -30px;"}
+![](figures/spillovers.jpg){width="80%"}
+
+[YouTube video on spillovers](https://www.youtube.com/watch?v=i5kyzT_CpwQ)
+:::
+:::
+:::
+:::
+
+## Heterogeneous treatment effects (HTE) (Lec 18)
+
+:::{style="font-size: 23px; margin-top: 19px;"}
+:::{.columns}
+:::{.column width="55%"}
+- Effects often vary; ATE is just the average; understanding variability is key
+- Challenge: $Var(\tau)$ depends on unidentifiable $Cov(Y(1), Y(0))$
+- Exploring HTE:
+    - [Treatment-by-Covariate Interactions (CATEs)]{.alert}: Estimate ATE within subgroups based on pre-treatment $X$; use regression interactions ($Y \sim Z * X$); [Caution:]{.alert} Correlational re: HTE source; multiple comparisons risk
+    - [Treatment-by-Treatment Interactions (Factorial Designs)]{.alert}: Experimentally manipulate multiple factors ($Z_1, Z_2$); allows causal inference about interactions; requires larger N
+- Beware the [multiple comparisons problem]{.alert} when testing many subgroups; use corrections (Bonferroni) or pre-specification
+:::
+:::{.column width="45%"}
+::: {style="text-align: center; margin-top: 60px;"}
+![](figures/factorial.jpg){width="100%"}
+
+Source: [University of Minnesota (2020)](https://courses.lumenlearning.com/suny-psychologyresearchmethods/chapter/8-2-multiple-independent-variables/)
+:::
+:::
+:::
+:::
+
+## Mediation analysis (Lec 20)
+
+:::{style="font-size: 23px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="55%"}
+- Seeks to understand *how* $Z$ affects $Y$ via mediator $M$ ($Z \to M \to Y$)
+- Traditional regression methods are often biased due to $M \leftrightarrow Y$ confounding (omitted variables affecting both $M$ and $Y$)
+- Potential outcomes approach reveals fundamental identification problem requiring strong 'sequential ignorability' assumptions ($M$ is 'as-if' random conditional on $Z$ and $X$)
+- Randomising $Z$ alone is insufficient or impossible
+- Using $Z$ as an IV for $M$ requires the strong [exclusion restriction]{.alert} (no direct $Z \leftrightarrow Y$ path), often violated
+:::
+:::{.column width="45%"}
+- [Implicit Mediation]{.alert} is a robust design-based alternative:
+    - Experimentally vary treatment components ($Z$ vs $Z'$)
+    - Compare effects of different bundles to infer mechanism importance without measuring $M$
+
+::: {style="text-align: center; margin-top: 50px;"}
+![](figures/mediation.png){width="70%"}
+
+Source: [Rijnhart et al (2021)](https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-021-01426-3)
+:::
+:::
+:::
+:::
+
+## Survey experiments (Lec 21 & 22)
+
+:::{style="font-size: 23px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="55%"}
+### Survey Experiments (Lec 21)
+- Random assignment embedded within survey instruments
+- Ideal for studying attitudes, preferences, information effects
+- Common designs: Question wording/framing, order effects, vignettes
+- Trade-offs: High internal validity vs potential external validity/demand effect concerns
+
+### Sensitive Topics (Lec 22)
+- Challenge: Social desirability bias
+- Goal: Elicit truthful responses while protecting privacy
+- Techniques: [List Experiment]{.alert}, [Randomised Response (RRT)]{.alert}, [Endorsement Experiment]{.alert}, [Conjoint Analysis]{.alert}
+:::
+
+:::{.column width="45%"}
+::: {style="text-align: center; margin-top: -10px;"}
+![](figures/freire.jpg){width="100%"}
+
+Source: [Freire & Skarbek (2022)](https://journals.sagepub.com/doi/10.1177/20531680221150389)
+:::
+:::
+:::
+:::
+
+## Survey experiments: validation & design (Lec 21 cont)
+
+:::{style="font-size: 27px;"}
+- Ensuring construct validity (manipulating what you intend):
+    - Pilot testing treatments before main study
+    - Manipulation checks (post-treatment questions assessing if manipulation worked)
+    - Placebo conditions (similar task/info but without key manipulation)
+    - Non-equivalent outcomes (outcomes that *shouldn't* be affected)
+- Design considerations:
+    - Comparability across conditions (length, complexity)
+    - Realism of vignettes/stimuli
+    - Respondent burden and attention (timers, forced exposure)
+    - Device compatibility (mobile vs desktop)
+
+:::
+
+## Sensitive survey techniques details (Lec 22 cont)
+
+:::{style="font-size: 28px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [List Experiment:]{.alert} Compare mean count between T (list + sensitive item) and C (list only); difference estimates prevalence; assumes no design effects/no liars; watch for floor/ceiling effects
+- [RRT:]{.alert} Respondent uses random device (coin flip) to determine whether to answer truthfully or give fixed response; known probabilities allow estimation; can be confusing for respondents but often performs well in validation
+:::
+:::{.column width="50%"}
+- [Endorsement Experiment:]{.alert} Randomly associate policy/statement with endorsing group; difference in support reveals implicit attitude towards endorser; analysis complex with multiple endorsers
+- [Conjoint Analysis:]{.alert} Respondents choose between profiles with multiple randomised attributes; estimates importance of each attribute (including sensitive ones) via trade-offs; powerful but complex design/analysis
+:::
+:::
+:::
+
+# Discussions & Integration 🌍 {background-color="#2d4563"}
+
+## Paper discussions (Lec 06, 17, 19, 23)
+
+:::{style="font-size: 27px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="50%"}
+### Foundational Ideas & Design
+- [Lec 06]{.alert}: Kalla & Broockman (access), Bertrand & Mullainathan (discrimination), Chattopadhyay & Duflo (representation) 
+  - Classic examples of field & natural experiments demonstrating core concepts
+- [Lec 17]{.alert}: Centola (networks/contagion), Paluck (network intervention/climate), Gerber & Green (GOTV/interference/IV) 
+  - Focused on exploring interference, network structure, and spillover effects experimentally and analytically
+
+:::
+:::{.column width="50%"}
+### Identification & Complex Settings
+- [Lec 19]{.alert}: Munshi (networks/IV/FE), Miguel & Kremer (externalities/cluster RCT/spillovers) 
+  - Showcased clever identification strategies using IVs and cluster-randomisation for observational data and spillovers
+- [Lec 23]{.alert}: Druckman (list/sensitive), Blair (list+endorsement/sensitive), Rosenfeld (validation/sensitive), Freire & Skarbek (conjoint/sensitive) 
+  - Illustrated application and validation of methods for sensitive topics
+:::
+:::
+:::
+
+## Integration of research findings (Lec 24)
+
+:::{style="font-size: 24px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="55%"}
+- Generalising results ([extrapolation]{.alert}) is challenging; distinguish Sample ATE (SATE) from Population ATE (PATE); PATE estimation adds sampling uncertainty
+- The [Bayesian framework]{.alert} formally updates prior beliefs with new evidence, can incorporate beliefs about potential bias (e.g., sampling bias); posterior is precision-weighted average
+- [Meta-Analysis]{.alert} pools results from multiple studies
+    - Fixed Effects assumes one true effect; weights by precision ($1/SE^2$)
+    - Random Effects allows true effect to vary across studies (more realistic); accounts for between-study heterogeneity
+    - Beware publication bias and study heterogeneity
+:::
+:::{.column width="45%"}
+::: {style="text-align: center; margin-top: 60px;"}
+![](figures/freire01.png){width="100%"}
+
+Source: [Freire et al (2022)](https://doi.org/10.1017/S0007123422000552)
+:::
+:::
+:::
+:::
+
+## Generalisation & meta-analysis details (Lec 24 cont)
+
+:::{style="font-size: 27px; margin-top: 20px;"}
+- PATE standard error includes sampling variance: $SE(\widehat{PATE}) = \sqrt{ \frac{Var(Y_i(1))}{m} + \frac{Var(Y_i(0))}{N-m} }$
+- Bayesian updating combines prior precision ($\rho_{prior}$) and data precision ($\rho_{data}$) for posterior precision ($\rho_{posterior} = \rho_{prior} + \rho_{data}$)
+- Posterior mean is precision-weighted average: $\mu_{posterior} = \frac{\rho_{prior} \mu_{prior} + \rho_{data} x_e}{\rho_{posterior}}$
+- Incorporating bias ($B \sim N(\beta, \sigma^2_B)$) reduces effective data precision: $\rho_{effective\_data} = \frac{1}{\sigma^2_B + \sigma^2_{xe}}$
+- Meta-analysis requires careful study selection (PRISMA), data extraction, and choice between fixed/random effects models; meta-regression explores heterogeneity sources
+:::
+
+## Wrapping up
+
+:::{style="font-size: 25px; margin-top: 20px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Phew, that was a lot of content! 😅
+- We've discussed from basic experimental design (MIDA, PO) through implementation challenges (compliance, attrition, ethics, interference) to advanced analysis (HTE, mediation, quasi-methods) and synthesis (meta-analysis)
+- Key theme: Understanding assumptions, potential biases, and choosing appropriate experimental designs and methods
+- Experiments are amazing 🤩! But they require careful thought and execution
+- Thank you for your engagement throughout the course 🙌
+- Any questions?
+:::
+
+:::{.column width="50%"}
+::: {style="text-align: center; margin-top: -30px;"}
+![](figures/meme01.jpg){width="70%"}
+:::
+:::
+:::
+:::
+
+# Thank you for your attention! 🙏 {background-color="#2d4563"}

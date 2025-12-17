@@ -1,0 +1,99 @@
+---
+title: "DATASCI 385 - Experimental Methods"
+subtitle: Assignment 08
+fig-cap-location: top
+---
+
+# Instructions
+
+This week's assignment focuses on interference and spillovers in field experiments. Interference occurs when the treatment status of one unit affects outcomes for other units, violating the Stable Unit Treatment Value Assumption (SUTVA). Please submit your assignment in PDF or HTML format.
+
+If you have any questions about the assignment, feel free to email me at <danilo.freire@emory.edu>.
+
+Good luck!
+
+# Questions 
+
+1. National surveys indicate that college roommates tend to have correlated weights. The more one roommate weighs at the end of the freshman year, the more the other freshman roommate weighs. On the other hand, researchers studying housing arrangements in which roommates are randomly paired together find no correlation between two roommates' weights at the end of their freshman year. Explain how these two facts can be reconciled. 
+
+In class, we discussed an example where a field experiment was conducted to assess the impact of establishing a clinic in villages. The experiment is described on pages 260-264. The tables with the villages' potential outcomes and the probabilities of receiving treatment and spillovers are described on page 262 and shown below:
+
+![](villages.png){width=90%}
+
+Table: Potential outcomes
+
+| Village   | Untreated ($Y_{00}$) | Adjacent village treated ($Y_{10}$) | Treated ($Y_{01}$) |
+|-----------|----------------------|-------------------------------------|--------------------|
+| A         | 0                    | 2                                   | 0                  |
+| B         | 6                    | 2                                   | 10                 |
+| C         | 0                    | 4                                   | 4                  |
+| D         | 6                    | 6                                   | 6                  |
+| F         | 6                    | NA                                  | 3                  |
+
+Table: Probability of receiving treatment, spillover, and control
+
+| Village | A         | B         | C         | D         | F         | Pr(control) | Pr(spillover) | Pr(treatment) |
+|---------|-----------|-----------|-----------|-----------|-----------|-------------|---------------|---------------|
+| 1       | $Y_{01}$  | $Y_{10}$  | $Y_{00}$  | $Y_{00}$  | $Y_{00}$  | 0.6         | 0.2           | 0.2           |
+| 2       | $Y_{10}$  | $Y_{01}$  | $Y_{10}$  | $Y_{00}$  | $Y_{00}$  | 0.4         | 0.4           | 0.2           |
+| 3       | $Y_{00}$  | $Y_{10}$  | $Y_{01}$  | $Y_{10}$  | $Y_{00}$  | 0.4         | 0.4           | 0.2           |
+| 4       | $Y_{00}$  | $Y_{00}$  | $Y_{00}$  | $Y_{10}$  | $Y_{01}$  | 0.6         | 0.2           | 0.2           |
+| 5       | $Y_{00}$  | $Y_{00}$  | $Y_{00}$  | $Y_{00}$  | $Y_{01}$  | 0.8         | 0             | 0.2           |
+
+Using these data, calculate the following quantities:
+
+2. Estimate $E[Y_{01} - Y_{00}]$ for the random assignment that places the treatment at location A.
+
+3. Estimate $E[Y_{10} - Y_{00}]$ for the random assignment that places the treatment at location A, restricting the sample to the set of villages that have a non-zero probability of expressing both of these potential outcomes.
+
+4. In order to make a more direct comparison between these two treatment effects, estimate $E[Y_{01} - Y_{00}]$, restricting the sample to the same set of villages as in question 3.
+
+5. Compare and contrast the advantages and disadvantages of using buffer rows versus clustered randomization in field experiments. Using the villages experiment as an example, discuss how each approach would affect: (1) the ability to estimate direct treatment effects, (2) the ability to study spillover effects, and (3) the complexity of statistical analysis required. What factors should researchers consider when choosing between these approaches?
+
+6. In class, we also examined a waitlist experiment that analyses the impact of TV campaigns on politicians' approval ratings. It is described in the slides and on pages 276 to 281. The tables related to the experiment are shown below and on page 279. Estimate $E[Y_{01} - Y_{00}]$ by restricting your attention to weeks 2 and 3. How does this estimate compare to the estimate of $E[Y_{11} - Y_{00}]$ presented in the text, which is also identified using observations from weeks 2 and 3?
+
+Table: Assigned treatment condition
+
+| Market | Week 1 | Week 2 | Week 3 |
+|--------|--------|--------|--------|
+| 1      | 01     | 11     | 11     |
+| 2      | 00     | 00     | 01     |
+| 3      | 00     | 01     | 11     |
+| 4      | 00     | 00     | 01     |
+| 5      | 00     | 00     | 00     |
+| 6      | 01     | 11     | 11     |
+| 7      | 00     | 00     | 00     |
+| 8      | 00     | 01     | 11     |
+
+Table: Observed outcomes
+
+| Market | Week 1 | Week 2 | Week 3 |
+|--------|--------|--------|--------|
+| 1      | 7      | 9      | 4      |
+| 2      | 7      | 5      | 7      |
+| 3      | 1      | 2      | 10     |
+| 4      | 4      | 3      | 10     |
+| 5      | 3      | 3      | 3      |
+| 6      | 10     | 8      | 10     |
+| 7      | 2      | 3      | 4      |
+| 8      | 3      | 1      | 3      |
+
+Table: Probabilities of assignment to treatment condition, by week
+
+| Treatment Condition | Week 1 | Week 2 | Week 3 |
+|---------------------|--------|--------|--------|
+| Pr(00)              | 0.75   | 0.50   | 0.25   |
+| Pr(01)              | 0.25   | 0.25   | 0.25   |
+| Pr(11)              | 0      | 0.25   | 0.50   |
+
+7. Experiments studying spillovers can raise unique ethical considerations. Discuss some of the ethical dilemmas that might arise when conducting experiments in the presence of interference. How can researchers design and implement spillover experiments in an ethically responsible manner?
+
+8. How does the presence of interference affect the statistical power of a field experiment? In what ways might researchers need to adjust their sample size calculations when designing experiments where interference is anticipated?
+
+9. Sometimes researchers are reluctant to randomly assign individual students in elementary classrooms because they are concerned that treatments administered to some students are likely to spill over to untreated students in the same classroom. In an attempt to get around possible violations of the non-interference assumption, they assign classrooms as clusters to treatment and control, and administer the treatment to all students in a classroom.
+
+(a) State the non-interference assumption as it applies to the proposed clustered design.
+
+(b) What causal estimand does the clustered design identify? Does this causal estimand include or exclude spillovers within classrooms?
+
+10. If an experiment is conducted in a setting with significant interference, how does this affect the generalisability of the findings to other settings where the nature or extent of interference might be different? Discuss the challenges and potential strategies for increasing the external validity of experimental findings when interference is a concern.

@@ -1,0 +1,495 @@
+---
+title: DATASCI 385 - Experimental Methods
+subtitle: Lecture 18 - Heterogeneous Effects
+author:
+  - name: Danilo Freire
+    email: danilo.freire@emory.edu
+    affiliations: Department of Data and Decision Sciences <br> Emory University
+format:
+  clean-revealjs:
+    self-contained: true
+    code-overflow: wrap
+    footer: "[Heterogeneous Effects](https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-18/18-hte.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: knitr
+revealjs-plugins:
+  - multimodal
+editor:
+  render-on-save: true
+---
+
+# Hello, everyone! 👋 <br> How are you today? {background-color="#2d4563"}
+
+# Brief recap 📚 {background-color="#2d4563"}
+
+## Brief recap 📚
+
+:::{style="margin-top: 20px; font-size: 24px;"}
+:::{.columns}
+:::{.column width="50%"}
+**Centola (2010): Online Behaviour Spread**
+
+- [Experimentally varied network structure]{.alert} (clustered vs. random) in an online health community
+- Measured spread of adopting a health forum registration
+- [Finding]{.alert}: Behaviour spread significantly farther and faster in [clustered (high reinforcement) networks]{.alert} compared to random networks
+- [Implication]{.alert}: Network structure critically affects diffusion, especially for behaviours requiring social proof. Weak ties might be less effective for complex contagions
+:::
+
+::: {.column width="50%"}
+**Paluck et al. (2021): Conflict Climate Change**
+
+- Field experiment in [56 U.S. middle schools]{.alert} using social networks to reduce conflict
+- Randomly assigned schools to intervention or control
+- Intervention: [Student-nominated "social referents"]{.alert} to model anti-conflict norms
+- [Finding]{.alert}: Targeting influential [social referents]{.alert} was effective in reducing overall student conflict (by ~30%) than targeting random students
+- [Mechanism]{.alert}: Changed perceived social norms around conflict within the school network ([spillover effect]{.alert})
+:::
+:::
+:::
+
+# Today's plan 📅 {background-color="#2d4563"}
+
+## Heterogeneous treatment effects (HTE)
+### Moving beyond the average
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- Why average treatment effects ([ATEs]{.alert}) aren't the whole story
+- Defining and understanding [treatment effect variability]{.alert}
+- Fundamental challenge: We [cannot directly observe individual treatment effects]{.alert} or their variance
+- Methods for exploring HTE:
+  - [Bounding the variance]{.alert} of treatment effects
+  - [Testing for the presence]{.alert} of heterogeneity
+:::
+
+:::{.column width=50%}
+- Structured approaches:
+  - [Treatment-by-Covariate Interactions]{.alert} (Subgroup Analysis / CATEs)
+  - [Treatment-by-Treatment Interactions]{.alert} (Factorial Designs)
+- [Modelling HTE]{.alert} using regression
+- Pitfalls and best practices:
+  - [Multiple comparisons]{.alert}
+  - [Causal interpretation]{.alert} challenges
+:::
+:::
+:::
+
+# Why look beyond the ATE? {background-color="#2d4563"}
+
+## The limits of averages
+
+:::{style="margin-top: 30px; font-size: 30px;"}
+- To this point, we've focused mainly on estimating the [Average Treatment Effect (ATE)]{.alert}
+- Assumption: The treatment effect might be similar across individuals
+- [Reality]{.alert}: Interventions rarely affect everyone identically. Effects often vary across individuals, groups, or contexts
+- [Practical Value]{.alert}: Policymakers want to know *who* benefits most (or least) from an intervention and *under what conditions*
+  - Targeting resources effectively
+  - Tailoring programmes
+- [Scientific Value]{.alert}: Understanding *why* effects vary helps uncover causal mechanisms
+  - What makes an intervention work (or not)?
+:::
+
+## Examples of heterogeneity
+
+:::{style="margin-top: 30px; font-size: 33px;"}
+- [School Choice]{.alert}: Policies allowing school choice might benefit children whose parents prioritise academic quality more than those whose parents prioritise proximity
+- [Job Training]{.alert}: Programmes might increase earnings for voluntary participants but have no effect on those required to attend for public assistance eligibility
+- [Tax Compliance]{.alert}: Efforts to increase compliance might work differently depending on whether taxpayers can easily conceal income
+- [Advertising]{.alert}: A campaign targeting teenagers might alienate older consumers
+:::
+
+# The fundamental problem of HTE inference {background-color="#2d4563"}
+
+## Defining treatment effect heterogeneity
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- Individual treatment effect: $\tau_i = Y_i(1) - Y_i(0)$
+- Treatment effect heterogeneity refers to the [variance of individual treatment effects]{.alert} across subjects: $Var(\tau)$
+- We want to estimate $Var(\tau)$ and test if $Var(\tau) > 0$ (indicating heterogeneity)
+- Recall the relationship:
+
+$$Var(\tau) = Var(Y_i(1) - Y_i(0))$$
+$$Var(\tau) = Var(Y_i(1)) + Var(Y_i(0)) - 2Cov(Y_i(1), Y_i(0))$$
+
+- This equation highlights the challenge! Let's see why... 🤓
+:::
+
+## Decomposing the variance
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+- $Var(Y(1))$ + $Var(Y(0))$: Total variance in outcomes *if we could see both worlds*
+- $Cov(Y_i(1), Y_i(0))$: The [covariance term]{.alert}. This is the key!
+  - It asks: Do people who would have high outcomes *without* the treatment also have high outcomes *with* it?
+- [Why subtract the covariance?]{.alert} It accounts for stable differences between subjects
+- [Scenario: high positive covariance]{.alert} (common case)
+  - People who are "high-achievers" ($Y_i(0)$ is high) may also be "high-achievers" *after* treatment ($Y_i(1)$ is high)
+  - This stable difference makes $Var(Y(1))$ and $Var(Y(0))$ large, but there's no heterogeneity in the *effect*
+  - Subtracting $2Cov(\cdot)$ [corrects for this stable variance]{.alert}, isolating the true variance of the effect, $Var(\tau)$
+- [Example:]{.alert} If the effect is constant ($\tau_i = \tau$ for all $i$), then $Var(\tau) = 0$. The high covariance between $Y_i(1)$ and $Y_i(0)$ will cancel out the other two terms
+:::
+
+## What experimental data tell us (and what they don't)
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- Experiments give us samples of $Y_i(1)$ (from the treatment group) and $Y_i(0)$ (from the control group)
+- From these, we can estimate the [marginal distributions]{.alert} of $Y(1)$ and $Y(0)$
+- We can estimate, for instance, $E[Y(1)]$, $E[Y(0)]$, $Var(Y(1))$, and $Var(Y(0))$
+- **BUT:** We *never* observe both $Y_i(1)$ and $Y_i(0)$ for the same individual $i$
+- Therefore, we [cannot directly estimate the joint distribution]{.alert} of potential outcomes
+- So we [cannot estimate $Cov(Y_i(1), Y_i(0))$]{.alert}
+- Without the covariance, we [cannot directly calculate $Var(\tau)$]{.alert}!
+:::
+
+## Illustrating the problem
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- Suppose $N=6$ subjects. We observe outcomes:
+  - Control Group ($Y(0)$): ${1, 2, 3}$ -> $\hat{Var}(Y(0))=1$
+  - Treatment Group ($Y(1)$): ${4, 5, 6}$ -> $\hat{Var}(Y(1))=1$
+- Estimated ATE = $E[Y(1)] - E[Y(0)] = 5 - 2 = 3$
+- What is $Var(\tau)$? It depends on how potential outcomes are paired (which we don't know):
+- [Scenario 1 (perfect positive correlation):]{.alert} Pairs are ${(1,4), (2,5), (3,6)}$
+  - Individual effects $\tau_i$ are ${3, 3, 3}$
+  - $Var(\tau) = 0$. [Homogeneous effect]{.alert}
+- [Scenario 2 (perfect negative correlation):]{.alert} Pairs are ${(1,6), (2,5), (3,4)}$
+  - Individual effects $\tau_i$ are ${5, 3, 1}$
+  - $Var(\tau) = Var(\{5,3,1\}) = 4$. [Heterogeneous effect]{.alert}
+- [Scenario 3 (Mixed):]{.alert} Pairs are ${(1,6), (2,4), (3,5)}$
+  - Individual effects $\tau_i$ are ${5, 2, 2}$
+  - $Var(\tau) = Var(\{5,2,2\}) = 3$. [Heterogeneous effect]{.alert}
+
+- Experimental data alone do not distinguish these scenarios!
+:::
+
+# Detecting heterogeneity: bounds & tests {background-color="#2d4563"}
+
+## Bounding the variance of treatment effects
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- Since we can't estimate $Cov(Y(1), Y(0))$, we can't pinpoint $Var(\tau)$
+- However, we can [estimate bounds on $Var(\tau)$]{.alert} by considering the most extreme possible correlations (Heckman, Smith, Clements 1997)
+- We can use the same pairing logic from the previous example
+- [Procedure (for equal group sizes):]{.alert}
+  1. Sort observed $Y(0)$ values ascendingly
+  2. Sort observed $Y(1)$ values ascendingly
+  3. [Lower Bound for $Var(\tau)$:]{.alert} Pair the sorted values rank-by-rank (1st with 1st, 2nd with 2nd, ...). Calculate the variance of the resulting $\tau_i$ estimates. This assumes [maximum possible positive covariance]{.alert}
+  4. [Upper Bound for $Var(\tau)$:]{.alert} Pair the sorted $Y(0)$ values (ascending) with sorted $Y(1)$ values in *descending* order (1st $Y(0)$ with last $Y(1)$, ...). Calculate the variance of the resulting $\tau_i$. This assumes [maximum possible negative covariance]{.alert}
+- If the number of subjects differs, pair percentiles instead of ranks
+- A lower bound substantially greater than 0 suggests heterogeneity
+:::
+
+## Testing for heterogeneity: comparing variances
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- A simpler approach: Test the null hypothesis $H_0: Var(\tau) = 0$ (homogeneous effects)
+- If $\tau_i = \tau$ (constant) for all $i$, then $Var(\tau)=0$
+- Also, if $\tau$ is constant, $Cov(Y(0), \tau) = Cov(Y(0), \text{constant}) = 0$
+- Recall: $Var(Y(1)) = Var(Y(0)) + Var(\tau) + 2Cov(Y(0), \tau)$
+- Under $H_0: Var(\tau)=0$, this simplifies to $Var(Y(1)) = Var(Y(0))$
+- **Test Idea:** If we observe significantly different variances in the treatment and control groups, we can [reject the null hypothesis of homogeneous effects]{.alert}
+- [Caution]{.alert}: Equality of variances does *not* strictly prove homogeneity, but large differences suggest heterogeneity
+:::
+
+## Example: teacher incentives variance test
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- Revisit the teacher incentives experiment (Muralidharan & Sundararaman 2011)
+- Outcome: Change in school test scores (post-pre)
+- Observed variances:
+  - Control group: $\hat{Var}(Y(0)) = 59.29$
+  - Treatment group: $\hat{Var}(Y(1)) = 91.20$
+- Observed difference: $|91.20 - 59.29| = 31.91$; is this difference large enough to reject $H_0$?
+- **Randomisation Inference:**
+  1. Assume constant treatment effect (ATE = 3.50) for all schools (generate full potential outcomes schedule)
+  2. Repeat random assignment to treatment/control 100,000 times
+  3. For each simulation, calculate the absolute difference in variances between the simulated T/C groups
+  4. Find the proportion of simulated differences >= 31.91
+- Result: p-value = 0.088
+- **Conclusion:** Cannot reject $H_0$ at $\alpha=0.05$, but the borderline p-value [hints at possible heterogeneity]{.alert}. Incentives *might* affect schools differently
+:::
+
+## Limitations of basic methods
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- Bounds on $Var(\tau)$ are often [very wide]{.alert}, making them uninformative
+- Tests comparing $Var(Y(1))$ and $Var(Y(0))$ often [lack statistical power]{.alert}, especially with smaller samples
+- These methods don't tell us *why* effects might vary or *who* is affected differently
+- They serve as a [preliminary step]{.alert}. Significant results encourage more structured investigation
+
+➡️ Need approaches that examine variation across specific subgroups or conditions
+:::
+
+# Treatment-by-Covariate Interactions (CATEs) 📊 {background-color="#2d4563"}
+
+## Conditional Average Treatment Effects (CATEs)
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- We can partition subjects into subgroups based on [pre-treatment covariates ($X$)]{.alert} and estimate the ATE within each subgroup
+- [CATE:]{.alert} Conditional Average Treatment Effect
+  - $CATE(X=x) = E[Y_i(1) - Y_i(0) | X_i = x]$
+- Example: Estimate the ATE for men vs. women, old vs. young, high income vs. low income
+- [Interaction Effect:]{.alert} The difference between CATEs across subgroups
+  - $Interaction = CATE(X=x_1) - CATE(X=x_2)$
+- This approach uses observable characteristics to explore *potential* sources of heterogeneity
+- Often guided by theory about *why* effects might differ
+:::
+
+## Example: teacher incentives & parent literacy
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- Researchers explored if teacher incentive effects varied by school characteristics (Muralidharan & Sundararaman 2011)
+- Covariate: Average parent literacy level (pre-treatment). Partitioned schools into below-median and above-median literacy
+- [Estimated CATEs:]{.alert}
+  - Low Literacy Schools: CATE = 11.14 - 7.83 = [3.31]{.alert}
+  - High Literacy Schools: CATE = 12.26 - 8.57 = [3.69]{.alert}
+- [Interaction Effect:]{.alert} 3.69 - 3.31 = 0.38
+- [Hypothesis Test:]{.alert} Is this difference statistically significant?
+  - Using randomisation inference (or regression F-test), p = 0.88
+  - [No significant evidence]{.alert} that the treatment effect differs based on parental literacy levels in the school
+:::
+
+## Regression framework for CATEs
+
+:::{style="margin-top: 30px; font-size: 26px;"}
+- Regression provides a flexible way to estimate and test CATEs and interactions
+- Let $I_i$ be the treatment indicator (1=Treat, 0=Control)
+- Let $P_i$ be the covariate indicator (e.g., 1=High Literacy, 0=Low Literacy)
+- [Null Model (Homogeneous Effect):]{.alert}
+  $Y_i = \alpha + \beta I_i + \gamma P_i + u_i$
+  - Assumes a single ATE ($\beta$)
+- [Alternative Model (Interaction):]{.alert}
+  $Y_i = \alpha + \beta I_i + \gamma P_i + \delta (I_i \times P_i) + u_i$
+  - CATE for Low Literacy ($P_i=0$): $\beta$
+  - CATE for High Literacy ($P_i=1$): $\beta + \delta$
+  - [Interaction Effect: $\delta$]{.alert}
+- Use an F-test to see if the model with the interaction term ($\delta$) fits significantly better than the null model (i.e., test $H_0: \delta = 0$)
+- In the teacher incentive example, the F-test yields $p = 0.88$, matching the randomisation inference
+:::
+
+# Cautions with CATEs ⚠️ {background-color="#2d4563"}
+
+## The multiple comparisons problem
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- Datasets often contain many potential covariates (age, gender, income, education, location, etc.)
+- If we test for interactions with many covariates, the chance of finding a [significant interaction purely by chance]{.alert} increases
+- Example: Test 20 uncorrelated covariates for interaction at $\alpha=0.05$. Assume the true effect is homogeneous
+  - $(1 - \alpha)^q$ gives the probability of no false positives across $q$ tests, so $1 - (1 - \alpha)^q$ is the probability of at least one false positive
+  - Probability of finding *at least one* significant interaction: $1 - (1 - 0.05)^{20} \approx 0.64$. (High risk of Type I error!)
+- [Solution 1: Bonferroni Correction:]{.alert}
+  - If conducting $q$ tests, adjust significance level to $\alpha / q$
+  - E.g., for 20 tests at $\alpha=0.05$, require $p < 0.05 / 20 = 0.0025$
+  - Simple, but can be overly conservative (reduces power)
+  - Other similar solutions exist (e.g., [False Discovery Rate control](https://en.wikipedia.org/wiki/False_discovery_rate), [Holm-Bonferroni](https://en.wikipedia.org/wiki/Holm%E2%80%93Bonferroni_method), etc.)
+- [Solution 2: Pre-specification:]{.alert}
+  - Specify the few theoretically motivated interactions you will test *before* looking at the data (e.g., in a Pre-Analysis Plan)
+:::
+
+## Correlation vs. causation in subgroups
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+- Covariates used for subgroup analysis are [observed characteristics, not randomly assigned treatments]{.alert}
+- Finding that CATEs differ between, say, high-education and low-education groups means the treatment effect *correlates* with education
+- It does [not necessarily]{.alert} mean that *changing* someone's education level would change how they respond to the treatment
+- Education might be a marker for other underlying factors (e.g., income, access to information, underlying health) that are the "true" drivers of the heterogeneity
+- [Subgroup analysis is essentially observational/descriptive regarding the source of heterogeneity]{.alert}
+- It's useful for prediction (who is likely to respond more?) and generating hypotheses, but not for establishing the *causal impact* of the covariate itself on the treatment effect
+:::
+
+## Example: interpreting voter turnout interaction
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+- [Gerber, Green, Larimer (2008)](https://doi.org/10.1017/S000305540808009X) sent mailers showing recipients' own (and neighbours') past voting records to encourage turnout
+- Finding: Mailer effect (ATE) was larger among people who *had* voted in a previous election (2004) compared to those who hadn't
+- [Superficial interpretation]{.alert}: Seeing your *past voting* record is more motivating than seeing your *past non-voting* record
+- However, [past voting behaviour (the covariate) is not random]{.alert}. People who voted in 2004 are different from those who didn't in many ways (more politically engaged, different demographics, etc.)
+- [Follow-up Experiment (Gerber, Green, Larimer 2010)]{.alert}: *Randomly varied* whether the mailer showed a record of voting or a record of abstention
+- [Result]{.alert}: Showing a record of *abstention* was significantly *more* motivating!
+- The subgroup analysis conflated the type of person with the content of the message. Direct experimental manipulation was needed to isolate the causal effect of the message content
+:::
+
+# Treatment-by-Treatment Interactions (Factorial Designs) 🧪 {background-color="#2d4563"}
+
+## Beyond covariates: manipulating multiple factors
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+- To make causal claims about why treatment effects vary, [we need to experimentally manipulate the hypothesised moderating factors]{.alert}
+- This is done using [factorial experimental designs]{.alert}
+- An experimental design that includes two or more "factors" (independent variables), where subjects are randomly assigned to a combination of the levels of these factors
+- Example: Factor A (Treatment vs. Control), Factor B (Context 1 vs. Context 2)
+- Subjects randomly assigned to one of four groups: (Treat, Cxt 1), (Treat, Cxt 2), (Control, Cxt 1), (Control, Cxt 2)
+- Allows us to estimate:
+  - Main effect of Factor A
+  - Main effect of Factor B
+  - [Interaction effect:]{.alert} Does the effect of Factor A *depend* on the level of Factor B?
+- This provides stronger causal evidence about moderators than treatment-by-covariate analysis
+:::
+
+## Examples of factorial designs
+
+:::{style="margin-top: 30px; font-size: 29px;"}
+- [Gerber & Green (2000) Voter Mobilisation:](https://doi.org/10.2307/2585837) Crossed multiple communication methods (Factor 1: Canvassing Y/N, Factor 2: Phone Call Y/N, Factor 3: Direct Mail Y/N) to see if effects were additive or interactive
+- [Olken (2007) Corruption Monitoring:](https://www.journals.uchicago.edu/doi/abs/10.1086/517935) Crossed top-down audits (Factor 1: Audit Y/N) with bottom-up community monitoring (Factor 2: Invitations to meetings Y/N) in Indonesian road projects. Tested if audits were more effective when community was involved
+- Rosen (2010) Discrimination: Crossed putative email sender ethnicity (Factor 1: Hispanic/Non-Hispanic name) with email grammar quality (Factor 2: Good/Bad grammar) sent to state legislators. Tested if ethnic discrimination depended on perceived social class (signalled by grammar)
+:::
+
+## Rosen (2010) example: ethnicity and grammar
+
+:::{style="margin-top: 20px; font-size: 21px;"}
+- Do U.S. state legislators respond differently to constituent emails based on perceived ethnicity and writing quality?
+
+- 2x2 Factorial Design:
+  - Factor 1: Sender Name (Colin Smith vs. José Ramirez)
+  - Factor 2: Email Grammar (Good vs. Bad)
+
+- Outcome: Percentage of emails receiving a reply
+
+- Results (Subset, N=100 per cell):
+
+|                     | Colin Smith (Non-Hispanic) | José Ramirez (Hispanic) | Difference (José - Colin) |
+| :------------------ | :------------------------: | :---------------------: | :-----------------------: |
+| **Good Grammar**    |             52%            |           37%           |          [-15%]{.alert}   |
+| **Bad Grammar**     |             29%            |           34%           |          [+5%]{.alert}    |
+| **Difference (Bad-Good)** |          [-23%]{.alert}   |          [-3%]{.alert}    |                           |
+
+- [Interpretation:]{.alert}
+  - With good grammar, Colin gets more replies (-15% effect for José)
+  - With bad grammar, José gets slightly *more* replies (+5% effect)
+  - The effect of ethnicity *depends on* grammar quality ([Interaction]{.alert})
+  - Poor grammar hurts Colin much more (-23%) than José (-3%)
+:::
+
+## Advantages and caveats of factorial designs
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+- [Advantages:]{.alert}
+  - Allows causal estimation of [interaction effects]{.alert}
+  - Efficient way to study multiple factors simultaneously
+  - Can reveal complex relationships (e.g., conditions where a treatment is effective/ineffective)
+- [Caveats:]{.alert}
+  - Require larger sample sizes to detect interactions (interactions are often smaller than main effects)
+  - Can become complex logistically with many factors/levels
+  - [Non-compliance]{.alert} can be problematic: estimating effects for those receiving *multiple* treatments requires sufficient compliers in those specific cells, which can be rare
+:::
+
+# Modelling HTE with regression 📈 {background-color="#2d4563"}
+
+## Extending the regression framework
+
+:::{style="margin-top: 30px; font-size: 30px;"}
+- Regression is a powerful tool for modelling both treatment-by-covariate and treatment-by-treatment interactions. And [you already know how to use it!]{.alert}
+- [Systematic Heterogeneity:]{.alert} Variation in $\tau$ that can be predicted by observed covariates or experimental factors (modelled by interaction terms)
+- [Idiosyncratic Heterogeneity:]{.alert} Residual variation in $\tau$ not explained by the model (part of the error term $u_i$)
+- We use [interaction terms]{.alert} to capture systematic heterogeneity
+:::
+
+## Modelling treatment-by-treatment interaction
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- Let $J_i = 1$ if sender is José, 0 if Colin
+- Let $G_i = 1$ if grammar is bad, 0 if good
+- Model: $Y_i = \alpha + \beta J_i + \gamma G_i + \delta (J_i \times G_i) + u_i$
+- **Interpreting Coefficients:**
+  - $\alpha$: Mean outcome for baseline (Colin, Good Grammar) = 52%
+  - $\beta$: Effect of José vs. Colin, *when grammar is good* = 37% - 52% = [-15%]{.alert}
+  - $\gamma$: Effect of Bad vs. Good grammar, *when sender is Colin* = 29% - 52% = [-23%]{.alert}
+  - $\delta$: Interaction effect. How the effect of José changes when grammar goes from good to bad.
+    - Effect of José (Bad Grammar) = ($\alpha + \gamma$) + ($\beta + \delta$)
+    - Effect of José (Good Grammar) = $\alpha + \beta$
+    - Difference = $\gamma + \delta$
+    - Alternatively: $\delta$ = (Effect of Bad Grammar for José) - (Effect of Bad Grammar for Colin) = (-3%) - (-23%) = [+20%]{.alert}
+- **Estimates for Rosen data:** $\hat{Y}_i = 0.52 - 0.15 J_i - 0.23 G_i + 0.20 (J_i \times G_i)$
+- **Testing the Interaction:** F-test for $H_0: \delta = 0$. In Rosen's data, p = 0.037. [Significant interaction]{.alert}
+:::
+
+## Automating the search for interactions
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+- Manually specifying and testing interactions becomes infeasible with many covariates/factors
+- [Machine Learning Approaches:]{.alert} Algorithms designed to automatically search for interactions
+  - E.g., [Generalised Random Forests (Athey & Imbens)](https://github.com/grf-labs/grf)
+  - Methodically partition the data based on covariates to find subgroups with different treatment effects
+  - Often use techniques like cross-validation to avoid overfitting and false discoveries
+- Can be a great exploratory tool, especially in high-dimensional settings
+- Still requires careful interpretation and follow-up validation
+- Beyond the scope of this lecture, but good to be aware of! 🤓
+:::
+
+# Summary {background-color="#2d4563"}
+
+## Investigating heterogeneous treatment effects
+
+:::{style="margin-top: 20px; font-size: 22px;"}
+:::{.columns}
+:::{.column width="50%"}
+- ATEs provide an incomplete picture; treatment effects often [vary systematically]{.alert}
+- Fundamental challenge: $Cov(Y(1), Y(0))$ is [unidentified]{.alert}, so $Var(\tau)$ cannot be directly estimated from experimental data alone
+- Preliminary checks:
+  - [Bounding $Var(\tau)$]{.alert}: Often yields wide, uninformative bounds
+  - [Comparing $Var(Y(1))$ and $Var(Y(0))$]{.alert}: Low power test for $H_0: Var(\tau)=0$.
+- Structured approaches are needed for deeper insights
+:::
+
+::: {.column width="50%"}
+- [Treatment-by-Covariate (Subgroup/CATEs):]{.alert}
+  - Estimates effects within subgroups defined by pre-treatment X
+  - Useful for description and prediction
+  - [Interpretation caution]{.alert}: Correlational regarding source of HTE; risk of multiple comparisons
+- [Treatment-by-Treatment (Factorial Designs):]{.alert}
+  - Experimentally manipulate multiple factors
+  - Allows [causal inference about interactions]{.alert}
+  - More complex design, requires larger N
+- [Regression Modelling:]{.alert} Flexible tool for estimating and testing interactions
+- [Best Practice:]{.alert} [Pre-specify theoretically motivated interactions]{.alert} to test; treat exploratory findings cautiously pending replication
+:::
+:::
+:::
+
+# And that's all for today! 🎉 {background-color="#2d4563"}
+
+# See you next time! 😉 {background-color="#2d4563"}
+
+## Appendix 01: why $- 2Cov$?
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+The 2 comes from the algebraic expansion of a squared difference. More formally:
+
+Let $X = Y_i(1)$ and $Y = Y_i(0)$. We want $Var(X - Y)$.
+
+1. Start with the definition of Variance:
+
+$Var(Z) = E[ (Z - E[Z])^2 ]$
+
+So, $Var(X - Y) = E[ ( (X - Y) - E[X - Y] )^2 ]$
+
+2. Rearrange the terms inside:
+
+$Var(X - Y) = E[ ( (X - E[X]) - (Y - E[Y]) )^2 ]$
+
+3. Expand the square (like $(a - b)^2 = a^2 - 2ab + b^2$):
+
+Let $a = (X - E[X])$ and $b = (Y - E[Y])$.
+
+$Var(X - Y) = E[ (X-E[X])^2 \mathbf{- 2}(X-E[X])(Y-E[Y]) + (Y-E[Y])^2 ]$
+
+4. Distribute the Expectation ( $E[A - B + C] = E[A] - E[B] + E[C]$ ):
+
+$Var(X-Y) = E[(X-E[X])^2] \mathbf{- 2}E[(X-E[X])(Y-E[Y])] + E[(Y-E[Y])^2]$
+
+5. Recognise the definitions of Variance and Covariance:
+
+$E[(X-E[X])^2] = Var(X)$
+
+$E[(Y-E[Y])^2] = Var(Y)$
+
+$E[(X-E[X])(Y-E[Y])] = Cov(X, Y)$
+
+6. Substitute back:
+
+$Var(X - Y) = Var(X) - 2Cov(X, Y) + Var(Y)$
+
+$Var(\tau) = Var(Y_i(1)) + Var(Y_i(0)) - 2Cov(Y_i(1), Y_i(0))$
+:::

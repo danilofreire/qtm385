@@ -1,0 +1,953 @@
+---
+title: DATASCI 385 - Experimental Methods
+subtitle: Lecture 13 - Introduction to Quarto and DeclareDesign
+author:
+  - name: Danilo Freire
+    email: danilo.freire@emory.edu
+    affiliations: Department of Data and Decision Sciences <br> Emory University
+format:
+  clean-revealjs:
+    self-contained: true
+    code-overflow: wrap
+    footer: "[Quarto and DD](https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-13/13-quarto.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: knitr
+revealjs-plugins:
+  - multimodal
+editor:
+  render-on-save: true
+---
+
+# Hello, everyone! 😊 {background-color="#2d4563"}
+
+# Brief recap 📚 {background-color="#2d4563"}
+
+## Last class, we discussed...
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+:::{.columns}
+:::{.column width="50%"}
+- The historical development of research ethics ([Nuremberg Code]{.alert}, [Tuskegee Study]{.alert}, [Belmont Report]{.alert})
+- Core ethical principles: [respect for persons]{.alert}, [beneficence]{.alert}, and [justice]{.alert}
+- [Informed consent]{.alert} requirements and procedures
+- Considerations for [anonymity and confidentiality]{.alert} in research data
+- How [Institutional Review Boards (IRBs)]{.alert} protect human subjects
+- Ethical controversies in [recent studies]{.alert} like Facebook's emotional contagion study
+- [Adaptive research designs]{.alert} that maximise benefits and minimise harm
+:::
+
+:::{.column width="50%"}
+- Ethical responsibilities toward [research staff]{.alert} and [communities]{.alert}
+- How [ethical research practices improve data quality]{.alert} and research outcomes
+- The principle of [equipoise]{.alert} in determining when experiments are justified
+- The need for special protections for [vulnerable populations]{.alert}
+- How ethical practices help [prevent attrition]{.alert} and [strengthen research validity]{.alert}
+:::
+:::
+:::
+
+# Today's plan 📅 {background-color="#2d4563"}
+
+## Introduction to Quarto and DeclareDesign
+### Two useful tools for experimental research (and beyond)
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Quarto](https://quarto.org/){.alert} is a great tool to write and publish reproducible documents
+- It fits well with R Markdown and Jupyter Notebooks, so there is very little learning curve for you!
+- Quarto also meets all the requirements for a [good research workflow]{.alert} and [literate programming]{.alert}
+  - It is text-based, so you can use version control (e.g., Git)
+  - It supports code execution and visualisation
+  - It allows you to write in Markdown, LaTeX, and other formats
+:::
+
+:::{.column width="50%"}
+:::{style="margin-top: -30px; text-align: center;"}
+![](figures/quarto.jpeg){width=100%}
+
+<https://quarto.org/>
+:::
+:::
+:::
+:::
+
+## Introduction to Quarto and DeclareDesign
+### Two useful tools for experimental research (and beyond)
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [DeclareDesign](https://declaredesign.org/){.alert} is a package for R that helps you design and analyse experiments
+- We have already used it before, but today we will see more of its capabilities
+- As we will see, DeclareDesign is a powerful tool to plan and execute experiments
+  - It helps you define your research question and hypotheses
+  - It guides you in choosing the right design and sample size
+  - It provides tools to analyse your data and draw conclusions
+- And it is simulation-based, so you can test your design before running the experiment
+- I hope you can use it in your pre-analysis plans! 😉
+:::
+
+:::{.column width="50%"}
+:::{style="margin-top: -30px; text-align: center;"}
+![](figures/dd.png){width=90%}
+
+<https://declaredesign.org/>
+:::
+:::
+:::
+:::
+
+# Quarto 📝 {background-color="#2d4563"}
+
+## What is Quarto?
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+- Quarto (`.qmd`) is a document format that combines the best features of R Markdown and Jupyter Notebooks
+- It is designed for [reproducibility and literate programming]{.alert}, as mentioned before
+- [Literate programming]{.alert} is a programming paradigm that combines code and documentation in a single document
+  - This makes your code more readable and easier to maintain
+  - It also helps you communicate your results more effectively
+- [If you use R Markdown or Jupyter Notebooks, you already do literate programming!]{.alert}
+- Why is literate programming important for experimental research?
+  - It helps you [keep track of your code and results]{.alert}
+  - It makes it easier to [share your work with others]{.alert}
+  - It allows you to [reproduce your analysis and results]{.alert}
+:::
+
+## Why Quarto?
+### Can't I just use R Markdown or Jupyter Notebooks instead?
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+- [Yes, you can!]{.alert} 
+- But Quarto has some advantages over R Markdown and Jupyter Notebooks
+- For example, Quarto supports [multiple programming languages]{.alert} (not just R and Python)
+- It also has built-in support for [interactive visualisations]{.alert} and [data tables]{.alert}
+- And it is designed to work well with [version control systems]{.alert} like Git
+- You can also use it to [publish your documents online](https://quarto.org/docs/publishing/) (like this one!), create [slideshows](https://quarto.org/docs/slides/), [websites](https://quarto.org/docs/websites/), and [books](https://quarto.org/docs/books/)
+- [Learn it once, use it everywhere!]{.alert} 🤓
+:::
+
+## How to get started with Quarto?
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+:::{.columns}
+:::{.column width="50%"}
+- First, you need to [install Quarto](https://quarto.org/docs/get-started/)
+- It is available for Windows, Mac, and Linux
+- If you use [Homebrew](https://brew.sh/), you can install Quarto with `brew install quarto`
+- In case you use [VS Code](https://code.visualstudio.com/), you can install the [Quarto extension](https://marketplace.visualstudio.com/items?itemName=quarto.quarto-vscode) too, which will save you a lot of time
+- You can also use [Quarto in RStudio](https://quarto.org/docs/rstudio/)
+- As [Quarto was created by the same people who made RStudio](https://posit.co/blog/announcing-quarto-a-new-scientific-and-technical-publishing-system/), it is very easy to use it in RStudio
+  - Just install the [Quarto R package](https://quarto.org/docs/r-package/) and you are good to go!
+  - `install.packages("quarto")`
+:::
+
+:::{.column width="50%"}
+:::{style="margin-top: -30px; text-align: center;"}
+![](figures/quarto-install.png){width=100% data-modal-type="iframe" data-modal-url="https://quarto.org/docs/get-started/"}
+
+Click on the image to visit [the Quarto installation page](https://quarto.org/docs/get-started/)
+:::
+:::
+:::
+:::
+
+# Writing a Quarto document 📝 {background-color="#2d4563"}
+
+## How to write a Quarto document?
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Quarto documents are directly influenced by R Markdown
+- All documents have three main components:
+  - YAML header with metadata
+  - Markdown content (text)
+  - Code chunks (R, Python, Julia, etc.)
+- [YAML](https://yaml.org/){.alert} stands for "YAML Ain't Markup Language"
+  - It is a human-readable data serialisation format
+  - It is often used for configuration files and metadata
+  - In Quarto, the YAML header contains information about the document (title, author, date, etc.)
+:::
+
+:::{.column width="50%"}
+```markdown
+---
+title: My Quarto Document
+subtitle: A simple example
+author: Danilo Freire
+date: 2025-03-03
+format: html
+editor:
+  render-on-save: true
+---
+```
+:::
+:::
+:::
+
+## Markdown
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Headings: `#`, `##`, `###`, etc.
+- Emphasis: `*italic*` or `_italics_`, `**boldface**` or `__boldface__`, `~~strikethrough~~`
+- Lists: `*`, `1.`, `-`
+- Links: `[text](url)`
+- Images: `![alt text](url)`
+- Code: \`code\`
+- Tables:
+
+```markdown
+| Header 1 | Header 2 |
+|----------|----------|
+| Cell 1   | Cell 2   |
+```
+:::
+
+:::{.column width="50%"}
+### Heading
+
+_Italics_, **boldface**, and `code`.
+
+List:
+
+- Item 1
+- Item 2
+  - Subitem 1
+
+This is a [link](https://www.emory.edu).
+
+| Header 1 | Header 2 |
+|----------|----------|
+| Cell 1   | Cell 2   |
+:::
+:::
+:::
+
+## Markdown
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Blockquotes: `> quote`
+- Horizontal rules: `---`
+- Footnotes: `[^1]`
+- Superscript: `2^10^`
+- Subscript: `H~2~O`
+- Math: `$\LaTeX$`
+- For equations, use `$` or `$$`
+- Check the [LaTeX Wiki](https://en.wikibooks.org/wiki/LaTeX/Mathematics) for math symbols
+- More at [Markdown Guide](https://www.markdownguide.org/)
+:::
+
+:::{.column width="50%"}
+> This is a blockquote.
+
+This is a paragraph[^1].
+
+Equation: $\mu = \frac{1}{n} \sum_{i=1}^{n} x_i$
+
+[^1]: This is a footnote.
+
+2^10^ is 1024, and H~2~O is water.
+
+---
+
+This is a horizontal rule.
+
+:::
+:::
+:::
+
+# Quarto engines {background-color="#2d4563"}
+
+## knitr
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width="50%"}
+```{r}
+#| echo: true
+#| eval: false
+---
+title: "ggplot2 demo"
+  format: 
+    html:
+      code-fold: true
+---
+
+## Meet Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+```{{r}}
+#| label: plot-penguins
+#| echo: false
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(palmerpenguins)
+
+ggplot(penguins, 
+       aes(x = flipper_length_mm, y = bill_length_mm)) +
+geom_point(aes(color = species, shape = species)) +
+scale_color_manual(values = c("darkorange","purple","cyan4")) +
+  labs(
+    title = "Flipper and bill length",
+    subtitle = "Dimensions for penguins at Palmer Station LTER",
+    x = "Flipper length (mm)", y = "Bill length (mm)",
+    color = "Penguin species", shape = "Penguin species"
+  ) +
+theme_minimal()
+```
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/knitr-plot.png){width="90%"}
+:::
+:::
+:::
+:::
+
+## Jupyter
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width="50%"}
+```{verbatim}
+---
+title: "Palmer Penguins Demo"
+  format: 
+    html:
+      code-fold: true
+jupyter: python3
+---
+
+
+## Meet Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+```{{python}}
+#| echo: false
+#| message: false
+
+import pandas as pd
+import seaborn as sns 
+from palmerpenguins import load_penguins
+sns.set_style('whitegrid')
+
+penguins = load_penguins()
+
+g = sns.lmplot(x="flipper_length_mm",
+               y="body_mass_g",
+               hue="species",
+               height=7,
+               data=penguins,
+               palette=['#FF8C00','#159090','#A034F0']);
+g.set_xlabels('Flipper Length');
+g.set_ylabels('Body Mass');
+```
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/jupyter-plot.png){width="90%"}
+:::
+:::
+:::
+:::
+
+## PDFs
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+:::{.columns}
+:::{.column width="30%"}
+- Most articles and reports are in PDF format
+- You will need a [LaTeX distribution](https://www.latex-project.org/get) to create PDFs
+- You can install it with `quarto`:
+  - `quarto install tinytex`
+- If you use `R`, you can use [`tinytex`](https://yihui.org/tinytex/) with: 
+  - `install.packages("tinytex")`
+  - `tinytex::install_tinytex()`
+- This is [strongly recommended]{.alert} as a LaTeX distribution is huge and takes a long time to install
+- More information [here](https://quarto.org/docs/output-formats/pdf-basics.html)
+:::
+
+:::{.column width="70%"}
+:::{style="text-align: right;"}
+![](figures/pdf.png){width="85%"}
+:::
+:::
+:::
+:::
+
+## Adding references
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+:::{.columns}
+:::{.column width="50%"}
+- You can add academic references to your documents using `BibTeX`
+- `BibTeX` is a reference management software developed for LaTeX
+- A `BibTeX` file is a plain text file with `.bib` extension
+- You can add references to your YAML header
+- Use `@key` to cite a reference, `[@key]` to cite in parentheses
+- The key is the first line of the reference in the `.bib` file (e.g., `@article{nash1950equilibrium,...}`). The key here is `nash1950equilibrium`
+- More information [here](https://quarto.org/docs/authoring/references.html)
+:::
+
+:::{.column width="50%"}
+- The easiest way to manage references is with a reference manager like [Zotero](https://www.zotero.org/) or download a BibTeX reference from Google Scholar
+- Just search for a paper and click on the `cite` button
+- Then click on `BibTeX` and copy the reference to your `.bib` file
+:::
+:::
+:::
+
+## Example
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+:::{.columns}
+:::{.column width="50%"}
+![](figures/scholar.png)
+
+![](figures/citation.png)
+
+:::
+
+:::{.column width="50%"}
+```bibtex
+@article{nash1950equilibrium,
+  title={Equilibrium points in n-person games},
+  author={Nash Jr, John F},
+  journal={Proceedings of the national academy of sciences},
+  volume={36},
+  number={1},
+  pages={48--49},
+  year={1950},
+  publisher={National Acad Sciences}
+}
+```
+
+- Save it on your `references.bib` file (or any other name, as long as you reference it in your YAML header and the file ends with `.bib`)
+- Quarto will automatically format the references
+- More information about BibTeX [here](https://www.overleaf.com/learn/latex/Bibliography_management_with_bibtex)
+:::
+:::
+:::
+
+## Example
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+:::{.columns}
+:::{.column width="30%"}
+Then you add the references to your YAML header:
+
+```markdown
+---
+title: "Matplotlib Demo"
+author: "Norah Jones"
+date: "2024-09-30"
+date-format: "MMMM D, YYYY"
+format: 
+  pdf:
+    fig-width: 3
+    fig-height: 2
+    margins: 2in
+bibliography: references.bib
+---
+```
+:::
+
+:::{.column width="70%"}
+![](figures/bibtex.png)
+:::
+:::
+:::
+
+# DeclareDesign 📊 {background-color="#2d4563"}
+
+## What is DeclareDesign?
+### A package for designing and analysing data
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- [DeclareDesign](https://declaredesign.org/){.alert} is an `R` package that helps you design and analyse experiments, quasi-experiments, and other observational studies
+- Its main goal is to provide [tools for declaration, diagnosis, and redesign in code]{.alert}, that is, to help you plan and execute your research before data analysis
+- DeclareDesign can be thought of in 2 parts
+  - [The data fabrication step]{.alert} (this is the bulk of the code)
+  - [The evaluation step]{.alert}, where users can change initial assumptions and see how well their design actually worked (this is the computationally intensive part of the code)
+- The great thing about DeclareDesign is that you can simulate [any kind of design]{.alert} you can think of (e.g., experiments, regression discontinuity, difference-in-differences, even qualitative research!)
+- However, most studies are not that complex, so you will rarely need to use all of DeclareDesign's capabilities
+- The authors have written a [book](https://declaredesign.org/library/) that explains the package in detail
+- And they have also created a companion package, [DesignLibrary](https://declaredesign.org/r/designlibrary/), with pre-built designs that you can use right away! 🤓
+:::
+
+## Six components of a DeclareDesign study
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- [Population]{.alert}: Set of units about which inferences are sought and their characteristics
+  - Where should the theory apply? Who are the units of interest?
+- [Potential outcomes]{.alert}: Outcomes each unit might exhibit depending on how causal process changes the world
+  - Rooted in theory; non-compliance, spillovers and attrition [affect potential outcomes]{.alert}
+- [Sampling strategy]{.alert}: Strategy used to select units to include in study
+  - How are we selecting units to analyse?
+- [Assignment]{.alert}: Manner in which units are assigned to reveal one potential outcome or another
+  - Randomisation strategy used
+- [Estimand]{.alert}: Quantities that we want to learn about in the world, in terms of potential outcomes
+  - What are we trying to estimate? ATE? Difference in means? Other quantities?
+- [Estimator]{.alert}: Procedure for generating estimates of the quantities we want to learn about
+  - This is your statistical model (e.g., OLS, IV, etc.)
+:::
+
+## DeclareDesign in action
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+:::{.columns}
+:::{.column width="50%"}
+- First, you need to install DeclareDesign with `install.packages("DeclareDesign")` and DesignLibrary with `install.packages("DesignLibrary")`
+- Under the hood, DeclareDesign uses `fabricatr` to generate data, `randomizr` to randomise units, and `estimatr` to estimate causal effects
+- All functions start with `declare_`, and you can chain them together with `+`
+- Once you have your design, you can run it with `diagnose_design` and `draw_data`
+- Then you can also use `ggplot2` to visualise your results or `dplyr` to summarise them
+- The authors have written a [tutorial](https://declaredesign.org/getting-started/) that explains how to use DeclareDesign
+- And they have also created a [gallery](https://declaredesign.org/r/designlibrary/) with examples of different designs
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+| Design component | Function        | Description                     |
+|-----------------|-----------------|---------------------------------|
+| Model           | `declare_model()` | background variables and potential outcomes |
+| Inquiry         | `declare_inquiry()` | research questions                |
+| Data strategy   | `declare_sampling()` | sampling procedures              |
+|                 | `declare_assignment()` | assignment procedures            |
+|                 | `declare_measurement()` | measurement procedures           |
+| Answer strategy | `declare_estimator()` | estimation procedures            |
+|                 | `declare_test()`   | testing procedures               |
+:::
+
+[Chapter 18 of the book](https://book.declaredesign.org/library/experimental-causal.html#sec-ch18s1) explains how to use DeclareDesign for experimental causal inference. Lots of examples! Some we are going to see today 🤓
+:::
+:::
+:::
+
+## Example
+### Two-arm experiment
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+```{r}
+#| echo: true
+#| eval: true
+library(DeclareDesign)
+library(tidyverse)
+set.seed(385)
+
+sample_size <- 50
+
+two_arm <-
+  declare_model(
+    N = 10000,
+    X = rep(c(0, 1), each = N / 2),
+    U = rnorm(N, sd = 0.25),
+    potential_outcomes(Y ~ 0.2 * Z + X + U)
+  ) +
+  declare_inquiry(ATE = mean(Y_Z_1 - Y_Z_0)) +
+  declare_sampling(S = complete_rs(N = N, n = sample_size)) +
+  declare_assignment(Z = complete_ra(N = N, m = sample_size/2)) +
+  declare_measurement(Y = reveal_outcomes(Y ~ Z)) +
+  declare_estimator(Y ~ Z, .method = lm_robust, inquiry = "ATE")
+
+diagnosis_two_arm <- diagnose_design(two_arm)
+diagnosis_two_arm
+```
+:::
+
+## Power is a bit too low...
+### Let's redesign the experiment
+
+:::{style="margin-top: 30px; font-size: 20px;"}
+:::{.columns}
+:::{.column width="50%"}
+```{r}
+#| echo: true
+#| eval: true
+set.seed(385)
+
+two_arm_power <-
+  two_arm |>
+  redesign(sample_size = c(50, 100, 250, 500)) |>
+  diagnose_designs() |>
+  tidy() |>
+  filter(diagnosand == "power")
+
+two_arm_power |>
+  select(design, sample_size, diagnosand, estimate)
+```
+:::
+
+:::{.column width="50%"}
+```{r}
+#| echo: true
+#| eval: true
+ggplot(two_arm_power, aes(sample_size, estimate)) + 
+  geom_point() +
+  geom_smooth(method = "loess", color = "blue") +
+  geom_hline(yintercept = 0.8, color = "red") +
+  labs(x = "Sample Size", y = "Statistical Power") +
+  theme_minimal()
+  
+```
+:::
+:::
+:::
+
+## Two-arm experiments with covariates
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+```{r}
+#| echo: true
+#| eval: true
+set.seed(385)
+
+model <-
+  declare_model(
+    N = 10000,
+    X = rep(c(0, 1), each = N / 2),
+    U = rnorm(N, sd = 0.25),
+    potential_outcomes(Y ~ 0.2 * Z + X + U)
+  ) 
+inquiry <-
+  declare_inquiry(ATE = mean(Y_Z_1 - Y_Z_0))
+sampling <-
+  declare_sampling(S = complete_rs(N = N, n = sample_size))
+assignment <-
+  declare_assignment(Z = complete_ra(N = N, m = sample_size/2))
+measurement <-
+  declare_measurement(Y = reveal_outcomes(Y ~ Z))
+answer_strategy <-
+  declare_estimator(Y ~ Z, .method = lm_robust, inquiry = "ATE", label = "OLS")
+
+two_arms_a <-
+  model +
+  inquiry +
+  sampling +
+  assignment +
+  measurement +
+  answer_strategy
+
+diagnosis_two_arms_a <- diagnose_design(two_arms_a)
+diagnosis_two_arms_a
+```
+:::
+
+## Two-arm experiments with covariates
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+```{r}
+#| echo: true
+#| eval: true
+set.seed(385)
+
+two_arm_cov <-
+  model +
+  inquiry +
+  sampling +
+  assignment +
+  measurement +
+  declare_estimator(Y ~ Z, covariates = ~ X, .method = lm_lin, inquiry = "ATE", label = "OLS with covariates")
+
+diagnosis_two_arm_cov <- diagnose_design(two_arm_cov)
+diagnosis_two_arm_cov
+```
+:::
+
+## Two-arm experiments without covariates
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+
+```{r}
+#| echo: true
+#| eval: true
+simulations_ta <- get_simulations(diagnosis_two_arm)
+
+# first create summary for vertical lines
+summary_ta <- 
+  simulations_ta |> 
+  group_by(estimator) |> 
+  summarize(estimand = mean(estimand))
+
+# then plot simulations
+ggplot(simulations_ta) +
+  geom_histogram(aes(estimate),
+                 bins = 40, fill = "#72B4F3") +
+  geom_vline(data = summary_ta,
+             aes(xintercept = estimand),
+             lty = "dashed", color = "#C6227F") +
+  annotate("text", y = 300, x = 0.18, label = "Estimand",
+           color = "#C6227F", hjust = 1) +
+  facet_wrap(~ estimator) +
+  labs(x = "Estimate", y = "Count of simulations") +
+  theme_minimal()
+```
+:::
+
+## Two-arm experiments with covariates
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+```{r}
+#| echo: true
+#| eval: true
+simulations_tac <- get_simulations(diagnosis_two_arm_cov)
+
+summary_tac <- 
+  simulations_tac |> 
+  group_by(estimator) |> 
+  summarize(estimand = mean(estimand))
+
+# then plot simulations
+ggplot(simulations_tac) +
+  geom_histogram(aes(estimate),
+                 bins = 40, fill = "#72B4F3") +
+  geom_vline(data = summary_tac,
+             aes(xintercept = estimand),
+             lty = "dashed", color = "#C6227F") +
+  annotate("text", y = 300, x = 0.18, label = "Estimand",
+           color = "#C6227F", hjust = 1) +
+  facet_wrap(~ estimator) +
+  labs(x = "Estimate", y = "Count of simulations") +
+  theme_minimal()
+```
+:::
+
+## Block randomisation two-arm experiment
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+```{r}
+#| echo: true
+#| eval: true
+set.seed(385)
+
+block_randomisation <-
+  model +
+  inquiry +
+  declare_sampling(S = strata_rs(strata = X, n = 50)) +
+  declare_assignment(Z = block_ra(blocks = X)) +
+  measurement +
+  declare_estimator(Y ~ Z, covariates = ~ X, .method = lm_lin, inquiry = "ATE", label = "Lin")
+
+diagnosis_block_randomisation <- diagnose_design(block_randomisation)
+diagnosis_block_randomisation
+
+simulations_br <- get_simulations(diagnosis_block_randomisation)
+
+summary_br <- 
+  simulations_br |> 
+  group_by(estimator) |> 
+  summarize(estimand = mean(estimand))
+
+# then plot simulations
+ggplot(simulations_br) +
+  geom_histogram(aes(estimate),
+                 bins = 40, fill = "#72B4F3") +
+  geom_vline(data = summary_br,
+             aes(xintercept = estimand),
+             lty = "dashed", color = "#C6227F") +
+  annotate("text", y = 300, x = 0.18, label = "Estimand",
+           color = "#C6227F", hjust = 1) +
+  facet_wrap(~ estimator) +
+  labs(x = "Estimate", y = "Count of simulations") +
+  theme_minimal()
+```
+:::
+
+## Blocked and clustered randomisation
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+```{r}
+#| echo: true
+#| eval: true
+set.seed(385)
+
+ICC <- 0.9
+
+block_cluster <-
+  declare_model(
+    cluster =
+      add_level(
+        N = 10,
+        cluster_size = rep(seq(10, 50, 10), 2),
+        cluster_shock =
+          scale(cluster_size + rnorm(N, sd = 5)) * sqrt(ICC),
+        cluster_tau = rnorm(N, sd = sqrt(ICC))
+      ),
+    individual =
+      add_level(
+        N = cluster_size,
+        individual_shock = rnorm(N, sd = sqrt(1 - ICC)),
+        individual_tau = rnorm(N, sd = sqrt(1 - ICC)),
+        Y_Z_0 = cluster_shock + individual_shock,
+        Y_Z_1 = Y_Z_0 + cluster_tau + individual_tau
+      )
+  ) +
+  declare_inquiry(ATE = mean(Y_Z_1 - Y_Z_0)) +
+  declare_assignment(Z = block_and_cluster_ra(clusters = cluster, blocks = cluster_size)) +
+  declare_measurement(Y = reveal_outcomes(Y ~ Z)) +
+  declare_estimator(Y ~ Z,
+                    clusters = cluster,
+                    inquiry = "ATE")
+
+diagnosis_block_cluster <- diagnose_design(block_cluster)
+diagnosis_block_cluster
+```
+:::
+
+## Redesigning over values of ICC
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+```{r}
+#| echo: true
+#| eval: true
+set.seed(385)
+
+block_cluster_icc <-
+  block_cluster |>
+  redesign(ICC = seq(0.1, 0.9, by = 0.4)) |> 
+  diagnose_designs() |>
+  tidy()
+
+block_cluster_icc |>
+  select(design, ICC, diagnosand, estimate) |>
+  filter(diagnosand %in% c("mean_estimate", "sd_estimate"))
+```
+:::
+
+# DesignLibrary 📚 {background-color="#2d4563"}
+
+## DesignLibrary
+### Making your life easier!
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- [DesignLibrary](https://declaredesign.org/r/designlibrary/){.alert} is a companion package to DeclareDesign and it includes several common designs
+- You can use these designs as templates for your own experiments!
+- Let's see how to create a simple [two-arm experiment with DesignLibrary](https://declaredesign.org/r/designlibrary/reference/two_arm_designer.html)
+
+```{r}
+#| echo: true
+#| eval: true
+library(DesignLibrary)
+
+# two_arm_designer(
+  # N = 100,
+  # assignment_prob = 0.5,
+  # control_mean = 0,
+  # control_sd = 1,
+  # ate = 1,
+  # treatment_mean = control_mean + ate,
+  # treatment_sd = control_sd,
+  # rho = 1,
+  # args_to_fix = NULL
+# )
+
+two_arm_design <- two_arm_designer(ate = 2, N = 1000)
+
+two_arm_design
+```
+:::
+
+## DesignLibrary
+### Clustered designs
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- You can create complex designs easily too!
+
+```{r}
+#| echo: true
+#| eval: true
+
+# A design with varying block size and varying cluster size
+cluster_sampling_design <- cluster_sampling_designer(
+  N_blocks = 2,
+  N_clusters_in_block = 100,
+  N_i_in_cluster = 50,
+  n_clusters_in_block = 10,
+  n_i_in_cluster = 10,
+  icc = 0.1)
+
+cluster_sampling_design
+```
+:::
+
+# DesignWizard 🧙 {background-color="#2d4563"}
+
+## DesignWizard
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+:::{.columns}
+:::{.column width="40%"}
+- Our friends at DeclareDesign have created a tool called [DesignWizard](https://eos.wzb.eu/ipi/DDWizard/) that can help you create and diagnose designs interactively
+- It's a great way to get started with DeclareDesign [without writing any code!]{.alert}
+- DesignWizard asks a few questions about your research goals and then generates the corresponding DeclareDesign code for you
+- It even generates the simulations and diagnoses for you automatically!
+- [Give it a try!]{.alert} 🧙
+:::
+
+:::{.column width="60%"}
+:::{style="text-align: center;"}
+![](figures/designwizard.png){width=90%}
+
+<https://eos.wzb.eu/ipi/DDWizard/>
+:::
+:::
+:::
+:::
+
+# Summary 📚 {background-color="#2d4563"}
+
+## Today we learned...
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+- The basics of [Quarto](https://quarto.org/){.alert} and [DeclareDesign](https://declaredesign.org/){.alert}
+- How to write a [Quarto document]{.alert} that includes text, code, and visualisations
+- The importance of [literate programming]{.alert} for reproducible research
+- How to use [DeclareDesign]{.alert} to plan and execute experiments
+- The six components of a [DeclareDesign study]{.alert}
+- How to use [DesignLibrary]{.alert} to create common designs
+:::
+
+## Further readings
+
+:::{style="margin-top: 30px; font-size: 28px;"}
+- You can find more information about Quarto at <https://quarto.org/>
+- Many templates are available in the Quarto Gallery: <https://quarto.org/gallery/>
+- I have a personal collection of PDF templates available at <https://github.com/danilofreire/quarto-templates>
+- Familiarise yourself with `fabricatr` at <https://declaredesign.org/r/fabricatr/>
+- If you want to dive deeper into the MIDA framework, please read chapters 5–13 here: <https://book.declaredesign.org/declaration-diagnosis-redesign/declaring-designs.html>
+- And if you want to learn more about the DesignLibrary, please visit <https://declaredesign.org/r/designlibrary/>
+:::
+
+## Quarto cheat sheet
+
+:::{style="margin-top: 30px; font-size: 22px; text-align: center;"}
+![](figures/quarto-cheat-sheet.png){width=90%}
+
+Source: <https://raw.githubusercontent.com/rstudio/cheatsheets/master/quarto.pdf>
+:::
+
+## DeclareDesign cheat sheet
+
+:::{style="margin-top: 30px; font-size: 22px; text-align: center;"}
+![](figures/dd-cheat-sheet.png){width=90%}
+
+Source: <https://raw.githubusercontent.com/rstudio/cheatsheets/master/declaredesign.pdf>
+:::
+
+# And that's all for today! 🎉 {background-color="#2d4563"}
+
+# Have a great week! 🎉 {background-color="#2d4563"}

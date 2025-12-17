@@ -1,0 +1,646 @@
+---
+title: DATASCI 385 - Experimental Methods
+subtitle: Lecture 03 - Potential Outcomes Framework
+author:
+  - name: Danilo Freire
+    orcid: 0000-0002-4712-6810
+    email: danilo.freire@emory.edu
+    affiliations: Department of Data and Decision Sciences <br> Emory University
+format:
+  clean-revealjs:
+    self-contained: true
+    code-overflow: wrap
+    footer: "[Potential Outcomes](https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-03/03-potential-outcomes.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: python3
+editor:
+  render-on-save: true
+---
+
+# Hello, everyone! 👋 <br> Hope you're all doing well! 😉 {background-color="#2d4563"}
+
+# Brief recap 📚 {background-color="#2d4563"}
+
+## Last time, we saw that...
+
+:::{style="margin-top: 30px; font-size: 19px;"}
+:::{.incremental}
+:::{.columns}
+:::{.column width=50%}
+
+- A good research question should produce [knowledge that solves real-world problems]{.alert} and guides policy decisions, with a [practical and credible research design]{.alert}
+
+- [Theory]{.alert} is essential in research design, whether implicit or explicit, as it helps generate hypotheses, informs design choices, and guides inference strategies
+
+- [Operationalisation]{.alert} is the process of translating theoretical concepts into measurable variables, such as turning "social isolation" into the frequency of social interactions
+
+- [Pre-registration]{.alert} involves filing research designs and hypotheses publicly to reduce bias, improve credibility, and distinguish between pre-planned and exploratory analyses
+
+- The [reproducibility crisis]{.alert} in science highlights the need for transparent and replicable research, with pre-registration and pre-analysis plans helping address this issue
+
+:::
+:::{.column width=50%}
+
+- The [EGAP research design form](https://egap.github.io/learningdays-resources/Exercises/design-form.html) provides a blueprint for creating robust research designs, covering key components like hypotheses, population, intervention, outcomes, and analysis
+
+- The [MIDA framework](https://book.declaredesign.org/introduction/what-is-a-research-design.html#mida-the-four-elements-of-a-research-design) (Model, Inquiry, Data, Answer) helps researchers simulate and diagnose their designs before implementation, ensuring they can answer their research questions effectively
+
+- [DeclareDesign](https://declaredesign.org/) is a tool that allows researchers to declare, diagnose, and design their studies using the MIDA framework, improving the quality and credibility of research
+
+- A [two-arm trial]{.alert} is a common experimental design where units are randomly assigned to treatment or control groups, and the average treatment effect (ATE) is estimated
+
+- [Alignment]{.alert} between research design and theoretical frameworks is necessary for generating credible and actionable results, even when experiments are not feasible
+
+:::
+:::
+:::
+:::
+
+## Today, we will discuss...
+
+:::{style="margin-top: 50px; font-size: 24px;"}
+:::{.columns}
+:::{.column width=50%}
+- The concept of [potential outcomes]{.alert} and how it helps us understand causal inference
+- The [fundamental problem of causal inference]{.alert}
+- The [Rubin Causal Model]{.alert}
+- The [Stable Unit Treatment Value Assumption (SUTVA)]{.alert} and its importance in causal inference
+- Why [random assignment]{.alert} removes selection bias and allows us to estimate causal effects
+- But first... an example
+:::
+
+:::{.column width=50%}
+:::{style="text-align: center; margin-top: -20px;"}
+![](figures/possible.png){width=100%}
+:::
+:::
+:::
+:::
+
+# Do hospitals make people sicker? 🏥 {background-color="#2d4563"}
+
+## Imagine you are a health economist...
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+- ... and you want to know whether the government should invest in building more hospitals
+- You measure the sample's health status: poor, fair, good, very good, or excellent? (the higher, the better)
+- And you find this:
+
+|                 | Hospital | No Hospital | Difference |
+|-----------------|----------|-------------|------------|
+| Health status   | 3.21     | 3.93        | −0.72∗∗∗   |
+|                 | (0.014)  | (0.003)     |            |
+| Observations    | 7,774    | 90,049      |            |
+
+<br>
+
+- A simple comparison of means suggests that going to the hospital makes people worse off: those who had a hospital stay in the last 6 months are, on average, less healthy than those that were not admitted to the hospital
+- The difference is statistically significant at the 1% level
+- [But don't dismiss the idea just yet!]{.alert}
+- [What could be going on here?]{.alert}
+:::
+
+## Potential outcomes
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- We are interested in the relationship between [treatment]{.alert} $T$ and some outcome that may be impacted by the treatment (e.g., health)
+
+:::{style="margin-top: 20px;"}
+:::
+
+- Outcome of interest:
+  - $Y$ = outcome we are interested in studying (e.g. health)
+  - $Y_i$ = value of outcome of interest for individual $i$
+
+:::{style="margin-top: 20px;"}
+:::
+
+- For each individual, there are [two potential outcomes]{.alert}:
+  - $Y_{0,i}$ = outcome if individual $i$ does not receive treatment
+  - $Y_{1,i}$ = outcome if individual $i$ does receive treatment
+
+:::{style="margin-top: 20px;"}
+:::
+- So the treatment effect for individual $i$ is:
+  - $\tau_{i} = Y_{1,i} - Y_{0,i}$
+:::
+
+## Potential outcomes
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- Alejandro has a broken leg
+- He has two potential outcomes:
+  - $Y_{0,a}$ = If he doesn’t go to the hospital, his leg doesn’t heal properly
+  - [$Y_{1,a}$ = If he goes to the hospital, his leg heals completely]{.alert}
+
+:::{style="margin-top: 20px;"}
+:::
+
+- Benicio doesn’t have any broken bones. His health is fine
+- He also has two potential outcomes:
+  - $Y_{0,b}$ = If he doesn’t go to the hospital, his health is still fine
+  - [$Y_{1,b}$ = If he goes to the hospital, his health is still fine]{.alert}
+
+:::{style="margin-top: 20px;"}
+:::
+- [The fundamental problem of causal inference]{.alert}:
+  - _We never observe both potential outcomes for the same individual_
+  - Creates [a missing data problem]{.alert} if we compare treated to untreated
+:::
+
+## The fundamental problem of causal inference
+
+:::{style="margin-top: 30px; font-size: 22px;"}
+- For any individual, we can only observe [one potential outcome]{.alert}:
+
+$$
+Y_i =
+\begin{cases}
+Y_{0i} & \text{if } T_i = 0 \\
+Y_{1i} & \text{if } T_i = 1
+\end{cases}
+$$
+
+where $T_i$ is a treatment indicator equal to 1 if $i$ was treated and 0 otherwise
+
+- Each individual either participates in the programme or not
+
+- The causal impact of programme $T$ on $i$ is:
+
+$$
+Y_{1i} - Y_{0i}
+$$
+
+- We only observe $i$'s actual outcome:
+
+$$
+Y_i = Y_{0i} + (Y_{1i} - Y_{0i}) T_i
+$$
+
+**Example:** Alejandro goes to the hospital, Benicio does not
+:::
+
+## Establishing causality
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- In an ideal world (research-wise), we could clone each treated individual and observe the impacts of treatment on the outcomes of interest
+
+:::{style="text-align: center; margin-top: 20px;"}
+![](figures/lisa.png){width=30%}
+:::
+
+- But we can't clone people (yet 😂), so we need to find a way to estimate the treatment effect using the data we have
+- What is the impact of giving Lisa a textbook on her test scores? 📚
+  - Impact = Lisa’s score with a book - Lisa’s score without a book
+- In the real world, we either observe Lisa with a textbook or without a textbook, but not both
+- [We never observe the counterfactual]{.alert}
+:::
+
+## Establishing causality
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- To measure the causal impact of giving Lisa a book on her test score, we need to find a similar child that did not receive a book
+
+:::{style="text-align: center; margin-top: 20px;"}
+![](figures/bart.png){width=30%}
+:::
+
+- Our estimate of the impact of the book is then the difference in test scores between the treatment group and the comparison group
+  - Impact = Lisa’s score with a book - Bart’s score without a book
+
+- As this example illustrates, finding a good comparison group is hard
+  - [Your research design is your counterfactual]{.alert}
+:::
+
+## Average causal effects
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- What we actually want to know is the [average causal effect]{.alert}, but that is not what we get from a difference in means comparison
+
+:::{style="margin-top: 20px;"}
+:::
+
+[Difference in group means]{.alert}:
+
+- Average causal effect of programme on participants + selection bias
+
+Even in a large sample:
+
+- People will choose to participate in a programme when they expect the programme to make them better off (i.e., when $Y_{1,i} - Y_{0,i} > 0$)
+
+- The people who choose to participate are likely to be different than those who choose not to... *even in the absence of the programme*
+:::
+
+## Selection bias: example
+
+:::{style="margin-top: 30px; font-size: 28px; text-align: center;"}
+![](figures/tab01.png){width=40%}
+:::
+
+## Selection bias: example
+
+:::{style="margin-top: 30px; font-size: 28px; text-align: center;"}
+![](figures/tab02.png){width=90%}
+:::
+
+## Selection bias: example
+
+:::{style="margin-top: 30px; font-size: 28px; text-align: center;"}
+![](figures/tab03.png){width=90%}
+:::
+
+## Mathematically speaking...
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+- The [mathematical expectation]{.alert} of $Y$ is $E[Y]$
+- The theoretical, probability-weighted average of a variable in a population (the "long-run average")
+  - Example: probability a coin flipped lands heads = 0.5
+  - A six-sided die rolled = 3.5 (although no side has 3.5 dots)
+
+- [Law of large numbers]{.alert}: sample average converges to population average as sample size increases
+  - $\bar{Y} \xrightarrow{p} E[Y]$ as $N \to \infty$
+  - Where $\xrightarrow{p}$ denotes convergence in probability
+- In small samples, average of $Y_i$ might be anything
+- Average of $Y_i$ gets very close to $E[Y]$ as number of observations (that we are averaging over) gets large
+- [Bias]{.alert}: difference between expected value of an estimator and the true value of the parameter being estimated
+  - $Bias = E[\hat{\theta}] - \theta$
+:::
+
+## The Law of Large Numbers visualised
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- Imagine we simulate a uniform distribution of numbers from 0 to 9
+- The expected value of this distribution is 4.5
+- As we increase the number of simulations, you'll see that the average of the numbers converges to 4.5
+
+:::{style="margin-top: 20px; text-align: center;"}
+![](figures/clt.mp4){width=90%}
+
+Source: [r/dataisbeautiful](https://www.reddit.com/r/dataisbeautiful/comments/bfpw5f/demonstrating_the_central_limit_theorem_oc/)
+:::
+:::
+
+## Conditional expectations
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- [Conditional expectation]{.alert} of $Y_i$ given $X_i$ is $E[Y_i|X_i]$
+- The conditional expectation of $Y_i$ given a variable $X_i = x$, is the average of $Y_i$ in an infinite population that has $X_i = x$
+- In a sample, we estimate this with: $\hat{E}[Y_i|X_i = x] = \frac{1}{N_x}\sum_{i: X_i = x} Y_i$
+
+<br>
+
+- Example:
+  - $X_i =1$ if individual $i$ is treated, 0 otherwise
+  - $E[Y_i|X_i = 1]$ = average outcome for treated individuals
+  - $E[Y_i|X_i = 0]$ = average outcome for untreated individuals
+  - $E[Y_i|X_i = 1] - E[Y_i|X_i = 0]$ gives us the average treatment effect if treatment is randomly assigned
+:::
+
+## Selection bias (this time with maths)
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- When we compare participants to non-participants, the [observed difference]{.alert} in outcomes is a [combination of the true treatment effect and selection bias]{.alert}
+
+:::{style="margin-top: 20px; text-align: center;"}
+![](figures/selection-bias.png){width=90%}
+:::
+:::
+
+## Explaining the formula 🏥
+
+:::{style="margin-top: 30px; font-size: 25px;"}
+Let's break down the equation using the hospital example
+
+-   [Observed Difference]{.alert}: This is the simple comparison we can calculate
+    -   It's the average health of hospital-goers ($\mathbb{E}(Y_i|T_i=1) = 3.21$) minus the average health of non-hospital-goers ($\mathbb{E}(Y_i|T_i=0) = 3.93$)
+    -   $3.21 - 3.93 = -0.72$. This naive result suggests hospitals are harmful
+
+-   [Average Treatment Effect on the Treated (ATT)]{.alert}: The true effect of the hospital *on those who went*
+    -   It compares their actual health ($\mathbb{E}(Y_{1i}|T_i=1) = 3.21$) with their [unseen counterfactual]{.alert}: what their health would have been if they hadn't gone ($\mathbb{E}(Y_{0i}|T_i=1)$)
+    -   Since they were already sick, their counterfactual health would have been poor (e.g., hypothetically 2.5)
+    -   **True Effect**: $3.21 - 2.5 = +0.71$. The hospital had a positive effect!
+:::
+
+## Explaining the formula 🏥
+
+:::{style="margin-top: 30px; font-size: 27px;"}
+-   [Selection Bias]{.alert}: The pre-existing difference between the groups
+    -   It compares the counterfactual health of the hospital-goers (2.5) with the health of the non-hospital-goers (3.93)
+    -   **Bias**: $2.5 - 3.93 = -1.43$. The hospital group was much sicker to begin with
+
+-   [Putting It All Together]{.alert}:
+    -   Observed Difference = ATT + Selection Bias
+    -   $-0.72 = (+0.71) + (-1.43)$
+    -   The large negative selection bias completely masked the positive effect of the hospital
+    -   [Randomisation eliminates this bias]{.alert}
+:::
+
+# The experimental ideal 👩🏻‍🔬 {background-color="#2d4563"}
+
+## Two common (but often flawed) comparisons
+
+:::{style="margin-top: 60px; font-size: 30px;"}
+- Participant vs. Non-Participant comparisons (we just saw why this is problematic)
+
+<br>
+
+- Pre-treatment vs. Post-treatment comparisons (why?)
+
+<br>
+
+- [Extremely strong]{.alert} (read: *often unreasonable* 😅) assumptions are required to make either of these impact evaluation approaches credible
+:::
+
+## Pre- vs. post-treatment comparisons
+
+:::{style="margin-top: 30px; font-size: 24px; text-align: center;"}
+![](figures/jpal01.png){width=90%}
+:::
+
+## Pre- vs. post-treatment comparisons
+
+:::{style="margin-top: 30px; font-size: 24px; text-align: center;"}
+![](figures/jpal02.png){width=90%}
+:::
+
+## Pre- vs. post-treatment comparisons
+
+:::{style="margin-top: 30px; font-size: 24px; text-align: center;"}
+![](figures/jpal03.png){width=90%}
+:::
+
+## Pre- vs. post-treatment comparisons
+
+:::{style="margin-top: 30px; font-size: 24px; text-align: center;"}
+![](figures/jpal04.png){width=90%}
+:::
+
+## Millennium development villages
+
+:::{style="margin-top: 30px; font-size: 23px;"}
+- [Millennium Villages Project (MVP)](https://www.un.org/esa/coordination/Alliance/Earth%20Institute%20-%20The%20Millennium%20Villages%20Project.htm) (2004-2015) was a UN project to demonstrate that integrated, community-led development could improve health, education, and agriculture in rural Africa
+- First evaluation relied on data on pre-treatment and post-treatment outcomes in [Bar Sauri, Kenya](https://en.wikipedia.org/wiki/Sauri_Millennium_Village) and comparison villages in the same region
+- On most outcomes, people living in the MDV looked better after 3–5 years
+- But have a look at this 🤨
+
+:::{style="margin-top: 20px; text-align: center;"}
+![](figures/mvp.png){width=45%}
+:::
+:::
+
+## How to estimate causal effects
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+:::{.columns}
+:::{.column width="50%"}
+### Quasi-experimental approaches
+
+- **Difference-in-difference estimation**
+  - [Idea]{.alert}: Combine pre/post + treated/untreated designs
+  - [Requirement]{.alert}: Common trends in treatment, comparison groups
+
+- **Instrumental variables**
+  - [Idea]{.alert}: Find a source of exogenous variation in treatment
+  - [Requirement]{.alert}: A valid instrument (satisfying the exclusion restriction)
+
+- **Regression discontinuity**
+  - [Idea]{.alert}: Exploit explicit rules (cutoffs) for assigning treatment
+  - [Requirement]{.alert}: The existence of discontinuity
+:::
+
+:::{.column width="50%"}
+### Alternative approaches
+
+- **Conditional independence assumption (CIA) approaches**
+  - Machine estimators, i.e., [propensity score matching]{.alert}
+  - Coefficient stability robustness to controls
+
+- **Explicit models** (structural or not) of selection into treatment
+
+- **Natural experiments** when treatment is as-good-as-random
+  - Example: [Rainfall shocks in childhood]{.alert} (Maccini and Yang 2009)
+  - Closely related to instrumental variables approach
+:::
+:::
+:::
+
+## How to estimate causal effects
+### Experimental approach
+
+:::{style="margin-top: 30px; font-size: 21px;"}
+
+- Random assignment to treatment
+  - Eligibility for programme is determined at random, e.g., via [pulling names out of a hat]{.alert}
+
+- The Law of Large Numbers
+  - A [sample average]{.alert} can be brought as close as we like to the [population mean]{.alert} just by enlarging the sample
+  - Mathematically: $\bar{Y} \to E[Y_i] \quad \text{as} \quad N \to \infty$
+
+- Treatment and control groups
+- When treatment status is randomly assigned:
+  - Treatment and control groups are [random samples]{.alert} of a single population
+  - Example: The population of all eligible applicants for the programme
+
+- Expected outcomes
+- In the absence of the programme, the [expected outcome]{.alert} would be the same for both groups
+  - Formally: $E[Y_{0,i} | T_i=1] = E[Y_{0,i} | T_i=0]$
+:::
+
+## Random assignment
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- Randomisation does not eliminate individual differences (we still can’t identify [individual treatment effects]{.alert})
+- On average, individuals in treatment/control are similar (in large samples)
+- Need [Stable Unit Treatment Value Assumption (SUTVA)]{.alert}: Potential outcomes for any unit do not vary with the treatments assigned to other units (more later)
+- See [Imbens and Rubin (2015)](https://www.cambridge.org/core/books/causal-inference-for-statistics-social-and-biomedical-sciences/71126BE90C58F1A431FE9B2DD07938AB?utm_campaign=shareaholic&utm_medium=copy_link&utm_source=bookmark) for more details
+- When is SUTVA violated?
+  - Spillovers (one person's treatment affects another's outcome)
+  - Interference (units' treatments affect each other)
+  - Contamination (control group gets the treatment)
+  - Non-compliance (some people don't follow their assignment)
+- We will see all that in the next lectures! 🤓
+:::
+
+## Violations of SUTVA
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+:::{.columns}
+:::{.column width="50%"}
+### SUTVA: “stable unit” part
+- Individuals are receiving [the same treatment]{.alert} – i.e., the “dose” of the treatment to
+each member of the treatment group is the same
+- If we are estimating the effect of hospitalisation on health status, [we assume everyone is getting the same dose of the hospitalisation treatment]{.alert}
+- Easy to imagine violations if hospital quality varies across individuals
+- Have to be careful what we are and are not defining as the treatment
+:::
+
+:::{.column width="50%"}
+### SUTVA: “treatment value” part
+- The potential outcomes for any unit do not vary with the treatments assigned to other units
+- [No spillovers]{.alert}: The treatment of one individual does not affect the outcomes of others (e.g., a vaccinated person cannot indirectly protect unvaccinated neighbours)
+- [No interference]{.alert}: Units' treatments do not influence each other's outcomes through direct interaction or competition
+- [No contamination]{.alert}: Control group members do not receive any form of the treatment, either intentionally or accidentally
+:::
+:::
+:::
+
+## Partial equilibrium
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- [Partial equilibrium]{.alert} is a concept from economics
+- It refers to the idea that the effects of a policy or intervention are limited to the individuals directly affected by it
+- In the context of SUTVA, partial equilibrium means that the treatment effect for one group [may not generalise to other groups]{.alert}
+- Issue of [external validity]{.alert}
+- Let’s say we estimate a causal effect of early childhood intervention in some area
+- Now adopt it for the whole country – will it have the same effect as we found?
+  - Expansion may create general equilibrium effects
+  - Have different effects due to economies of scale
+  - The effect might be different if the population is different
+:::
+
+# Recap: back to our hospital example 🏥 {background-color="#2d4563"}
+
+## Potential outcomes revisited
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- Main question: do hospitals make people sicker?
+
+- [Heterogeneous treatment effects]{.alert}: treatments work differently for different people
+  - Sick people benefit more from hospitals (e.g., broken bones, infections)
+  - Healthy people might even be *harmed* by hospitals (e.g., stress, exposure to germs)
+
+- Real-World Example:
+  - Imagine two people:
+    - *Alejandro* (sick): Hospital fixes his broken leg → improves his health
+    - *Benicio* (healthy): Hospital visit causes anxiety → slightly worsens his health
+
+- [Takeaway]{.alert}:
+  - Treatments don’t work the same way for everyone
+  - If we only study people who *choose* treatment (like sick people), results are misleading
+:::
+
+## Potential outcomes for hospital visits
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- [What would happen if everyone went to the hospital vs. no one?]{.alert}
+
+- Potential outcomes table:
+
+<br>
+
+  | **Person** | **Outcome if Hospitalised** | **Outcome if Not Hospitalised** |
+  |------------|-----------------------------|---------------------------------|
+  | Sick       | Health improves slightly    | Health stays poor               |
+  | Healthy    | Health slightly worsens     | Health stays fine               |
+
+<br>
+
+- The Problem:
+  - We only observe *one outcome* per person (e.g., we see Alejandro’s health *after* he goes to the hospital, but not what would’ve happened if he didn’t)
+
+- [Selection Bias]{.alert}: Sick people *choose* hospitals, making comparisons unfair
+:::
+
+## How random assignment fixes this
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- Randomisation breaks the link between treatment choice and outcomes
+
+- (An absurd) experiment:
+  - [What if we randomly assign *everyone* (sick and healthy) to two groups]{.alert}?
+    - **Treatment group**: Must go to the hospital
+    - **Control group**: Cannot go to the hospital
+  - Afterward, compare average health of both groups
+
+- Randomisation ensures groups are *similar* on average (similar mix of sick/healthy people)
+- Any difference in outcomes is *caused by the hospital*, not pre-existing health
+
+- But [what are we measuring here?]{.alert}
+
+:::{.incremental}
+- The average effect of hospitalisation on the population
+:::
+:::
+
+## Randomising amongst the sick
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- [What if we only randomise treatment for people who need it?]{.alert}
+
+- **Better Experiment**:
+  - Only include *sick people* in the study
+  - Randomly assign half to hospitals, half to stay home
+
+- **Result**:
+  - Compare health of hospitalised sick people vs. non-hospitalised sick people
+
+- [What are we measuring now? Is this the ideal experiment?]{.alert}
+
+:::{.incremental}
+- The average effect of hospitalisation on sick people
+- **Limitation**:
+  - Doesn’t tell us how hospitals affect healthy people (but they don’t need hospitals anyway!)
+:::
+:::
+
+## People do not always follow the rules
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+
+- [We might consider randomising access to hospitals]{.alert}
+
+- But what if people ignore their random assignment?
+
+- **Example**:
+  - Assign 100 sick people to hospitals, but 40 refuse to go
+  - Assign 100 sick people to stay home, but 20 go to hospitals anyway
+
+- **Problem**:
+  - The “treated” group now includes *only those who complied* (e.g., the most severe cases)
+  - The “control” group includes some people who sought treatment
+
+- **Result**:
+  - The measured effect applies only to *compliers* (e.g., very sick people)
+  - The effect might not apply to everyone
+
+- This is the [compliance problem]{.alert} in experiments
+:::
+
+## Why compliance matters for real-world policy
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- Even with random assignment, human behaviour (often) complicates things
+
+- Example: A government offers free training to help people find jobs
+  - Random assignment: Some people get training, others do not
+  - Reality: Only 30% of the treatment group actually attend the training and get jobs
+
+- [Should we continue the programme?]{.alert}
+
+- Two ways to analyse:
+  - [Intent-to-Treat (ITT)]{.alert}: Compare *all* people assigned to treatment vs. control (even if they didn’t go)
+      - Shows the effect of *offering* the programme
+  - [Treatment-on-the-Treated (TOT)]{.alert}: Compare only those who *actually took* the treatment vs. control
+      - Shows the effect for *compliers*
+
+- **Takeaway**: Compliance affects how we interpret results and design policies
+:::
+
+## To sum up...
+
+:::{style="margin-top: 30px; font-size: 24px;"}
+- [Potential outcomes]{.alert} help us understand the causal effects of treatments
+- The [fundamental problem of causal inference]{.alert} is that we never observe both potential outcomes for the same individual
+- [Random assignment]{.alert} helps us estimate causal effects by breaking the link between treatment choice and outcomes
+- [Selection bias]{.alert} occurs when treated and untreated groups are different in the absence of treatment
+- [SUTVA]{.alert} is a key assumption in causal inference that ensures potential outcomes do not vary with the treatments assigned to other units
+- [Compliance]{.alert} affects how we interpret results and design policies
+- [Partial equilibrium]{.alert} is the idea that the effects of a policy or intervention are limited to the individuals directly affected by it
+- [External validity]{.alert} is the extent to which the results of a study can be generalised to other populations, settings, and times
+:::
+
+# That's all for today! 🎉 {background-color="#2d4563"}
+
+# Thank you for your attention! 🙏 <br> See you all soon! 😊 {background-color="#2d4563"}

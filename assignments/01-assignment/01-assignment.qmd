@@ -1,0 +1,44 @@
+---
+title: "DATASCI 385 - Experimental Methods"
+subtitle: Assignment 01
+---
+
+# Instructions
+
+This assignment covers the first two classes of the course. It consists of 10 questions, each worth one point, about the fundamentals of randomised experiments and the use of theory in experimental research. You can answer the questions in any format you prefer, but I recommend using either Jupyter Notebook or PDF, as they are easier to read on Canvas. Please write at least two paragraphs for each written question.
+
+If you have any questions about the assignment, feel free to email me at <danilo.freire@emory.edu>.
+
+Good luck!
+
+# Questions
+
+1. What is the purpose of pre-registration in experimental research?
+   
+A) To ensure that researchers can change their hypotheses after seeing the data
+B) To reduce bias and improve the credibility of research findings
+C) To make the research process faster
+D) To avoid the need for peer review
+
+2. Which of the following is an example of a causal question?
+
+A) How do teachers allocate their time during a school day?
+B) Does providing vocational training to migrants improve their economic integration?
+C) What is the average income of migrants in a country?
+D) How many people in a country are unemployed?
+
+3. Critique the following statement: "_Cities with more ice cream vendors have higher crime rates, so reducing ice cream sales will lower crime_." Explain why this correlation does not imply causation. Propose two plausible confounding variables that could explain the relationship, and design a hypothetical experiment to test one of these variables.
+
+4. A 2022 study found that only 30% of psychology experiments could be replicated. Analyse two systemic incentives in academia that contribute to this crisis. 
+
+5. Imagine you want to test the theory that "_social media use decreases political polarisation_." How would this theory guide your choice of (a) treatment and (b) outcome measures? Which type of experimental design would you use to test this theory, and why?
+
+6. A lab experiment shows that a mindfulness app reduces stress in college students under controlled conditions. However, when tested in a real-world setting, the effect disappears. Explain how differences in internal versus external validity might explain this discrepancy. Propose one modification to the lab design to improve external validity without sacrificing internal validity.
+
+7. Pre-registration aims to reduce bias by committing researchers to a specific analysis plan. However, exploratory analysis is still valuable in science. Argue for or against the following statement: "_Pre-registration stifles scientific creativity by limiting researchers’ ability to pursue unexpected findings_." 
+
+8. A voter turnout experiment designed in the USA is replicated in India, but the treatment (civic duty appeals) shows no effect. Identify two cultural factors that might explain this discrepancy. How would you redesign the study to improve cross-cultural validity?
+
+9. A study tests honesty by randomly telling participants they can cheat on a task without detection (when they are actually being monitored). Analyse two ethical concerns with this design, and propose alternatives to deception while maintaining the study’s validity.
+
+10. Natural experiments are often called the "next best thing" to RCTs. Explain two reasons why natural experiments may fail to meet the standards of RCTs.

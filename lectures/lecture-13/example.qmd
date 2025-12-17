@@ -1,0 +1,13 @@
+---
+title: Example Document
+author: Danilo Freire
+date: 2025-03-03
+format: pdf
+bibliography: references.bib
+---
+
+# Introduction
+
+This is a new paper about the applications of Quarto in reproducible research. @nash1950equilibrium and @mokyr2005intellectual.
+
+# References

@@ -1,0 +1,52 @@
+---
+title: "DATASCI 385 - Experimental Methods"
+subtitle: Assignment 09
+fig-cap-location: top
+---
+
+# Instructions
+
+This assignment deals with causal inference with heterogeneous effects. The topic is discussed in chapter 09 of the textbook. If you have any questions about the assignment, feel free to email me at <danilo.freire@emory.edu>.
+
+Good luck!
+
+# Questions 
+
+1. Define the following concepts and answer the questions:
+
+(a) Define CATE. Is a Complier average causal effect (CACE) an example of a CATE?
+(b) What is an interaction effect?
+(c) Describe the multiple comparisons problem and the Bonferroni correction. What other ways are there to correct the multiple comparisons problem? (Feel free to use other reference materials to answer this question)
+
+2. Suppose that a researcher compares the CATE among two subgroups, men and women. Among men ($N = 100$), the ATE is estimated to be $8.0$ with a standard error of $3.0$, which is significant at $p < 0.05$. Among women ($N = 25$), the CATE is estimated to be $7.0$ with an estimated standard error of $6.0$, which is not significant, even at the 10% significance level. Critically evaluate the researcher's claim that "_the treatment only works for men; for women, the effect is statistically indistinguishable from zero_". In formulating your answer, address the distinction between testing whether a single CATE is different from zero and testing whether two CATEs are different from each other.
+
+3. For questions 3 to 5, consider the following table and data. In their 2004 study of racial discrimination in employment markets, Bertrand and Mullainathan sent resumes with varying characteristics to firms advertising job openings. Some firms were sent resumes with putative African American names, while other firms received resumes with putatively Caucasian names. The researchers also varied other attributes of the resume, such as whether the resume was judged to be of high or low quality (based on labor market experience, career profile, gaps in employment, and skills listed). The table below shows the rate at which applicants were called back by employers, by the city in which the experiment took place and by the randomly assigned attributes of their applications.
+
+|                     | Boston                               | Chicago                              |
+| :------------------ | :----------------------------------- | :----------------------------------- |
+|                     | Low-quality resume | High-quality resume | Low-quality resume | High-quality resume |
+|                     | Black    | White   | Black    | White    | Black    | White   | Black    | White    |
+| % Received call     | 7.01     | 10.15   | 8.50     | 13.12    | 5.52     | 7.16    | 5.28     | 8.94     |
+| (N)                 | (542)    | (542)   | (541)    | (541)    | (670)    | (670)   | (682)    | (682)    |
+
+For each city, interpret the apparent treatment effects of a black name and a low-quality resume on the probability of receiving a follow-up call.
+
+4. Propose a regression model that assesses the effects of the treatments, interaction between them, and interactions between the treatments and the covariate, city, where city is coded 1 for subjects in Boston and 0 for Chicago. Define your variables clearly.
+
+5. Estimate the parameters in your regression model and interpret the results. (This can be done by hand based on the percentages given in the table.) 
+
+6. [Rind and Bordia](https://doi.org/10.1111/j.1559-1816.1996.tb01847.x) studied the tipping behaviour of lunchtime patrons of an “upscale Philadelphia restaurant” who were randomly assigned to four experimental groups. One factor was server sex (male or female), and a second factor was whether the server draws a “happy face” on the back of the bill presented to customers. Download the data located at <https://github.com/danilofreire/qtm385/blob/main/assignments/09-assignment/Rind_Bordia_JASP_1996.csv> and read the data into R.
+
+Suppose you ignored the sex of the server and simply analysed whether the happy face treatment has heterogeneous effects. Use randomisation inference to test whether $\text{Var}(\tau_i) = 0$ by testing whether $\text{Var}(Y_i(1)) = \text{Var}(Y_i(0))$. Construct the full schedule of potential outcomes by assuming that the treatment effect is equal to the observed difference-in-means between $Y_i(1)$ and $Y_i(0)$. Interpret your results.
+
+7. Write down a regression model that depicts the effect of the sex of the waitstaff, whether they write a happy face on the bill, and the interaction of these factors.
+
+8. Estimate the regression model in question 07 and test the interaction between waitstaff sex and the happy face treatment. Is the interaction significant?
+
+9. A large clinical trial ($N=2000$) finds a statistically significant average treatment effect (ATE) of a new drug. The researchers decide to explore heterogeneity by splitting the sample into 10 pre-defined subgroups based on demographic characteristics (e.g., 5 age bins x 2 genders). They run separate analyses within each subgroup.
+
+(a) If the treatment effect is truly homogeneous (the same for everyone), what is the approximate probability that at least one of the 10 subgroup analyses will yield a statistically significant result (at $\alpha=0.05$) just by chance? Show your calculation.
+
+(b) If the researchers find significant effects in 2 subgroups and non-significant effects in the other 8, explain the pitfalls of concluding that the drug "only works" for those 2 subgroups.
+
+10. Distinguish between treatment effect heterogeneity and confounding. Can controlling for a variable address both issues simultaneously? Please explain.

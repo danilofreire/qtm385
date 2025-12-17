@@ -1,0 +1,545 @@
+---
+title: DATASCI 385 - Experimental Methods
+subtitle: Lecture 23 - Texts for Discussion
+author:
+  - name: Danilo Freire
+    email: danilo.freire@emory.edu
+    affiliations: Department of Data and Decision Sciences <br> Emory University
+format:
+  clean-revealjs:
+    self-contained: true
+    code-overflow: wrap
+    footer: "[Texts for Discussion](https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-23/23-discussion.html)"
+transition: slide
+transition-speed: default
+scrollable: true
+engine: knitr
+editor:
+  render-on-save: true
+---
+
+# Hello, everyone! 😉 {background-color="#2d4563"}
+
+# Brief recap 📚 {background-color="#2d4563"}
+
+## Survey experiments for sensitive topics
+
+:::{style="font-size: 30px; margin-top: 30px;"}
+- [Sensitive topics]{.alert} are difficult to study!
+- [Social desirability bias]{.alert} is a common problem in survey research
+- [List experiments]{.alert} measure prevalence indirectly through item counts
+- [Randomised response]{.alert} techniques use probability models for anonymity
+- [Endorsement experiments]{.alert} assess support without direct attribution
+- [Conjoint analysis]{.alert} measures preferences through trade-off scenarios
+- Maintain [plausible deniability]{.alert} for respondents
+- Software to estimate these models: <http://sensitivequestions.org/>
+:::
+
+# Today's plan 📅 {background-color="#2d4563"}
+
+## Texts for discussion
+
+:::{style="font-size: 20px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- Today we have four texts for discussion:
+- Druckman, J. N., Gilli, M., Klar, S., & Robison, J. (2015). [Measuring drug and alcohol use among college student‐athletes.](https://onlinelibrary.wiley.com/doi/abs/10.1111/ssqu.12135) Social Science Quarterly, 96(2), 369-380.
+- Blair, G., Imai, K., & Lyall, J. (2014). [Comparing and Combining List and Endorsement Experiments: Evidence from Afghanistan.](https://onlinelibrary.wiley.com/doi/abs/10.1111/ajps.12086) American Journal of Political Science, Vol. 58, No. 4 (October), pp. 1043-1063. 
+- Rosenfeld, B, Imai, K., & Shapiro, J. (2016). [An Empirical Validation Study of Popular Survey Methodologies for Sensitive Questions.](https://onlinelibrary.wiley.com/doi/abs/10.1111/ajps.12205) American Journal of Political Science, 60(3), 783-802.
+- Freire, D., & Skarbek, D. (2023). [Vigilantism and Institutions: Understanding Attitudes Toward Lynching in Brazil.](https://journals.sagepub.com/doi/full/10.1177/20531680221150389) Research & Politics, 10(1), 1-8.
+:::
+
+:::{.column width="50%"}
+- All four papers are about sensitive topics and use the methods we discussed in class
+- The first uses a [list experiment]{.alert} to measure underreporting of drug and alcohol use amongst athletes (a major problem in athletics!)
+- The second paper is a more sophisticated one: the authors use [two methods]{.alert} to measure support for NATO forces in Afghanistan (a sensitive topic indeed!)
+- The third paper uses a clever design, leveraging a referendum in the US to see which method is better to measure sensitive topics (spoiler: [randomised response]{.alert} is the best one!)
+- The last one, by yours truly, uses a [conjoint experiment]{.alert} to address a major problem in developing countries: support for extralegal violence
+- And I can say that [the issue seems not to be that sensitive to a lot of respondents]{.alert} 😅
+- I hope you find them useful and interesting! 😊
+:::
+:::
+:::
+
+# Drug and alcohol use amongst athletes 📋 {background-color="#2d4563"}
+
+## Measuring drug and alcohol use
+
+:::{style="font-size: 25px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="40%"}
+- Do young athletes really tell how much they drink and use drugs?
+- [Of course not!]{.alert} 😂
+- What is interesting about this experiment is that the difference between [direct questions]{.alert} and [list experiments is huge!]{.alert}
+- This raises some other questions, and I would like to hear your thoughts on them!
+- So let's have a closer look at their experiment!
+:::
+
+:::{.column width="60%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/druckman-abstract.png){width=100%}
+
+Source: [Druckman et al. (2015)](https://onlinelibrary.wiley.com/doi/abs/10.1111/ssqu.12135)
+:::
+:::
+:::
+:::
+
+## Context
+
+:::{style="font-size: 28px; margin-top: 30px;"}
+- The NCAA has a strict policy against drug use amongst athletes
+- However, [there is widespread concern that athletes underreport their drug and alcohol use in surveys]{.alert}
+- "[...] _among male student-athletes, 9.7 percent say they use “banned performance enhancers” and 55.8 percent say they used “performance-enhancing drugs” (which might include legal nutritional supplements). Among female student-athletes, no one said they use “banned performance enhancers” and 29.8 percent said they used “performance-enhancing drugs.”_" (p. 370)
+- In an official NCAA survey, [only 0.4 per cent of athletes self-reported using anabolic steroids]{.alert}
+- The authors argue that [list experiments can help uncover the true prevalence of drug and alcohol use]{.alert} (or at least get closer to it)
+- Why do you think athletes underreport substance use?
+:::
+
+## Experimental design
+
+:::{style="font-size: 24px; margin-top: 30px;"}
+- Their sample comes from [12 major universities competing in the Division I NCAA Athletics]{.alert}
+- They accessed the athletic websites of all 12 Big Ten universities (yes, the "Big Ten" includes 12 universities!) and obtained [the full rosters for all sports at every school]{.alert}
+- The authors located 6,375 names on rosters, and after discarding emails that bounced back, ended up with [4,093 e-mail addresses]{.alert}
+- They sent the survey to all of these athletes, and received [1,303 responses]{.alert} (~31% response rate, not bad!)
+- [Questions]{.alert}:
+  - Is it okay to collect emails from the internet and send unsolicited surveys?
+  - What are the pros and cons of this approach?
+  - How would you analyse the data? ATE or ITT?
+  - The authors also argue that "_the experimental nature of our key measurement approach means that obtaining a perfectly representative sample is of much less importance than is the random assignment of our experimental treatment between groups_" (p. 374). [Do you agree with this statement?]{.alert}
+:::
+
+## UCLA survey
+
+:::{style="font-size: 26px; margin-top: 30px;"}
+- The authors first measure the prevalence of drug and alcohol use in the [College Senior Survey 2009]{.alert}
+  - The CSS is a survey of college seniors conducted by the Higher Education Research Institute at UCLA
+  - Sample includes 24,457 individuals from 111 colleges and universities
+- [Student-athletes are substantially less likely—in self-reports—to drink beer or use drugs than their non-athlete peers]{.alert} (p. 374)
+- "_Nearly 75 percent of the general student population say they “frequently” or “occasionally” drink beer,
+whereas only 46 percent of our student-athlete sample say the same_ ($z = 20.55; p <0.01$)" (p. 374)
+- [Does that surprise you?]{.alert}
+:::
+
+## List experiment
+### Drug use
+
+:::{style="font-size: 26px; margin-top: 30px;"}
+> Below is a list of activities that you may have engaged in over your time in college. 
+> We are interested in HOW MANY of these activities you have engaged in – NOT which ones. 
+> Thus, please simply choose the number at the end of the list: 
+>
+> * Sustained an injury during a practice or game that prevented you from playing at least one other game
+> * Joined a social club whose majority of members did/does not include varsity athletes
+> * Skipped a class because you felt so tired from a practice or a game
+> * Was unable to take a class that you hoped to take because of your practice or game schedule
+> * [Knowingly took a drug banned by the NCAA that may improve your athletic performance]{.alert}
+:::
+
+## Results
+### Drug use
+
+:::{style="font-size: 28px; margin-top: 30px;"}
+- Note that the authors asked about [knowingly taking a drug banned by the NCAA]{.alert}
+- [The results were stark]{.alert}:
+  -  Control group = mean response of 3.31 (SD = 0.78; n = 553) 
+  -  Treatment group = mean response of 3.68 (SD = 0.98; n = 510) 
+  -  The difference between the two groups is statistically significant ($t_{1061}$ = 6.90; p < 0.01)
+  -  The authors conclude that the list experiment "_suggests that 37 percent of respondents have knowingly taken banned drugs_" (p. 377)
+- [Direct question]{.alert} =  4.9 per cent 😂
+- [What do you think about this result?]{.alert}
+:::
+
+## List experiment
+### Alcohol use
+
+:::{style="font-size: 27px; margin-top: 30px;"}
+> Below is a list of activities that you may have engaged in over your time in college. 
+> We are interested in HOW MANY of these activities you have engaged in – NOT which ones. 
+> Thus, please simply choose the number at the end of the list: 
+>
+> * Your choice of which University to attend was determined largely by the sports opportunities (e.g., it weighed in at least in 50% of your decision)
+> * Stayed up past 1 AM, on average, during the season of your sport
+> * Plan to continue playing your sport after college, although not necessarily on the professional level
+> * Play other sports during the school year at least once a month
+> * [In the typical week during the past academic year, consumed more than five alcoholic drinks]{.alert}
+:::
+
+## Results
+### Alcohol use
+
+:::{style="font-size: 28px; margin-top: 30px;"}
+- Again, [large statistical difference]{.alert}:
+  - Control group = mean response of 2.76 (SD = 0.85; n = 544) 
+  - Treatment group = mean response of 3.22 (SD = 1.10; n = 556) 
+  - [46 per cent consumed more than five drinks a week]{.alert}
+- Less than [3 per cent]{.alert} of athletes reported that they consumed more than five drinks a week when asked directly
+- The difference is [even larger than for drug use]{.alert}
+- [What do you think about this result?]{.alert}
+:::
+
+# Combining list and endorsement experiments {background-color="#2d4563"}
+
+## Comparing and combining list and endorsement experiments: evidence from Afghanistan
+### Interviewing the Taliban!
+
+:::{style="font-size: 26px; margin-top: 30px;"}
+- This paper is both a substantive and methodological contribution
+- Their main methodological contribution is to [compare (and eventually combine)]{.alert} list and endorsement experiments
+- The setting is pretty challenging, too: [Afghanistan]{.alert}
+- Motivation: regime change, "hearts and minds" campaign, and the Taliban
+- Outcome: [support for the Taliban and foreign (NATO) forces]{.alert} (ISAF)
+- Here, for the sake of time, we will focus on [their experimental design]{.alert}, but I encourage you to read the paper and see how the authors developed their estimators! 🤓
+- Note: all models were estimated with the [list](https://list.sensitivequestions.org/) and [endorse](https://endorse.sensitivequestions.org/) `R` packages
+:::
+
+## Experimental design
+
+:::{style="font-size: 23px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+### List experiment
+
+>I’m going to read you a list with the names of different groups and individuals on it.  After I read the entire list, I’d like you to tell me how many of these groups and individuals you broadly support, meaning that you generally agree with the goals and policies of the group or individual. Please don’t tell me which ones you generally agree with; only tell me how many groups or individuals you broadly support.
+>
+>Karzai Government; National Solidarity Program; Local Farmers; [Foreign Forces]{.alert}
+:::
+
+:::{.column width="50%"}
+### Endorsement experiment
+
+> A recent proposal [by ISAF]{.alert} calls for the sweeping reform of the Afghan prison system, including the construction of new prisons in every district to help alleviate overcrowding in existing facilities. Though expensive, new programs for inmates would also be offered, and new judges and prosecutors would be trained. How do you feel about this proposal?
+>
+> - From strongly disagree to strongly agree (5-point scale)
+:::
+:::
+
+- Respondents also had the option to say "Refuse to answer" or "Don't know"
+- Refusal rates were very low (about 6%) when compared to direct questions
+:::
+
+## Results
+
+:::{style="font-size: 26px; margin-top: 30px; text-align: center;"}
+![](figures/blair-figure01.png){width=100%}
+
+Source: [Blair et al. (2014)](https://onlinelibrary.wiley.com/doi/abs/10.1111/ajps.12086)
+:::
+
+## Results
+
+:::{style="font-size: 26px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+:::{style="text-align: center; margin-top: -30px;"}
+![](figures/blair-figure01a.png){width=70%}
+
+Source: [Blair et al. (2014)](https://onlinelibrary.wiley.com/doi/abs/10.1111/ajps.12086)
+:::
+:::
+
+:::{.column width="50%"}
+- [Both methods yield similar results!]{.alert}
+- Despite being different methods, it is interesting that they converge to similar estimates
+- ISAF support: about 16.5% in the list experiment, 17% in the endorsement experiment, and 19% in the combined model
+- The result indicates that the efforts to win "hearts and minds" had [limited success]{.alert}
+:::
+:::
+:::
+
+## Results
+
+:::{style="font-size: 26px; margin-top: 30px; text-align: center;"}
+![](figures/blair-figure02.png){width=100%}
+
+Source: [Blair et al. (2014)](https://onlinelibrary.wiley.com/doi/abs/10.1111/ajps.12086)
+:::
+
+## Results
+
+:::{style="font-size: 29px; margin-top: 30px;"}
+- These are [very interesting results]{.alert}!
+- Taliban victimisation leads to a [modest increase in support for ISAF]{.alert}
+- [ISAF victimisation is associated with a consistently negative effect across all three models]{.alert}
+- List experiment model estimates a modest positive effect, suggesting that Taliban post-harm efforts may actually be associated with an increase in ISAF support; the endorsement experiment model suggests the opposite!
+- [The authors don't know exactly why this happens]{.alert} 
+- ISAF post-harm efforts appear to have a [positive effect on ISAF support]{.alert}
+- The amount of aid seems to increase support for ISAF in the list experiment, but not in the endorsement experiment 
+:::
+
+## Results
+
+:::{style="font-size: 26px; margin-top: 30px; text-align: center;"}
+![](figures/blair-figure04.png){width=80%}
+
+Source: [Blair et al. (2014)](https://onlinelibrary.wiley.com/doi/abs/10.1111/ajps.12086)
+:::
+
+## Results
+
+:::{style="font-size: 26px; margin-top: 30px; text-align: center;"}
+![](figures/blair-figure03.png){width=70%}
+
+Source: [Blair et al. (2014)](https://onlinelibrary.wiley.com/doi/abs/10.1111/ajps.12086)
+:::
+
+# Empirical Validation of Survey Methodologies for Sensitive Questions {background-color="#2d4563"}
+
+## An empirical validation study of popular survey methodologies for sensitive questions
+### Randomised response vs. list experiment vs. endorsement experiment
+
+:::{style="font-size: 20px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="40%"}
+- Now we have a [different paper]{.alert} that compares the three methods we discussed in class
+- The findings suggest that the [choice of method can significantly impact the results]{.alert}
+- And who's the winner? [Randomised response!]{.alert}
+- The authors leveraged a [referendum in the Mississippi]{.alert} to test the three methods
+- Since the [true value of the outcome is known]{.alert}, they could compare the results of the three methods
+- It was an [anti-abortion referendum]{.alert}, and the three methods yielded estimates much closer to the true value
+:::
+
+:::{.column width="60%"}
+:::{style="text-align: center;"}
+![](figures/rosenfeld-figure01.png){width=100%}
+
+Source: [Rosenfeld et al. (2016)](https://onlinelibrary.wiley.com/doi/abs/10.1111/ajps.12205)
+:::
+:::
+:::
+:::
+
+## Setting
+
+:::{style="font-size: 24px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- In 2011, Mississippi voters were asked to vote on a [proposition to define life as beginning at conception]{.alert} 
+- Most commentators expected the initiative to pass easily, but the opposite happened
+- The amendment was defeated 57.6% to 42.4%, a [15 percentage point swing from the pre-election poll]{.alert}
+- No similar deviations from the poll were observed elsewhere on the ballot
+- Sample size: [2,655 respondents who already voted in the referendum]{.alert}
+- [Why after the referendum?]{.alert}
+- They sampled [only from counties that had an unexpected number of "no" votes]{.alert}
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/rosenfeld-figure02.png){width=100%}
+
+Source: [Rosenfeld et al. (2016)](https://onlinelibrary.wiley.com/doi/abs/10.1111/ajps.12205)
+:::
+:::
+:::
+:::
+
+## Experimental design
+
+:::{style="font-size: 21px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Direct question]{.alert}:
+
+> Did you vote YES or NO on the Personhood Initiative, which appeared on the November 2011 Mississippi General Election ballot?
+>
+> Voted Yes
+>
+> Voted No
+>
+> Did not vote
+>
+> Don’t know
+>
+> Refused
+:::
+
+:::{.column width="50%"}
+- [List experiment]{.alert}:
+
+> Here is a list of four things that some people have done and some people have not. Please listen to them and then tell me HOW MANY of them you have done in the past two years. Do not tell me which you have and have not done. Just tell me how many:
+>
+> * Discussed politics with family or friends;
+> * Cast a ballot for Governor Phil Bryant;
+> * Paid dues to a union;
+> * Given money to a Tea Party candidate or organization.
+> * [Voted ‘YES’ on the ‘Personhood’ Initiative on the November 2011]{.alert}
+:::
+:::
+:::
+
+## Experimental design
+
+:::{style="font-size: 18px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- [Endorsement experiment]{.alert}:
+  
+> We’d like to get your overall opinion of some people in the news. As I read each name, please say if you have a very favorable, somewhat favorable, somewhat unfavorable, or very unfavorable opinion of each person.
+>
+> Phil Bryant, Governor of Mississippi, [who campaigned in favor of the ‘Personhood’ Initiative on the 2011 Mississippi General Election
+ballot?]{.alert}
+>
+>Very favorable
+>
+>Somewhat favorable
+>
+>Don’t know/no opinion
+>
+>Somewhat unfavorable
+>
+>Very unfavorable
+>
+>Refused
+:::
+
+:::{.column width="50%"}
+- [Randomised response]{.alert}:
+
+> Please toss the coin two times and note the results of those tosses (heads or tails) one after the other on a sheet of paper. Do not reveal to me whether your coin lands on heads or tails. [...] First, we will practice.  To ensure that your answer is confidential and known only to you, please answer ‘yes’ if either your first coin toss came up heads or you voted in the November 2011 Mississippi General Election, otherwise answer ‘no’.
+>
+>Yes
+>
+>No
+>
+>Don’t know
+>
+>Refused
+>
+> Now, please answer ‘yes’ if either your second coin toss came up heads or you voted ‘YES’ on the ‘Personhood’ Initiative, which appeared on the November 2011 Mississippi General Election ballot.
+>
+>Yes
+>
+>No
+>
+>Don’t know
+>
+>Refused
+:::
+:::
+:::
+
+## Randomised response
+
+:::{style="font-size: 30px; margin-top: 30px;"}
+- The first question was [pre-tested]{.alert} in a pilot study and was just included to see if the respondent was being honest
+- People mainly gave honest answers to the first question (about 90% of the time)
+- The rest were maybe [confused by the procedure]{.alert}, which is indeed one of the [disadvantages of this method]{.alert}
+:::
+
+## Results
+### Direct question
+
+:::{style="font-size: 26px; margin-top: 30px; text-align: center;"}
+![](figures/rosenfeld-figure03.png){width=50%}
+
+Source: [Rosenfeld et al. (2016)](https://onlinelibrary.wiley.com/doi/abs/10.1111/ajps.12205)
+:::
+
+## Results
+### Experimental methods
+
+:::{style="font-size: 26px; margin-top: 30px; text-align: center;"}
+![](figures/rosenfeld-figure04.png){width=35%}
+
+Source: [Rosenfeld et al. (2016)](https://onlinelibrary.wiley.com/doi/abs/10.1111/ajps.12205)
+:::
+
+## Results
+### Experimental methods
+
+:::{style="font-size: 26px; margin-top: 30px; text-align: center;"}
+![](figures/rosenfeld-figure05.png){width=60%}
+
+Source: [Rosenfeld et al. (2016)](https://onlinelibrary.wiley.com/doi/abs/10.1111/ajps.12205)
+:::
+
+# Last one! <br> Support for vigilantism in Brazil 🇧🇷 {background-color="#2d4563"}
+
+## Vigilantism and institutions: understanding attitudes toward lynching in Brazil
+### By David Skarbek and yours truly
+
+:::{style="font-size: 22px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="40%"}
+- Why do people accept lynching as a form of punishment?
+- Vigilantism happens in many developing countries and it has [serious social consequences]{.alert}
+- It [undermines the rule of law]{.alert}, [deepens group conflict]{.alert}, and [can lead to cycles of violence]{.alert}
+- We use a [mixed-methods approach]{.alert}, mainly a [conjoint experiment]{.alert} to see under which conditions Brazilians believe [lynching is justified]{.alert}
+- [The results were quite surprising!]{.alert} 😅
+- Data and code: <https://github.com/danilofreire/lynching-experiment-brazil>
+:::
+
+:::{.column width="60%"}
+:::{style="text-align: center;"}
+![](figures/freire-figure01.png){width=100%}
+
+Source: [Freire & Skarbek (2023)](https://journals.sagepub.com/doi/full/10.1177/20531680221150389)
+:::
+:::
+:::
+:::
+
+## Experimental design
+
+:::{style="font-size: 23px; margin-top: 30px;"}
+:::{.columns}
+:::{.column width="50%"}
+- We ran the survey online with [Qualtrics]{.alert}
+- The sample was [randomly selected from a panel]{.alert} (N=2406)
+- We stratified the sample using quota sampling with demographic variables (gender, race, region, and education)
+- We also included many pre-treatment questions to [measure potential heterogeneous effects of the treatment]{.alert}
+- But the main part was the [conjoint experiment]{.alert}
+- We included a text box where respondents could write their comments, too
+:::
+
+:::{.column width="50%"}
+:::{style="text-align: center;"}
+![](figures/freire-figure02.png){width=100%}
+:::
+
+- Respondents read a vignette about lynchings in Brazil and were asked to choose between 5 pairs of profiles
+- The profiles included the information above and were about hypothetical scenarios
+:::
+:::
+:::
+
+## Results
+
+:::{style="font-size: 26px; margin-top: 30px; text-align: center;"}
+![](figures/freire-figure03.jpg){width=100%}
+:::
+
+## How to reduce support for lynching?
+
+:::{style="font-size: 26px; margin-top: 30px; text-align: center;"}
+- [Control group]{.alert}: In Brazil, some people believe that lynching may be justified under certain conditions. To what degree do you agree or disagree that lynching can be justified? Please use the slider below to indicate your preference. For disagreement, use 0–49; for agreement, use 51–100. Please use 50 if you neither agree nor disagree.
+
+- [Treatment 1 (Legal punishment for lynching perpetrators)]{.alert}: In Brazil, some people believe that lynching may be justified under certain conditions. [However, the Brazilian constitution and penal code strictly forbid lynching and those involved can be accused of torture or murder.]{.alert} To what degree do you agree or disagree that lynching can be justified? Please use the slider below to indicate your preference. For disagreement, use 0 to 49; for agreement, use 51 to 100. Please use 50 if you neither agree nor disagree.
+
+- [Treatment 2 (Human rights)]{.alert}: [...] [However, the Brazilian constitution states that all individuals have the right of not being tortured, including criminals.]{.alert}
+
+- [Treatment 3 (Vendettas)]{.alert}: [...] [However, lynchings can trigger a new cycle of violence as the family or friends of the victim may retaliate against the community.]{.alert}
+:::
+
+## Results
+
+:::{style="font-size: 26px; margin-top: 30px; text-align: center;"}
+![](figures/freire-figure04.png){width=100%}
+:::
+
+## Conclusion
+
+:::{style="font-size: 30px; margin-top: 30px;"}
+- I hope you liked the papers! 😊
+- Lots of things to think about:
+  - How to leverage list experiments to measure hidden behaviours
+  - Combining different methods to assess support for foreign forces
+  - Comparing results from survey experiments with a clear benchmark
+  - How to use conjoint experiments in a real-world setting
+- Be creative! 🤓
+:::
+
+# ...And that's all for today! 🎉 {background-color="#2d4563"}
+
+# Thank you for your attention! 🙏 {background-color="#2d4563"}
