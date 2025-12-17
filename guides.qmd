@@ -1,0 +1,44 @@
+---
+title: " Course Guides"
+---
+
+Below you will find a list of available guides for [DATASCI 385](https://github.com/danilofreire/datasci385). These guides are designed to help you prepare your pre-analysis plans and use [Quarto](https://quarto.org/) to create reproducible research documents and presentations. If you have any questions or suggestions for new guides, please feel free to reach out to the course instructor.
+
+## Available Guides
+
+- [Markdown Guide](markdown.qmd): An introduction to Markdown, a lightweight markup language with plain text formatting syntax.
+- [Quarto Guide](quarto.qmd): An introduction to Quarto, a document authoring system that supports Markdown, LaTeX, R, Python, and more.
+- [PAP Guide](pap.qmd): A guide to creating pre-analysis plans (PAPs) for experimental research.
+- [EGAP Research Design Form](design-form.qmd): A guide to help you think through the key components of your research design. Source: [EGAP](https://egap.github.io/learningdays-resources/Exercises/design-form.html).
+
+## Additional Resources
+
+### Markdown
+
+- [Markdown Cheatsheet](https://www.markdownguide.org/cheat-sheet/): A quick reference guide to Markdown syntax.
+- [Markdown Guide](https://www.markdownguide.org/): A comprehensive guide to Markdown syntax and features.
+- [GitHub Markdown Guide](https://guides.github.com/features/mastering-markdown/): A guide to using Markdown on GitHub.
+- [Markdown Tutorial](https://www.markdowntutorial.com/): An interactive tutorial to learn Markdown.
+
+### Quarto
+
+- [Quarto Documentation](https://quarto.org/docs/): The official documentation for Quarto, including installation instructions and usage guides.
+- Awesome Quarto: <https://github.com/mcanouil/awesome-quarto>. This repository contains dozens of tutorials, examples, and resources. 
+- Çetinkaya-Rundel, M. & Lowndes, J. S. (2022) [Keynote talk: Hello Quarto: Share • Collaborate • Teach • Reimagine](https://www.youtube.com/watch?v=p7Hxu4coDl8). [Slides](https://mine.quarto.pub/hello-quarto/#/hello-quarto-title) and [source code](https://github.com/mine-cetinkaya-rundel/hello-quarto). This is one of the nicest Quarto presentations I have seen.
+- [Getting Started with Quarto (YouTube)](https://www.youtube.com/watch?v=_f3latmOhew&t=2s). Posit (formerly RStudio) has a series of tutorials on Quarto on their YouTube channel. You can find their playlist [here](https://www.youtube.com/playlist?list=PL9HYL-VRX0oQI8fVioFxMTBrViFnRX_Df).
+- [Quarto extensions](https://quarto.org/docs/extensions/). Several extensions are available to enhance the functionality of Quarto, such as manuscript templates, citations, and cross-references.
+
+### Pre-Analysis Plans
+
+- [BITSS Resource Library](https://www.bitss.org/resource-library/): The Berkeley Initiative for Transparency in the Social Sciences (BITSS) provides a collection of resources on research transparency and reproducibility. It has [a section on pre-analysis plans](https://www.bitss.org/resource-library/?_sft_resource_tag=pre-analysis-plans#search-filter-results-8443) and many other useful materials.
+- [10 Things to Know About Pre-Analysis Plans](https://egap.org/resource/10-things-to-know-about-pre-analysis-plans/): A comprehensive guide by EGAP that best practices for creating pre-analysis plans.
+- [Pre-Analysis Plans by J-PAL](https://www.povertyactionlab.org/resource/pre-analysis-plans): The Abdul Latif Jameel Poverty Action Lab (J-PAL) also provides resources and guidelines for developing pre-analysis plans.
+- [How Good Are Pre-Analysis Plans?](https://blogs.worldbank.org/en/impactevaluations/how-good-are-pre-analysis-plans-practice-and-lessons-writingreviewing-your-next): A blog post by the World Bank discussing the effectiveness of pre-analysis plans and offering lessons for writing and reviewing them.
+
+## Feedback and Questions
+
+For any questions or issues regarding these tutorials, please [open a GitHub issue](https://github.com/danilofreire/datasci385/issues), [submit a pull request](https://github.com/danilofreire/datasci385/pulls), or [create a discussion post](https://github.com/danilofreire/datasci385/discussions). 
+
+Please do not forget that, in addition to the guides, the [course syllabus](https://danilofreire.github.io/datasci385/syllabus.html#course-outline-and-suggested-readings) also contains a list of recommended weekly readings and additional resources.
+
+I hope you like the guides and find them useful! 

@@ -1,0 +1,51 @@
+---
+title: "DATASCI 385 - Experimental Methods"
+---
+
+Welcome to [DATASCI 385](https://github.com/danilofreire/datasci385)! Experimental methods are gaining popularity in social and biological sciences, providing a more reliable approach to evidence-based research. This course introduces the essentials of experimental design, focusing on testing causal hypotheses. You will learn about causal inference, blocking, covariate adjustment, non-compliance, attrition, heterogeneous treatment effects, reproducible presentation, and research ethics. Through lectures and hands-on sessions, you will design and implement experiments, critically evaluate existing research, and improve your writing and presentation skills by creating your own experimental research project.
+
+We will meet every Monday and Wednesday from 17:30 to 18:45 in the [Psychology Building 220](http://emap.fmd.emory.edu/website/campus/index.htm#?queryzoom=Yes&Query=(bldg='2045')). It is important to read the assigned readings before class, and make sure to check this website for updates and additional resources. If you have any questions, please feel free to contact me or the course TA. I am here to help you succeed in this course and beyond.
+
+## Contact Information
+
+- **Name**: [Danilo Freire](https://danilofreire.github.io/)
+- **Email**: [`danilo.freire@emory.edu`](mailto:danilo.freire@emory.edu)
+- **Office Hours**: By appointment at your convenience, please email me to schedule a meeting
+
+## Learning Outcomes
+
+By the end of this course, students will be able to:
+
+1. Design rigorous experimental studies, including appropriate randomisation procedures and sample size calculations.
+2. Develop comprehensive pre-analysis plans (PAPs) for experimental research, demonstrating an understanding of best practices in pre-registration.
+3. Apply statistical techniques to analyse experimental data.
+4. Use Quarto to create reproducible research documents and presentations.
+5. Critically evaluate experimental designs and results, identifying potential issues and limitations.
+6. Adapt analysis strategies to address unexpected challenges in experimental data.
+7. Understand and apply ethical considerations in experimental design and analysis.
+8. Develop problem-solving skills through regular problem sets covering various aspects of experimental design and analysis.
+
+## Website Structure
+
+This website contains the [course syllabus](https://danilofreire.github.io/datasci385/syllabus.html), [lecture materials](https://danilofreire.github.io/datasci385/lectures.html), [guides](https://danilofreire.github.io/datasci385/guides.html), and [assignments](https://danilofreire.github.io/datasci385/assignments.html) for the course. The course repository at <https://github.com/danilofreire/datasci385> is similarly structured. Feel free to explore the materials and use them as needed.
+
+## Getting Help
+
+If you encounter any issues with the course materials or have questions about the content, please:
+
+1. Check the [course syllabus](https://danilofreire.github.io/datasci385/syllabus.html) and this README for relevant information
+2. Review the [lecture materials](https://danilofreire.github.io/datasci385/lectures.html) and [guides](https://danilofreire.github.io/datasci385/guides.html) in the repository
+3. Consult with your classmates or post in the [course discussion forum](https://github.com/danilofreire/datasci385/discussions)
+4. Attend office hours or schedule an appointment with the instructor
+
+## Contributing to the Repository
+
+While this repository is primarily maintained by the course instructor, everyone is welcome to contribute. Please feel free to suggest improvements or report issues by [opening a GitHub issue](https://github.com/danilofreire/qtm350/issues), [submitting a pull request](https://github.com/danilofreire/qtm350/pulls), [creating a discussion post](https://github.com/danilofreire/qtm350/discussions), or [contacting the instructor directly](mailto:danilo.freire@emory.edu).
+
+## License
+
+This repository is licensed under the [MIT License](https://github.com/danilofreire/qtm350/blob/main/LICENSE.md). You are free to use, modify, and distribute the materials as needed, with appropriate attribution to the original source.
+
+-----
+
+We look forward to an engaging and productive semester! Happy coding! 

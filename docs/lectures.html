@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Lectures – DATASCI 385</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-250a0ad726c327aed60c1b8aba93cc6c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-5100b8561cd7f6cd8c35657ed6fe7ee7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-250a0ad726c327aed60c1b8aba93cc6c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">DATASCI 385</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./syllabus.html"> 
+<span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./lectures.html" aria-current="page"> 
+<span class="menu-text">Lectures</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./assignments.html"> 
+<span class="menu-text">Assignments</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./guides.html"> 
+<span class="menu-text">Guides</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./LICENSE.html"> 
+<span class="menu-text"> </span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools tools-wide">
+    <a href="https://github.com/danilofreire/datasci385" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#lecture-01-introduction-to-experimental-design-august-27-2025" id="toc-lecture-01-introduction-to-experimental-design-august-27-2025" class="nav-link active" data-scroll-target="#lecture-01-introduction-to-experimental-design-august-27-2025">Lecture 01: Introduction to Experimental Design (August 27, 2025)</a></li>
+  <li><a href="#lecture-02-theories-and-experiments-september-3-2025" id="toc-lecture-02-theories-and-experiments-september-3-2025" class="nav-link" data-scroll-target="#lecture-02-theories-and-experiments-september-3-2025">Lecture 02: Theories and Experiments (September 3, 2025)</a></li>
+  <li><a href="#lecture-03-causal-inference-and-potential-outcomes-september-8-2025" id="toc-lecture-03-causal-inference-and-potential-outcomes-september-8-2025" class="nav-link" data-scroll-target="#lecture-03-causal-inference-and-potential-outcomes-september-8-2025">Lecture 03: Causal Inference and Potential Outcomes (September 8, 2025)</a></li>
+  <li><a href="#lecture-04-selection-bias-and-randomisation-september-10-2025" id="toc-lecture-04-selection-bias-and-randomisation-september-10-2025" class="nav-link" data-scroll-target="#lecture-04-selection-bias-and-randomisation-september-10-2025">Lecture 04: Selection Bias and Randomisation (September 10, 2025)</a></li>
+  <li><a href="#lecture-05-statistical-inference-for-randomised-experiments-september-15-2025" id="toc-lecture-05-statistical-inference-for-randomised-experiments-september-15-2025" class="nav-link" data-scroll-target="#lecture-05-statistical-inference-for-randomised-experiments-september-15-2025">Lecture 05: Statistical Inference for Randomised Experiments (September 15, 2025)</a>
+  <ul class="collapse">
+  <li><a href="#lecture-06-texts-for-discussion-september-17-2025" id="toc-lecture-06-texts-for-discussion-september-17-2025" class="nav-link" data-scroll-target="#lecture-06-texts-for-discussion-september-17-2025">Lecture 06: Texts for discussion (September 17, 2025)</a></li>
+  </ul></li>
+  <li><a href="#lecture-07-blocking-clustering-and-covariate-adjustment-september-22-2025" id="toc-lecture-07-blocking-clustering-and-covariate-adjustment-september-22-2025" class="nav-link" data-scroll-target="#lecture-07-blocking-clustering-and-covariate-adjustment-september-22-2025">Lecture 07: Blocking, Clustering, and Covariate Adjustment (September 22, 2025)</a></li>
+  <li><a href="#lecture-08-blocking-and-clustering-cont.-statistical-power-and-sample-calculations-september-24-2025" id="toc-lecture-08-blocking-and-clustering-cont.-statistical-power-and-sample-calculations-september-24-2025" class="nav-link" data-scroll-target="#lecture-08-blocking-and-clustering-cont.-statistical-power-and-sample-calculations-september-24-2025">Lecture 08: Blocking and Clustering (Cont.), Statistical Power, and Sample Calculations (September 24, 2025)</a></li>
+  <li><a href="#lecture-09-non-compliance-i-september-29-2025" id="toc-lecture-09-non-compliance-i-september-29-2025" class="nav-link" data-scroll-target="#lecture-09-non-compliance-i-september-29-2025">Lecture 09: Non-Compliance I (September 29, 2025)</a></li>
+  <li><a href="#lecture-10-non-compliance-ii-october-1-2025" id="toc-lecture-10-non-compliance-ii-october-1-2025" class="nav-link" data-scroll-target="#lecture-10-non-compliance-ii-october-1-2025">Lecture 10: Non-Compliance II (October 1, 2025)</a></li>
+  <li><a href="#lecture-11-attrition-and-missing-outcomes-october-6-2025" id="toc-lecture-11-attrition-and-missing-outcomes-october-6-2025" class="nav-link" data-scroll-target="#lecture-11-attrition-and-missing-outcomes-october-6-2025">Lecture 11: Attrition and Missing Outcomes (October 6, 2025)</a></li>
+  <li><a href="#lecture-12-ethical-considerations-in-experimental-research-october-8-2025" id="toc-lecture-12-ethical-considerations-in-experimental-research-october-8-2025" class="nav-link" data-scroll-target="#lecture-12-ethical-considerations-in-experimental-research-october-8-2025">Lecture 12: Ethical Considerations in Experimental Research (October 8, 2025)</a></li>
+  <li><a href="#lecture-13-introduction-to-quarto-and-declaredesign-october-15-2025" id="toc-lecture-13-introduction-to-quarto-and-declaredesign-october-15-2025" class="nav-link" data-scroll-target="#lecture-13-introduction-to-quarto-and-declaredesign-october-15-2025">Lecture 13: Introduction to Quarto and DeclareDesign (October 15, 2025)</a></li>
+  <li><a href="#lecture-14-writing-pre-analysis-plans-october-20-2025" id="toc-lecture-14-writing-pre-analysis-plans-october-20-2025" class="nav-link" data-scroll-target="#lecture-14-writing-pre-analysis-plans-october-20-2025">Lecture 14: Writing Pre-Analysis Plans (October 20, 2025)</a></li>
+  <li><a href="#lecture-15-when-experiments-are-not-possible-october-22-2025" id="toc-lecture-15-when-experiments-are-not-possible-october-22-2025" class="nav-link" data-scroll-target="#lecture-15-when-experiments-are-not-possible-october-22-2025">Lecture 15: When Experiments are Not Possible (October 22, 2025)</a></li>
+  <li><a href="#lecture-16-interference-in-experiments-october-27-2025" id="toc-lecture-16-interference-in-experiments-october-27-2025" class="nav-link" data-scroll-target="#lecture-16-interference-in-experiments-october-27-2025">Lecture 16: Interference in Experiments (October 27, 2025)</a></li>
+  <li><a href="#lecture-17-texts-for-discussion-october-29-2025" id="toc-lecture-17-texts-for-discussion-october-29-2025" class="nav-link" data-scroll-target="#lecture-17-texts-for-discussion-october-29-2025">Lecture 17: Texts for Discussion (October 29, 2025)</a></li>
+  <li><a href="#lecture-18-heterogeneous-treatment-effects-november-3-2025" id="toc-lecture-18-heterogeneous-treatment-effects-november-3-2025" class="nav-link" data-scroll-target="#lecture-18-heterogeneous-treatment-effects-november-3-2025">Lecture 18: Heterogeneous Treatment Effects (November 3, 2025)</a></li>
+  <li><a href="#lecture-19-texts-for-discussion-november-5-2025" id="toc-lecture-19-texts-for-discussion-november-5-2025" class="nav-link" data-scroll-target="#lecture-19-texts-for-discussion-november-5-2025">Lecture 19: Texts for Discussion (November 5, 2025)</a></li>
+  <li><a href="#lecture-20-mediation-analysis-november-10-2025" id="toc-lecture-20-mediation-analysis-november-10-2025" class="nav-link" data-scroll-target="#lecture-20-mediation-analysis-november-10-2025">Lecture 20: Mediation Analysis (November 10, 2025)</a></li>
+  <li><a href="#lecture-21-survey-experiments-november-12-2025" id="toc-lecture-21-survey-experiments-november-12-2025" class="nav-link" data-scroll-target="#lecture-21-survey-experiments-november-12-2025">Lecture 21: Survey Experiments (November 12, 2025)</a></li>
+  <li><a href="#lecture-22-survey-methods-for-sensitive-topics-november-17-2025" id="toc-lecture-22-survey-methods-for-sensitive-topics-november-17-2025" class="nav-link" data-scroll-target="#lecture-22-survey-methods-for-sensitive-topics-november-17-2025">Lecture 22: Survey Methods for Sensitive Topics (November 17, 2025)</a></li>
+  <li><a href="#lecture-23-texts-for-discussion-related-to-survey-experiments-november-19-2025" id="toc-lecture-23-texts-for-discussion-related-to-survey-experiments-november-19-2025" class="nav-link" data-scroll-target="#lecture-23-texts-for-discussion-related-to-survey-experiments-november-19-2025">Lecture 23: Texts for Discussion (Related to Survey Experiments) (November 19, 2025)</a></li>
+  <li><a href="#lecture-24-meta-analysis-and-integration-of-research-findings-november-24-2025" id="toc-lecture-24-meta-analysis-and-integration-of-research-findings-november-24-2025" class="nav-link" data-scroll-target="#lecture-24-meta-analysis-and-integration-of-research-findings-november-24-2025">Lecture 24: Meta-Analysis and Integration of Research Findings (November 24, 2025)</a></li>
+  <li><a href="#lecture-25-course-revision-december-1-2025" id="toc-lecture-25-course-revision-december-1-2025" class="nav-link" data-scroll-target="#lecture-25-course-revision-december-1-2025">Lecture 25: Course Revision (December 1, 2025)</a></li>
+  <li><a href="#lecture-26-presentations-december-3-2025" id="toc-lecture-26-presentations-december-3-2025" class="nav-link" data-scroll-target="#lecture-26-presentations-december-3-2025">Lecture 26: Presentations (December 3, 2025)</a></li>
+  <li><a href="#lecture-27-presentations-december-8-2025" id="toc-lecture-27-presentations-december-8-2025" class="nav-link" data-scroll-target="#lecture-27-presentations-december-8-2025">Lecture 27: Presentations (December 8, 2025)</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/danilofreire/datasci385/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/danilofreire/datasci385/blob/gh-pages/lectures.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lectures</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Please find below the schedule of our lectures. Each lecture includes a brief description, required readings, and suggested readings for further exploration. The lecture slides and additional resources will be posted on the course website and GitHub repository. Please remember that the schedule may change during the course. If you have any questions or need further assistance, please let me know!</p>
+<section id="lecture-01-introduction-to-experimental-design-august-27-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-01-introduction-to-experimental-design-august-27-2025">Lecture 01: Introduction to Experimental Design (August 27, 2025)</h2>
+<p>Required readings:</p>
+<ul>
+<li>Syllabus and course website: <a href="http://danilofreire.github.io/datasci385" class="uri">http://danilofreire.github.io/datasci385</a>.</li>
+<li>GitHub repository: <a href="https://github.com/danilofreire/datasci385" class="uri">https://github.com/danilofreire/datasci385</a>.</li>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-01/01-introduction.html">Welcome to QTM 385: Introduction / Why Experiments?</a></li>
+<li>FEDAI: Chapter 01: Introduction.</li>
+</ul>
+<p>Suggested readings:</p>
+<ul>
+<li>Humphreys, M. (2021). <a href="https://macartan.github.io/i/notes/rct_faqs.html">I saw your RCT and I have some worries! FAQs</a>. An informal collection of questions and answers about RCTs.</li>
+<li>Mize, T. D., &amp; Manago, B. (2022). <a href="https://doi.org/10.1016/j.ssresearch.2022.102799">The Past, Present, and Future of Experimental Methods in the Social Sciences</a>. Social Science Research, 108, 1-24.</li>
+<li>Jackson, M., &amp; Cox, D. R. (2013). <a href="https://doi.org/10.1146/annurev-soc-071811-145443">The Principles of Experimental Design and Their Application in Sociology</a>. Annual Review of Sociology, 39(1), 27-49.</li>
+<li>Hernán, M. A. (2018). <a href="https://ajph.aphapublications.org/doi/full/10.2105/AJPH.2018.304337">The C-Word: Scientific Euphemisms Do Not Improve Causal Inference from Observational Data</a>. American Journal of Public Health, 108(5), 616-619.</li>
+<li>Bothwell, L. E., Greene, J. A., Podolsky, S. H., &amp; Jones, D. S. (2016). <a href="https://www.nejm.org/doi/full/10.1056/nejmms1604593">Assessing the Gold Standard — Lessons from the History of RCTs</a>. New England Journal of Medicine, 374(22), 2175-2181</li>
+<li>de Kadt, D. &amp; Grzysmala-Busse, A. (2025). <a href="https://github.com/ddekadt/good_description/tree/main">Good Description</a>. Working paper..</li>
+<li>Deaton, A., &amp; Cartwright, N. (2018). <a href="https://www.sciencedirect.com/science/article/pii/S0277953617307359">Understanding and Misunderstanding Randomized Controlled Trials</a>. Social Science &amp; Medicine 210, 2-21.</li>
+</ul>
+</section>
+<section id="lecture-02-theories-and-experiments-september-3-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-02-theories-and-experiments-september-3-2025">Lecture 02: Theories and Experiments (September 3, 2025)</h2>
+<p>Required readings:</p>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-02/02-design.html">The Research Design Process: Testing Theories with Experiments</a>.</li>
+<li>Card, D., DellaVigna, S., &amp; Malmendier, U. (2011). <a href="https://pubs.aeaweb.org/doi/pdf/10.1257%2Fjep.25.3.39">The Role of Theory in Field Experiments</a>. Journal of Economic Perspectives, 25(3), 39-62.</li>
+<li>Blair, G., Cooper, J., Coppock, A., &amp; Humphreys, M. (2019). <a href="https://doi.org/10.1017/S0003055419000194">Declaring and Diagnosing Research Designs</a>. American Political Science Review, 113(3), 838-859.</li>
+<li><a href="https://github.com/danilofreire/datasci385/blob/main/assignments/01-assignment">Problem Set 01 assigned</a>.</li>
+</ul>
+<p>Suggested readings:</p>
+<ul>
+<li>Brutger, R., Kertzer, J. D., Renshon, J., Tingley, D., &amp; Weiss, C. M. (2023). <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/ajps.12710">Abstraction and Detail in Experimental Design</a>. American Journal of Political Science, 67(4), 979-995.</li>
+<li>Peterson, J. C., Bourgin, D. D., Agrawal, M., Reichman, D., &amp; Griffiths, T. L. (2021). <a href="https://www.science.org/doi/full/10.1126/science.abe2629">Using Large-Scale Experiments and Machine Learning to Discover Theories of Human Decision-Making</a>. Science, 372(6547), 1209-1214.</li>
+<li>Smith, V. L. (2010). <a href="https://www.sciencedirect.com/science/article/abs/pii/S016726810900033X">Theory and Experiment: What Are the Questions?</a>. Journal of Economic Behavior &amp; Organization, 73(1), 3-15.</li>
+<li>van Rooij, I., &amp; Baggio, G. (2021). <a href="https://journals.sagepub.com/doi/full/10.1177/1745691620970604">Theory Before the Test: How to Build High-Verisimilitude Explanatory Theories in Psychological Science</a>. Perspectives on Psychological Science, 16(4), 682-697.</li>
+</ul>
+</section>
+<section id="lecture-03-causal-inference-and-potential-outcomes-september-8-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-03-causal-inference-and-potential-outcomes-september-8-2025">Lecture 03: Causal Inference and Potential Outcomes (September 8, 2025)</h2>
+<p>Required readings:</p>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-03/03-potential-outcomes.html">Potential Outcomes Framework</a>.</li>
+<li>FEDAI: Chapter 02: Causal Inference and Experimentation.</li>
+<li>Rubin, D. B. (2005). <a href="https://www.tandfonline.com/doi/abs/10.1198/016214504000001880">Causal Inference using Potential Outcomes: Design, Modeling, Decisions</a>. Journal of the American Statistical Association, 100(469), 322-331.</li>
+<li><a href="https://play.kahoot.it/v2/?quizId=c6a69c01-0bb4-4e2a-aca1-60e0f11fdb5b&amp;hostId=05eb977d-4f8a-440e-9e45-95212b29d103">Kahoot Quiz</a></li>
+</ul>
+</section>
+<section id="lecture-04-selection-bias-and-randomisation-september-10-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-04-selection-bias-and-randomisation-september-10-2025">Lecture 04: Selection Bias and Randomisation (September 10, 2025)</h2>
+<p>Required readings:</p>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-04/04-selection-bias.html">Potential Outcomes Continued and Regression Analysis</a>.</li>
+<li>Angrist, J. D., &amp; Pischke, J. S. (2014). <a href="https://assets.press.princeton.edu/chapters/s10363.pdf">Mastering ’Metrics: The Path from Cause to Effect</a>. Princeton University Press. Chapter 01: Randomized Trials. The appendix is also worth reading.</li>
+<li><a href="https://play.kahoot.it/v2/?quizId=8fba8529-e672-4116-8a74-23f78df26cb1&amp;hostId=05eb977d-4f8a-440e-9e45-95212b29d103">Kahoot Quiz</a></li>
+<li>Problem Set 01 due.</li>
+<li><a href="https://github.com/danilofreire/datasci385/blob/main/assignments/02-assignment">Problem Set 02 assigned</a>.</li>
+</ul>
+<p>Suggested readings:</p>
+<ul>
+<li>Imbens, G. W., &amp; Rubin, D. B. (2015). <a href="https://www.cambridge.org/core/books/causal-inference-for-statistics-social-and-biomedical-sciences/71126BE90C58F1A431FE9B2DD07938AB">Causal Inference for Statistics, Social, and Biomedical Sciences: An Introduction</a>. Cambridge University Press. Part I - Introduction.</li>
+<li>Hernán, M. A., Hernández-Díaz, S., &amp; Robins, J. M. (2004). <a href="https://pubmed.ncbi.nlm.nih.gov/15308962/">A Structural Approach to Selection Bias</a>. Epidemiology, 15(5), 615-625.</li>
+<li>Hernán M.A.&nbsp;&amp; Robins J.M. (2020). <a href="https://miguelhernan.org/whatifbook">Causal Inference: What If</a>. Boca Raton: Chapman &amp; Hall/CRC. Chapters 6-10. Maths-heavy but very insightful.</li>
+<li>Morgan, S. L., &amp; Winship, C. (2015). <a href="https://www.cambridge.org/core/books/counterfactuals-and-causal-inference/5CC81E6DF63C5E5A8B88F79D45E1D1B7">Counterfactuals and Causal Inference: Methods and Principles for Social Research</a>. Cambridge University Press. Chapter 02: Counterfactuals and Potential Outcomes Model.</li>
+</ul>
+</section>
+<section id="lecture-05-statistical-inference-for-randomised-experiments-september-15-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-05-statistical-inference-for-randomised-experiments-september-15-2025">Lecture 05: Statistical Inference for Randomised Experiments (September 15, 2025)</h2>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-05/05-hypothesis-testing.html">Sampling Distributions, Statistical Inference, and Hypothesis Testing</a>.</li>
+<li>FEDAI: Chapter 03: Sampling Distributions, Statistical Inference, and Hypothesis Testing (up to section 3.5).</li>
+<li>EGAP Methods Guides: <a href="https://egap.org/resource/10-things-to-know-about-hypothesis-testing/">Hypothesis Testing</a>, <a href="https://egap.org/resource/10-things-to-know-about-randomization-inference/">Randomisation Inference</a>, and <a href="https://egap.org/resource/10-things-to-know-about-cluster-randomization/">Cluster Randomisation</a>. These short guides provide a good overview of the topics we will cover in class, as well as example code in <code>R</code>.</li>
+<li><a href="https://play.kahoot.it/v2/?quizId=2ff88efc-8164-446d-a088-bcd4d4fe5313&amp;hostId=05eb977d-4f8a-440e-9e45-95212b29d103">Kahoot Quiz</a>.</li>
+</ul>
+<p>Suggested readings:</p>
+<ul>
+<li>Imbens, G. W., &amp; Rubin, D. B. (2015). <a href="https://www.cambridge.org/core/books/causal-inference-for-statistics-social-and-biomedical-sciences/71126BE90C58F1A431FE9B2DD07938AB">Causal Inference for Statistics, Social, and Biomedical Sciences: An Introduction</a>. Cambridge University Press. Part II - Randomised Experiments.</li>
+<li>Athey, S., &amp; Imbens, G. W. (2017). <a href="https://arxiv.org/pdf/1607.00698">The Econometrics of Randomized Experiments</a>. In Handbook of economic field experiments (Vol. 1, pp.&nbsp;73-140). North-Holland. Read section 4, although the entire chapter is worth reading.</li>
+<li>Berry, C. R., &amp; Fowler, A. (2021). <a href="https://www.science.org/doi/full/10.1126/sciadv.abe3404">Leadership or Luck? Randomization Inference for Leader Effects in Politics, Business, and Sports</a>. Science Advances, 7(4), eabe3404.</li>
+<li>Caughey, D., Dafoe, A., Li, X., &amp; Miratrix, L. (2023). <a href="https://academic.oup.com/jrsssb/article-abstract/85/5/1471/7246293?login=false">Randomisation Inference Beyond the Sharp Null: Bounded Null Hypotheses and Quantiles of Individual Treatment Effects</a>. Journal of the Royal Statistical Society Series B: Statistical Methodology, 85(5), 1471-1491.</li>
+<li>Ritzwoller, D. M., Romano, J. P., &amp; Shaikh, A. M. (2025). <a href="https://arxiv.org/abs/2406.09521">Randomization Inference: Theory and Applications</a>. arXiv preprint arXiv:2406.09521. <em>Very technical</em>, recommended for maths or statistics enthusiasts.</li>
+</ul>
+<section id="lecture-06-texts-for-discussion-september-17-2025" class="level3">
+<h3 class="anchored" data-anchor-id="lecture-06-texts-for-discussion-september-17-2025">Lecture 06: Texts for discussion (September 17, 2025)</h3>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-06/06-discussion.html">Texts for Discussion</a>.</li>
+<li>Kalla, J. &amp; D. Broockman. 2016. <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/ajps.12180">Campaign Contributions Facilitate Access to Congressional Officials: A Randomized Field Experiment</a>. American Journal of Political Science, 60(3): 545–558</li>
+<li>Bertrand, M., &amp; Mullainathan, S. (2004). <a href="https://www.aeaweb.org/articles?id=10.1257%2F0002828042002561&amp;ref=exo-insight">Are Emily and Greg More Employable than Lakisha and Jamal? A Field Experiment on Labor Market Discrimination</a>. American Economic Review, 94(4), 991-1013.</li>
+<li>Chattopadhyay, R., &amp; Duflo, E. (2004). <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1468-0262.2004.00539.x">Women as Policy Makers: Evidence from a Randomized Policy Experiment in India</a>. Econometrica, 72(5), 1409-1443. (<em>if time allows</em>)</li>
+<li>Problem Set 02 due.</li>
+<li><a href="https://github.com/danilofreire/datasci385/tree/main/assignments/03-assignment">Problem Set 03 assigned</a>.</li>
+</ul>
+</section>
+</section>
+<section id="lecture-07-blocking-clustering-and-covariate-adjustment-september-22-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-07-blocking-clustering-and-covariate-adjustment-september-22-2025">Lecture 07: Blocking, Clustering, and Covariate Adjustment (September 22, 2025)</h2>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-07/07-blocking.html">Blocking and Clustering</a>.</li>
+<li>FEDAI: Section 3.6: Sampling Distributions for Experiments That Use Block or Cluster Random Assignment.</li>
+<li>FEDAI: Chapter 04: Using Covariates in Experimental Design and Analysis.</li>
+</ul>
+</section>
+<section id="lecture-08-blocking-and-clustering-cont.-statistical-power-and-sample-calculations-september-24-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-08-blocking-and-clustering-cont.-statistical-power-and-sample-calculations-september-24-2025">Lecture 08: Blocking and Clustering (Cont.), Statistical Power, and Sample Calculations (September 24, 2025)</h2>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-08/08-power.html">Blocking and Clustering (Cont.), Statistical Power, and Sample Calculations</a>.</li>
+<li>FEDAI Appendix 3.1 on Power</li>
+<li><a href="https://egap.org/resource/10-things-to-know-about-statistical-power/">EGAP Methods Guide on Power Calculations</a>.</li>
+<li>Problem Set 03 due.</li>
+<li><a href="https://github.com/danilofreire/datasci385/tree/main/assignments/04-assignment">Problem Set 04 assigned</a>.</li>
+</ul>
+<p>Suggested readings:</p>
+<ul>
+<li>Blair, G., Coppock, A., &amp; Humphreys, M. (2023). <a href="https://book.declaredesign.org/library/experimental-causal.html#block-randomized-experiments">Research Design in the Social Sciences</a>. Princeton University Press. Sections 18.2 and 18.3.</li>
+<li>Rainey, C. (2025). <a href="https://doi.org/10.31219/osf.io/5am9q_v2">Power Rules: Practical Advice for Computing Power (and Automating with Pilot Data)</a>. OSF Preprints. Note: This is a useful guide for power calculations without the need for complex maths. Not peer-reviewed yet.</li>
+<li>Zhang, X. &amp; Hartmann, P. (2023). <a href="https://www.frontiersin.org/journals/medicine/articles/10.3389/fmed.2023.1215927">How to Calculate Sample Size in Animal and Human Studies</a>. Frontiers in Medicine, 10.</li>
+<li>Bowers, J. <a href="https://egap.org/resource/10-things-to-know-about-cluster-randomization/">10 Things to Know About Cluster Randomization</a>.</li>
+<li>Kaltenbach, H-M. (2021). <a href="https://n.ethz.ch/~kahans/doe2021/">Statistical Design and Analysis of Biological Experiments</a>. Chapter 7: Improving Precision and Power: Blocked Designs.</li>
+<li>Imai, K., King, G., &amp; Nall, C. (2009). <a href="https://projecteuclid.org/journalArticle/Download?urlId=10.1214%2F08-STS274">The Essential Role of Pair Matching in Cluster-Randomized Experiments, with Application to the Mexican Universal Health Insurance Evaluation</a>. Statistical Science, 29-53.</li>
+<li>R Psychology. (2023). <a href="https://rpsychologist.com/d3/nhst/">Understanding Statistical Power and Significance Testing</a>. A comprehensive guide to power analysis in <code>R</code>.</li>
+<li>EGAP: <a href="https://egap.shinyapps.io/power-app/">Power Calculator</a>. An interactive tool to calculate power for your experiments.</li>
+<li>Pek, J., Hoisington-Shaw, K. J., &amp; Wegener, D. T. (2024). <a href="https://psycnet.apa.org/doi/10.1037/met0000577">Uses of Uncertain Statistical Power: Designing Future Studies, Not Evaluating Completed Studies</a>. Psychological Methods.</li>
+<li>Li, X., &amp; Ding, P. (2020). <a href="https://doi.org/10.1111/rssb.12353">Rerandomization and Regression Adjustment</a>. Journal of the Royal Statistical Society Series B: Statistical Methodology, 82(1), 241-268.</li>
+</ul>
+</section>
+<section id="lecture-09-non-compliance-i-september-29-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-09-non-compliance-i-september-29-2025">Lecture 09: Non-Compliance I (September 29, 2025)</h2>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-09/09-non-compliance1.html">Non-Compliance I</a>.</li>
+<li>FEDAI: Chapter 05: One-Sided Non-Compliance.</li>
+<li><a href="https://play.kahoot.it/v2/?quizId=a6f1c5fa-f06d-41d1-ab82-f5db73b6d18f&amp;hostId=05eb977d-4f8a-440e-9e45-95212b29d103">Kahoot Quiz</a></li>
+</ul>
+</section>
+<section id="lecture-10-non-compliance-ii-october-1-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-10-non-compliance-ii-october-1-2025">Lecture 10: Non-Compliance II (October 1, 2025)</h2>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-10/10-non-compliance2.html">Non-Compliance II</a>.</li>
+<li>FEDAI: Chapter 06: Two-Sided Non-Compliance.</li>
+<li><a href="https://play.kahoot.it/v2/?quizId=93cf500f-015b-4dd6-9c11-b3142b06f905&amp;hostId=05eb977d-4f8a-440e-9e45-95212b29d103">KaHoot Quiz</a></li>
+<li>Problem Set 04 due.</li>
+<li><a href="https://github.com/danilofreire/datasci385/tree/main/assignments/05-assignment">Problem Set 05 assigned</a>.</li>
+<li>Two paragraphs (maximum) summarising an experiment that you wish to develop in this course. At a minimum, your summary should include a research question, why the question is important, and a rough outline of how you plan to answer the question. Please send me an email by Wednesday with this information.</li>
+</ul>
+<p>Suggested readings:</p>
+<ul>
+<li>Angrist, J. D., &amp; Pischke, J. S. (2009). <a href="https://link.springer.com/article/10.1057/be.2009.37">Mostly Harmless Econometrics: An Empiricist’s Companion</a>. Princeton University Press. Chapter 4: Instrumental Variables Estimation.</li>
+<li>Baryakova, T.H., Pogostin, B.H., Langer, R. et al.&nbsp;<a href="https://www.nature.com/articles/s41573-023-00670-0">Overcoming Barriers to Patient Adherence: The Case for Developing Innovative Drug Delivery Systems</a>. Nature Reviews Drug Discovery 22, 387–409 (2023).</li>
+<li>Kane, J. V. (2025). <a href="https://doi.org/10.1017/XPS.2024.1">More than Meets the ITT: A Guide for Anticipating and Investigating Nonsignificant Results in Survey Experiments</a>. Journal of Experimental Political Science, 12(1), 110–125.</li>
+<li>Hartman, E., &amp; Huang, M. (2024). <a href="https://doi.org/10.1017/psrm.2023.38">Improving Precision through Design and Analysis in Experiments with Noncompliance</a>. Political Science Research and Methods, 12(3), 557-572.</li>
+<li>Gerber, A. S., Green, D. P., Kaplan, E. H., &amp; Kern, H. L. (2010). <a href="https://www.cambridge.org/core/journals/political-analysis/article/abs/baseline-placebo-and-treatment-efficient-estimation-for-threegroup-experiments/F9B246F9645C925BE49E98DFFE600A65">Baseline, Placebo, and Treatment: Efficient Estimation for Three-Group Experiments</a>. Political Analysis, 18(3), 297-315.</li>
+</ul>
+</section>
+<section id="lecture-11-attrition-and-missing-outcomes-october-6-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-11-attrition-and-missing-outcomes-october-6-2025">Lecture 11: Attrition and Missing Outcomes (October 6, 2025)</h2>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-11/11-attrition.html">Attrition</a>.</li>
+<li>FEDAI: Chapter 07: Attrition.</li>
+<li>Lo, A., Renshon, J., &amp; Bassan-Nygate, L. (2024). <a href="https://www.cambridge.org/core/journals/journal-of-experimental-political-science/article/practical-guide-to-dealing-with-attrition-in-political-science-experiments/0E2B475CE9B082EE5AF8680E6BB1E985">A Practical Guide to Dealing with Attrition in Political Science Experiments</a>. Journal of Experimental Political Science, 11(2), 147-161.</li>
+<li><a href="https://play.kahoot.it/v2/?quizId=64c27dc8-89cb-4d27-8062-11054deb7849&amp;hostId=05eb977d-4f8a-440e-9e45-95212b29d103">Kahoot quiz</a></li>
+</ul>
+<p>Suggested readings:</p>
+<ul>
+<li>Zhou, H., &amp; Fishbach, A. (2016). <a href="https://psycnet.apa.org/record/2016-29224-001">The Pitfall of Experimenting on the Web: How Unattended Selective Attrition Leads to Surprising (Yet False) Research Conclusions</a>. Journal of Personality and Social Psychology, 111(4), 493.</li>
+<li>Coppock, A., Gerber, A. S., Green, D. P., &amp; Kern, H. L. (2017). <a href="https://www.cambridge.org/core/journals/political-analysis/article/abs/combining-double-sampling-and-bounds-to-address-nonignorable-missing-outcomes-in-randomized-experiments/76D6DB70466C906123D9842528C9A861">Combining Double Sampling and Bounds to Address Nonignorable Missing Outcomes in Randomized Experiments</a>. Political Analysis, 25(2), 188-206.</li>
+<li>Ghanem, D., Hirshleifer, S., &amp; Ortiz-Becerra, K. (2019). <a href="http://dx.doi.org/10.26085/C38C76">Testing Attrition Bias in Field Experiments</a>. UC Berkeley: Center for Effective Global Action.</li>
+<li>Pallmann, P., Bedding, A.W., Choodari-Oskooei, B. et al.&nbsp;(2018). <a href="https://bmcmedicine.biomedcentral.com/articles/10.1186/s12916-018-1017-7">Adaptive Designs in Clinical Trials: Why Use Them, and How to Run and Report Them</a>. BMC Med 16(29).</li>
+</ul>
+</section>
+<section id="lecture-12-ethical-considerations-in-experimental-research-october-8-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-12-ethical-considerations-in-experimental-research-october-8-2025">Lecture 12: Ethical Considerations in Experimental Research (October 8, 2025)</h2>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-12/12-ethics.html">Ethical Considerations in Experimental Research</a>.</li>
+<li>Humphreys, M. (2015). <a href="https://doi.org/10.1515/jgd-2014-0016">Reflections on the Ethics of Social Experimentation</a>. Journal of Globalization and Development, 6(1), 87-112.</li>
+<li>Cronin-Furman, K., &amp; Lake, M. (2018). <a href="https://doi.org/10.1017/S1049096518000379">Ethics Abroad: Fieldwork in Fragile and Violent Contexts</a>. PS: Political Science &amp; Politics, 51(3), 607-614.</li>
+<li>Poverty Action Lab (2022). <a href="https://www.povertyactionlab.org/resource/ethical-conduct-randomized-evaluations">Ethical Conduct of Randomized Evaluations</a>. J-PAL.</li>
+<li>Problem Set 05 due.</li>
+<li><a href="https://github.com/danilofreire/datasci385/tree/main/assignments/06-assignment">Problem Set 06 assigned</a></li>
+</ul>
+<p>Suggested readings:</p>
+<ul>
+<li>Asiedu, E., Dean, E., Karlan, D., &amp; Osei, R. (2021). <a href="https://doi.org/10.1073/pnas.2117261118">Ethics and Society Review: Ethics Reflection as a Precondition to Research Funding</a>. Proceedings of the National Academy of Sciences, 118(52), e2117261118.</li>
+<li>ASAB Ethical Committee/ABS Animal Care Committee. (2024). <a href="https://www.sciencedirect.com/science/article/pii/S0003347223003172">Guidelines for the Ethical Treatment of Nonhuman Animals in Behavioural Research and Teaching</a>. Animal Behaviour, 207, I-XI.</li>
+</ul>
+</section>
+<section id="lecture-13-introduction-to-quarto-and-declaredesign-october-15-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-13-introduction-to-quarto-and-declaredesign-october-15-2025">Lecture 13: Introduction to Quarto and DeclareDesign (October 15, 2025)</h2>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-13/13-quarto.html">Introduction to Quarto and DeclareDesign</a>.</li>
+<li>Quarto official website: <a href="https://quarto.org/" class="uri">https://quarto.org/</a>.</li>
+<li>DeclareDesign official website: <a href="https://declaredesign.org/" class="uri">https://declaredesign.org/</a>.</li>
+<li>Problem Set 06 due.</li>
+</ul>
+<p>Suggested readings:</p>
+<ul>
+<li><a href="https://quarto.org/">Quarto official website</a>.</li>
+<li>Awesome Quarto: <a href="https://github.com/mcanouil/awesome-quarto" class="uri">https://github.com/mcanouil/awesome-quarto</a>. Note: this repository contains dozens of tutorials, examples, and resources.</li>
+<li>Çetinkaya-Rundel, M. &amp; Lowndes, J. S. (2022) <a href="https://www.youtube.com/watch?v=p7Hxu4coDl8">Keynote talk: Hello Quarto: Share • Collaborate • Teach • Reimagine</a>. <a href="https://mine.quarto.pub/hello-quarto/#/hello-quarto-title">Slides</a> and <a href="https://github.com/mine-cetinkaya-rundel/hello-quarto">source code</a>. This is one of the nicest Quarto presentations I have seen.</li>
+<li><a href="https://www.youtube.com/watch?v=_f3latmOhew&amp;t=2s">Getting Started with Quarto (YouTube)</a>. Note: Posit (formerly RStudio) has a series of tutorials on Quarto on their YouTube channel. You can find their playlist <a href="https://www.youtube.com/playlist?list=PL9HYL-VRX0oQI8fVioFxMTBrViFnRX_Df">here</a>.</li>
+<li>Blair, G., Coppock, A., &amp; Humphreys, M. (2023). <a href="https://macartan.github.io/dd_bootcamp/dd.html#/title-slide">Introduction to Design Declaration with DeclareDesign</a>. A series of presentation slides on DeclareDesign by the authors of the book. Strongly recommended.</li>
+<li><a href="https://declaredesign.org/">DeclareDesign official website</a>.</li>
+<li>Nosek, B.A., Alter, G., Banks, G.C., Borsboom, D., Bowman, S.D., Breckler, S.J., Buck, S., Chambers, C.D., Chin, G., Christensen, G. and Contestabile, M., 2015. <a href="https://www.science.org/doi/10.1126/science.aab2374">Promoting an Open Research Culture</a>. Science, 348(6242), pp.1422-1425.</li>
+<li><a href="https://youtu.be/8Y0p_ar59tQ/">A Gentle Introduction to DeclareDesign (YouTube)</a>. Video tutorial by the authors of the book.</li>
+</ul>
+</section>
+<section id="lecture-14-writing-pre-analysis-plans-october-20-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-14-writing-pre-analysis-plans-october-20-2025">Lecture 14: Writing Pre-Analysis Plans (October 20, 2025)</h2>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-14/14-pap.html">How to Write a Pre-Analysis Plan</a>.</li>
+<li>EGAP: <a href="https://egap.org/resource/10-things-to-know-about-pre-analysis-plans/">Pre-Analysis Plans</a>.</li>
+<li>Olken, B. A. (2015). <a href="https://www.aeaweb.org/articles?id=10.1257/jep.29.3.61">Promises and perils of pre-analysis plans</a>. Journal of Economic Perspectives, 29(3), 61-80.</li>
+<li><a href="https://play.kahoot.it/v2/?quizId=da50f0e5-b3a6-450e-ad99-95ed2be461d3&amp;hostId=05eb977d-4f8a-440e-9e45-95212b29d103">Kahoot Quiz</a></li>
+</ul>
+<p>Suggested readings:</p>
+<ul>
+<li>Ofosu, G. K., &amp; Posner, D. N. (2023). <a href="https://doi.org/10.1017/S1537592721000931">Pre-Analysis Plans: An Early Stocktaking</a>. Perspectives on Politics, 21(1), 174-190.</li>
+<li>Rubenson, D. (2021). <a href="https://doi.org/10.1017/pls.2021.23">Tie My Hands Loosely: Pre-Analysis Plans in Political Science</a>. Politics and the Life Sciences, 40(2), 142-151.</li>
+<li>Coffman, L. C., &amp; Niederle, M. (2015). <a href="https://www.aeaweb.org/articles?id=10.1257/jep.29.3.81">Pre-Analysis Plans Have Limited Upside, Especially where Replications Are Feasible</a>. Journal of Economic Perspectives, 29(3), 81-98.</li>
+<li>Even-Tov, Omri and Valentine, K. (2025). <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5379056">The Research Paper Playbook: A PhD Student’s Guide to Writing and Presenting</a>.</li>
+</ul>
+</section>
+<section id="lecture-15-when-experiments-are-not-possible-october-22-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-15-when-experiments-are-not-possible-october-22-2025">Lecture 15: When Experiments are Not Possible (October 22, 2025)</h2>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-15/15-quasi.html">Natural and Quasi-Experiments</a>.</li>
+<li><a href="https://play.kahoot.it/v2/?quizId=438409d4-2db5-4641-b210-1f9aede6db5b&amp;hostId=05eb977d-4f8a-440e-9e45-95212b29d103">Kahoot Quiz</a>.</li>
+<li>Dunning, T. (2012). <a href="https://www.cambridge.org/core/books/natural-experiments-in-the-social-sciences/96A64CBDC2A2952DC1C68AF77DE675AF">Natural Experiments in the Social Sciences: A Design-Based Approach</a>. Cambridge University Press. Chapter 01: Introduction.</li>
+<li><a href="https://github.com/danilofreire/datasci385/tree/main/assignments/07-assignment">Problem Set 07 assigned</a>.</li>
+</ul>
+<p>Suggested readings:</p>
+<ul>
+<li>Diener, E., Northcott, R., Zyphur, M. J., &amp; West, S. G. (2022). <a href="https://journals.sagepub.com/doi/full/10.1177/17456916211037670">Beyond Experiments</a>. Perspectives on Psychological Science, 17(4), 1101-1119.</li>
+<li>Dunning, T. (2016). <a href="https://www.annualreviews.org/content/journals/10.1146/annurev-polisci-072516-014127">Transparency, Replication, and Cumulative Learning: What Experiments Alone Cannot Achieve</a>. Annual Review of Political Science, 19(1), 541-563.</li>
+<li>Petticrew, M., Cummins, S., Ferrell, C., Findlay, A., Higgins, C., Hoy, C., … &amp; Sparks, L. (2005). <a href="https://www.sciencedirect.com/science/article/abs/pii/S0033350605000296">Natural Experiments: An Underused Tool for Public Health?</a>. Public Health, 119(9), 751-757.</li>
+<li>Grosz, M. P., Ayaita, A., Arslan, R. C., Buecker, S., Ebert, T., Hünermund, P., … &amp; Rohrer, J. M. (2024). <a href="https://journals.sagepub.com/doi/full/10.1177/25152459231218610">Natural Experiments: Missed Opportunities for Causal Inference in Psychology</a>. Advances in Methods and Practices in Psychological Science, 7(1), 25152459231218610.</li>
+</ul>
+</section>
+<section id="lecture-16-interference-in-experiments-october-27-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-16-interference-in-experiments-october-27-2025">Lecture 16: Interference in Experiments (October 27, 2025)</h2>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-16/16-interference.html">Interference in Experiments</a>.</li>
+<li>FEDAI: Chapter 08: Interference between Experimental Units.</li>
+<li>EGAP: <a href="https://egap.org/resource/10-things-to-know-about-spillovers/">Spillovers</a>.</li>
+<li><a href="https://play.kahoot.it/v2/?quizId=aa1d54d4-1501-4fee-9f91-a21c1bbf962f&amp;hostId=05eb977d-4f8a-440e-9e45-95212b29d103">Kahoot Quiz</a>.</li>
+</ul>
+<p>Suggested readings:</p>
+<ul>
+<li>Aronow, P. M., Eckles, D., Samii, C., &amp; Zonszein, S. (2020). <a href="https://arxiv.org/abs/2001.05444">Spillover Effects in Experimental Data</a>. arXiv preprint arXiv:2001.05444. <em>Quite technical too</em>.</li>
+<li>Baird, S., Bohren, J. A., McIntosh, C., &amp; Ozler, B. (2014). <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2505070">Designing Experiments to Measure Spillover Effects</a>.</li>
+<li>Benjamin-Chung, J., Arnold, B. F., Berger, D., Luby, S. P., Miguel, E., Colford Jr, J. M., &amp; Hubbard, A. E. (2018). <a href="https://academic.oup.com/ije/article-abstract/47/1/332/4583505">Spillover Effects in Epidemiology: Parameters, Study Designs and Methodological Considerations</a>. International Journal of Epidemiology, 47(1), 332-347.</li>
+<li>Imbens, G. (2024). <a href="https://www.youtube.com/watch?v=i5kyzT_CpwQ">Interference and Spillovers in Randomized Experiments</a> (Video). A short lecture on recent advances and new designs to deal with interference in experiments. A little technical.</li>
+</ul>
+</section>
+<section id="lecture-17-texts-for-discussion-october-29-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-17-texts-for-discussion-october-29-2025">Lecture 17: Texts for Discussion (October 29, 2025)</h2>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-17/17-discussion.html">Texts for Discussion</a>.</li>
+<li><a href="https://play.kahoot.it/v2/?quizId=008403a1-cea0-48f8-b9fb-3c0b60214da9&amp;hostId=05eb977d-4f8a-440e-9e45-95212b29d103">Kahoot Quiz</a>.</li>
+<li>Centola, D. (2010). <a href="https://www.science.org/doi/abs/10.1126/science.1185231">The spread of behavior in an online social network experiment</a>. Science, 329(5996), 1194-1197.</li>
+<li>Paluck, B. L., Shepherd, H., and Aronow, P. 2016. <a href="https://www.pnas.org/doi/abs/10.1073/pnas.1514483113">Changing climates of conflict: A social network experiment in 56 schools.</a> Proceedings of the National Academy of Sciences, 113(3): 566-571</li>
+<li>Gerber, A. S., &amp; Green, D. P. (2000). <a href="https://doi.org/10.2307/2585837">The effects of canvassing, telephone calls, and direct mail on voter turnout: A field experiment</a>. American Political Science Review, 94(3), 653-663.</li>
+<li>Problem Set 07 due.</li>
+<li><a href="https://github.com/danilofreire/datasci385/tree/main/assignments/08-assignment">Problem Set 08 assigned</a>.</li>
+</ul>
+</section>
+<section id="lecture-18-heterogeneous-treatment-effects-november-3-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-18-heterogeneous-treatment-effects-november-3-2025">Lecture 18: Heterogeneous Treatment Effects (November 3, 2025)</h2>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-18/18-hte.html">Heterogeneous Treatment Effects</a>.</li>
+<li>FEDAI: Chapter 09: Heterogeneous Treatment Effects.</li>
+</ul>
+<p>Suggested readings:</p>
+<ul>
+<li>Holzmeister, F., Johannesson, M., Böhm, R., Dreber, A., Huber, J., &amp; Kirchler, M. (2024). <a href="https://doi.org/10.1073/pnas.2403490121">Heterogeneity in Effect Size Estimates</a>. Proceedings of the National Academy of Sciences, 121(32), e2403490121.</li>
+<li>Ding, P., Feller, A., &amp; Miratrix, L. (2016). <a href="https://academic.oup.com/jrsssb/article/78/3/655/7040906?login=false">Randomization Inference for Treatment Effect Variation.</a> Journal of the Royal Statistical Society Series B: Statistical Methodology, 78(3), 655-671.</li>
+<li>Wager, S., &amp; Athey, S. (2018). <a href="https://www.tandfonline.com/doi/abs/10.1080/01621459.2017.1319839">Estimation and Inference of Heterogeneous Treatment Effects using Random Forests.</a> Journal of the American Statistical Association, 113(523), 1228-1242.</li>
+<li>Susan Athey and Stefan Wager: <a href="https://www.youtube.com/watch?v=YBbnCDRCcAI">Estimating Heterogeneous Treatment Effects in R</a>. A one-hour video on how to use the <code>grf</code> package in R to estimate heterogeneous treatment effects.</li>
+<li><a href="https://grf-labs.github.io/grf/">Generalised Random Forests</a> (R package).</li>
+<li>Coppock, A. (2015). <a href="https://egap.org/resource/10-things-to-know-about-multiple-comparisons/">10 Things to Know about Multiple Comparisons</a>. EGAP Methods Guide.</li>
+<li>Frandsen, B. (2025). <a href="https://github.com/Mixtape-Sessions/Heterogeneous-Effects/tree/main">Machine Learning and Heterogeneous Treatment Effects</a>. Slides and coding labs from a workshop on this topic. Available on GitHub.</li>
+</ul>
+</section>
+<section id="lecture-19-texts-for-discussion-november-5-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-19-texts-for-discussion-november-5-2025">Lecture 19: Texts for Discussion (November 5, 2025)</h2>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-19/19-discussion.html">Texts for Discussion</a>.</li>
+<li>Munshi, K. (2003). <a href="https://academic.oup.com/qje/article-abstract/118/2/549/1899587?login=false">Networks in the modern economy: Mexican migrants in the US labor market.</a> The Quarterly Journal of Economics, 118(2), 549-599.</li>
+<li>Miguel, E., &amp; Kremer, M. (2004). <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1468-0262.2004.00481.x">Worms: identifying impacts on education and health in the presence of treatment externalities.</a> Econometrica, 72(1), 159-217.</li>
+<li><a href="https://play.kahoot.it/v2/?quizId=e02f1d98-9af7-449f-8a32-dddb6cc94575&amp;hostId=05eb977d-4f8a-440e-9e45-95212b29d103">Kahoot Quiz</a>.</li>
+<li>Pre-Analysis Plan due.</li>
+<li>Problem Set 08 due.</li>
+<li><a href="https://github.com/danilofreire/datasci385/tree/main/assignments/09-assignment">Problem Set 09 assigned.</a>.</li>
+</ul>
+</section>
+<section id="lecture-20-mediation-analysis-november-10-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-20-mediation-analysis-november-10-2025">Lecture 20: Mediation Analysis (November 10, 2025)</h2>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-20/20-mediation.html">Mediation Analysis</a>.</li>
+<li>FEDAI: Chapter 10: Mediation.</li>
+<li><a href="https://play.kahoot.it/v2/?quizId=e02f1d98-9af7-449f-8a32-dddb6cc94575&amp;hostId=05eb977d-4f8a-440e-9e45-95212b29d103">KaHoot Quiz</a></li>
+</ul>
+<p>Suggested readings:</p>
+<ul>
+<li>Bullock, J. G., &amp; Green, D. P. (2021). <a href="https://doi.org/10.1177/25152459211047227">The Failings of Conventional Mediation Analysis and a Design-Based Alternative</a>. Advances in Methods and Practices in Psychological Science, 4(4), 25152459211047227.</li>
+<li>VanderWeele, T. J. (2016). <a href="https://www.annualreviews.org/content/journals/10.1146/annurev-publhealth-032315-021402">Mediation Analysis: A Practitioner’s Guide.</a> Annual Review of Public Health, 37(1), 17-32.</li>
+<li>Acharya, A., Blackwell, M., &amp; Sen, M. (2018). <a href="https://doi.org/10.1017/pan.2018.19">Analyzing Causal Mechanisms in Survey Experiments</a>. Political Analysis, 26(4), 357–378.</li>
+<li>MacKinnon, D. P., Fairchild, A. J., &amp; Fritz, M. S. (2007). <a href="https://www.annualreviews.org/content/journals/10.1146/annurev.psych.58.110405.085542">Mediation Analysis.</a> Annual Review of Psychology, 58(1), 593-614.</li>
+<li>Righetti, N. (2023). <a href="https://nicolarighetti.github.io/mediation-moderation-and-conditional-process-analysis-with-r/">Mediation, Moderation, and Conditional Process Analysis with R</a>. A comprehensive online book with R code examples.</li>
+</ul>
+</section>
+<section id="lecture-21-survey-experiments-november-12-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-21-survey-experiments-november-12-2025">Lecture 21: Survey Experiments (November 12, 2025)</h2>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-21/21-survey.html">Survey Experiments</a>.</li>
+<li>EGAP: <a href="https://egap.org/resource/10-things-to-know-about-survey-experiments/">Survey Experiments</a>.</li>
+<li>Stantcheva, S. (2023). <a href="https://www.annualreviews.org/content/journals/10.1146/annurev-economics-091622-010157">How to run surveys: A guide to creating your own identifying variation and revealing the invisible</a>. Annual Review of Economics, 15(1), 205-234.</li>
+<li>Problem Set 09 due.</li>
+<li><a href="https://github.com/danilofreire/datasci385/tree/main/assignments/10-assignment">Problem Set 10 assigned.</a></li>
+</ul>
+<p>Suggested readings:</p>
+<ul>
+<li>Sniderman, P. M. (2018). <a href="https://www.annualreviews.org/content/journals/10.1146/annurev-polisci-042716-115726">Some Advances in the Design of Survey Experiments.</a> Annual Review of Political Science, 21(1), 259-275.</li>
+<li>Schneider, D., &amp; Harknett, K. (2022). <a href="https://journals.sagepub.com/doi/full/10.1177/0049124119882477">What’s to Like? Facebook as a Tool for Survey Data Collection.</a> Sociological Methods &amp; Research, 51(1), 108-140.</li>
+<li>Clifford, S., Sheagley, G., &amp; Piston, S. (2021). <a href="https://doi.org/10.1017/S0003055421000241">Increasing Precision Without Altering Treatment Effects: Repeated Measures Designs in Survey Experiments</a>. American Political Science Review, 115(3), 1048-1065.</li>
+<li>Kane, J. V. (2024). <a href="https://www.cambridge.org/core/journals/journal-of-experimental-political-science/article/more-than-meets-the-itt-a-guide-for-anticipating-and-investigating-nonsignificant-results-in-survey-experiments/C01250EB50598D6328B6065F1DF86BA7">More Than Meets the ITT: A Guide for Anticipating and Investigating Nonsignificant Results in Survey Experiments.</a> Journal of Experimental Political Science, 1-16.</li>
+</ul>
+</section>
+<section id="lecture-22-survey-methods-for-sensitive-topics-november-17-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-22-survey-methods-for-sensitive-topics-november-17-2025">Lecture 22: Survey Methods for Sensitive Topics (November 17, 2025)</h2>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-22/22-survey2.html">Survey Methods for Sensitive Topics</a>.</li>
+<li>Bursztyn, L., Haaland, I. K., Röver, N., &amp; Roth, C. (2025). <a href="https://www.nber.org/papers/w33920">The Social Desirability Atlas</a>. NBER Working Paper No.&nbsp;33920.</li>
+</ul>
+<p>Suggested readings:</p>
+<ul>
+<li>Blair, G., Imai, K., &amp; Zhou, Y. Y. (2015). <a href="https://www.tandfonline.com/doi/abs/10.1080/01621459.2015.1050028">Design and Analysis of the Randomized Response Technique.</a> Journal of the American Statistical Association, 110(511), 1304-1319.</li>
+<li>Blair, G., &amp; Imai, K. (2012). <a href="https://www.cambridge.org/core/journals/political-analysis/article/statistical-analysis-of-list-experiments/6AEE6C9D3AB6DA410D602CB035D5959A">Statistical Analysis of List Experiments.</a> Political Analysis, 20(1), 47-77.</li>
+<li>Riambau, G., &amp; Ostwald, K. (2021). <a href="https://doi.org/10.1017/psrm.2020.18">Placebo Statements in List Experiments: Evidence from a Face-to-Face Survey in Singapore</a>. Political Science Research and Methods, 9(1), 172-179.</li>
+<li>Gosciak, J., Molitor, D., &amp; Lundberg, I. (2025). <a href="https://osf.io/preprints/socarxiv/69y2j_v1">Adaptive Randomization in Conjoint Survey Experiments</a>. Retrieved from <a href="https://osf.io/preprints/socarxiv/69y2j_v1" class="uri">https://osf.io/preprints/socarxiv/69y2j_v1</a>.</li>
+</ul>
+</section>
+<section id="lecture-23-texts-for-discussion-related-to-survey-experiments-november-19-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-23-texts-for-discussion-related-to-survey-experiments-november-19-2025">Lecture 23: Texts for Discussion (Related to Survey Experiments) (November 19, 2025)</h2>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-23/23-discussion.html">Texts for Discussion</a>.</li>
+<li>Druckman, J. N., Gilli, M., Klar, S., &amp; Robison, J. (2015). <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/ssqu.12135">Measuring drug and alcohol use among college student‐athletes.</a> Social Science Quarterly, 96(2), 369-380.</li>
+<li>Blair, G., Imai, K., &amp; Lyall, J. (2014). <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/ajps.12086">Comparing and Combining List and Endorsement Experiments: Evidence from Afghanistan.</a> American Journal of Political Science, Vol. 58, No.&nbsp;4 (October), pp.&nbsp;1043-1063.</li>
+<li>Rosenfeld, B, Imai, K., &amp; Shapiro, J. (2016). <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/ajps.12205">An Empirical Validation Study of Popular Survey Methodologies for Sensitive Questions.</a> American Journal of Political Science, 60(3), 783-802.</li>
+<li>Freire, D., &amp; Skarbek, D. (2023). <a href="https://journals.sagepub.com/doi/full/10.1177/20531680221150389">Vigilantism and Institutions: Understanding Attitudes Toward Lynching in Brazil.</a> Research &amp; Politics, 10(1), 1-8.</li>
+<li>Problem Set 10 due.</li>
+</ul>
+</section>
+<section id="lecture-24-meta-analysis-and-integration-of-research-findings-november-24-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-24-meta-analysis-and-integration-of-research-findings-november-24-2025">Lecture 24: Meta-Analysis and Integration of Research Findings (November 24, 2025)</h2>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-24/24-meta-analysis.html">Meta-Analysis and Integration of Research Findings.</a></li>
+<li>FEDAI: Chapter 11: Integration of Research Findings.</li>
+</ul>
+<p>Suggested readings:</p>
+<ul>
+<li>Borenstein, M., Hedges, L. V., Higgins, J. P., &amp; Rothstein, H. R. (2011). <a href="https://www.wiley.com/en-us/Introduction+to+Meta+Analysis%2C+2nd+Edition-p-9780470057247">Introduction to Meta-analysis.</a> John Wiley &amp; Sons. A whole book dedicated to the topic. A bit technical but very good.</li>
+<li>Harrer, M., Cuijpers, P., Furukawa, T., &amp; Ebert, D. (2021). <a href="https://doi.org/10.1201/9781003107347">Doing Meta-Analysis with R: A Hands-On Guide.</a> Chapman and Hall/CRC.</li>
+<li>Hansen, C., Steinmetz, H., &amp; Block, J. (2022). <a href="https://link.springer.com/article/10.1007/s11301-021-00247-4">How to Conduct a Meta-Analysis in Eight Steps: A Practical Guide.</a> Management Review Quarterly, 1-19.</li>
+<li>Page, M. J., McKenzie, J. E., Bossuyt, P. M., Boutron, I., Hoffmann, T. C., Mulrow, C. D., … &amp; Moher, D. (2021). <a href="https://www.bmj.com/content/372/bmj.n71.short">The PRISMA 2020 Statement: An Updated Guideline for Reporting Systematic Reviews</a>. BMJ, 372.</li>
+</ul>
+</section>
+<section id="lecture-25-course-revision-december-1-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-25-course-revision-december-1-2025">Lecture 25: Course Revision (December 1, 2025)</h2>
+<ul>
+<li>Lecture slides: <a href="https://raw.githack.com/danilofreire/datasci385/main/lectures/lecture-25/25-revision.html">Course Revision</a>.</li>
+</ul>
+</section>
+<section id="lecture-26-presentations-december-3-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-26-presentations-december-3-2025">Lecture 26: Presentations (December 3, 2025)</h2>
+<ul>
+<li>Presentations of final projects.</li>
+</ul>
+</section>
+<section id="lecture-27-presentations-december-8-2025" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-27-presentations-december-8-2025">Lecture 27: Presentations (December 8, 2025)</h2>
+<ul>
+<li>Presentations of final projects.</li>
+</ul>
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>The content of this site is licensed under the <a href="./LICENSE.html">MIT License</a>.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/danilofreire/datasci385/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li><li><a href="https://github.com/danilofreire/datasci385/blob/gh-pages/lectures.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/danilofreire/datasci385">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

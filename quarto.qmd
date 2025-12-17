@@ -1,0 +1,156 @@
+---
+title: "Quarto Guide"
+---
+
+Welcome to the Quarto guide for [DATASCI 385](https://github.com/danilofreire/datasci385)! This guide provides an introduction to [Quarto](https://quarto.org), a document authoring system that supports Markdown, LaTeX, R, Python, and more. Quarto is designed to help you create reproducible research documents and presentations, making it a great tool for academic writing and data analysis.
+
+Quarto is very versatile and easy to use. If you are familiar with [Jupyter Notebooks](https://jupyter.org/), you will be right at home with Quarto. [R Markdown](https://rmarkdown.rstudio.com/) users will find Quarto even easier, as it is only a more powerful version of R Markdown, which supports multiple programming languages (such as Python) and output formats.
+
+In this guide, you will learn how to install Quarto, create a new Quarto project, write content in Markdown, and generate output formats such as HTML, PDF, and slides. You will also explore advanced features of Quarto, such as code execution, citations, and cross-references. By the end of this guide, you will be able to use Quarto effectively for your research projects and presentations.
+
+# Why is reproducing research important?
+
+[Reproducibility](https://en.wikipedia.org/wiki/Reproducibility) is the ability of an entire experiment or study to be duplicated, either by the same researcher or by someone else working independently. Reproducing research is important for several reasons:
+
+* **Transparency**: Reproducible research allows others to verify the results of a study and build upon them. It promotes transparency and trust in the scientific process.
+* **Error detection**: Reproducing research can help identify errors or inconsistencies in the original study. It allows researchers to correct mistakes and improve the quality of their work.
+* **Knowledge dissemination**: Reproducible research makes it easier to share knowledge and findings with the broader scientific community. It enables others to learn from and build on existing research.
+* **Research integrity**: Reproducible research is essential for maintaining the integrity of the scientific process. It helps prevent fraud, bias, and other unethical practices.
+
+Currently, there is a [reproducibility crisis](https://en.wikipedia.org/wiki/Reproducibility_crisis) in many scientific fields, including psychology, medicine, and economics. Many studies are not reproducible due to factors such as poor experimental design, publication bias, and the use of p-values. By adopting reproducible practices and tools like Quarto, researchers can help address this crisis and improve the reliability of scientific research.
+
+# Installing Quarto
+
+To get started with Quarto, you need to install the Quarto CLI (Command Line Interface) on your computer. Quarto is available for Windows, macOS, and Linux. Follow the instructions below to install Quarto on your operating system:
+
+* Go to the <https://quarto.org/docs/download/> and select the appropriate download link for your operating system.
+* Run the installer and follow the on-screen instructions to complete the installation.
+* If you use macOS, you can also install Quarto using [Homebrew](https://brew.sh/). Run the following commands in your terminal to install Homebrew and Quarto:
+
+```bash
+# Install Homebrew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install Quarto
+brew install quarto
+```
+
+If you use [VS Code](https://code.visualstudio.com/) (which I recommend), you can also install the [Quarto extension](https://marketplace.visualstudio.com/items?itemName=quarto.quarto) to work with Quarto projects directly in the editor. It makes things easier and more convenient.
+
+For more detailed installation instructions, refer to the [Quarto documentation](https://quarto.org/docs/getting-started/installation.html).
+
+# Creating a new Quarto document
+
+Quarto uses the `.qmd` file extension for Quarto Markdown files. These files can be converted into various output formats, such as HTML, PDF, Word documents, slides, and even websites. This website, the syllabus, and all class slides were created using Quarto!
+
+Here you will not need to use Quarto for anything other than your pre-analysis plans (and slides if you are feeling adventurous). So you can simply use the [PAP Template](https://github.com/danilofreire/datasci385/pap-template) to create your PAPs. But you will need to install a few things to make sure you can compile your PAPs into PDFs.
+
+First, you need to install [Pandoc](https://pandoc.org/), a universal document converter that Quarto uses to generate output formats. Pandoc is available for Windows, macOS, and Linux. You can download the installer from the [Pandoc website](https://pandoc.org/installing.html) or install it using Homebrew on macOS:
+
+```bash
+brew install pandoc
+```
+
+Next, you need to install a LaTeX distribution to generate PDF output. I recommend using [TinyTeX](https://yihui.org/tinytex/), a lightweight LaTeX distribution that works well with Pandoc. The easiest way to install TinyTeX is through Quarto itself:
+
+```bash
+quarto install tinytex
+```
+
+For a more complete LaTeX distribution, you can install [TeX Live](https://www.tug.org/texlive/), which includes additional packages and tools. Please refer to the [TeX Live website](https://www.tug.org/texlive/) for installation instructions.
+
+With these tools, you should be good to go!
+
+# Writing content in Quarto
+
+Quarto supports [Markdown](https://en.wikipedia.org/wiki/Markdown), a lightweight markup language with plain text formatting syntax. Markdown is easy to read and write, making it a great choice for creating content quickly and efficiently. In Quarto, you can use Markdown to format text, add images, create lists, and more. The [Markdown Guide](markdown.qmd) provides a detailed overview of Markdown syntax and features.
+
+But before you start writing the document, you need to include a header with metadata about the document. This metadata includes the title, author, date, and other information that Quarto uses to generate the output. It should be placed at the beginning of the document between two sets of three dashes (`---`). Here is an example of a document header in Quarto:
+
+```yaml
+---
+title: "My Quarto Document"
+author: "John Doe"
+date: "2022-01-01"
+format:
+  pdf:
+    toc: false
+    toc-depth: 2
+    number-sections: true
+    colorlinks: true
+    mainfont: "Times New Roman"
+    geometry: 
+      - top=2cm 
+      - bottom=2cm 
+      - left=2cm 
+      - right=2cm
+    cite-method: natbib
+    biblio-style: apalike
+    bibliography: references.bib
+editor:
+  render-on-save: false
+---
+```
+
+The header above uses [knitr](https://yihui.org/knitr/) as the default code engine (R). You can also use [Jupyter](https://jupyter.org/) as your code engine, just add `jupyter: python3` to the header.
+
+If you would like to use a more complex header, you can refer to my PDF template: <https://github.com/danilofreire/quarto-templates/tree/main/article>. 
+
+After the header, you can start writing the content of your document using Markdown syntax. 
+
+# Generating output formats
+
+Once you have written your Quarto document, you can generate output formats using the Quarto CLI or the VS Code extension. To generate an output format, run the following command in your terminal:
+
+```bash
+quarto render my-document.qmd --to pdf
+```
+
+This command tells Quarto to render the `my-document.qmd` file into a PDF format. You can replace `pdf` with other output formats such as `html`, `docx`, `slides`, etc. Quarto will generate the output file in the same directory as the input file.
+
+You can also simply use the VS Code extension to render the document. Just open the `.qmd` file in VS Code and click on the "Preview" button in the top right corner. 
+
+![](vscode-preview-button.png)
+
+It will open a preview of the document in your editor, like this:
+
+![](vscode-preview.png)
+
+Both pictures are from the [Quarto documentation](https://quarto.org/docs/get-started/hello/vscode.html). Please have a look at [this page](https://quarto.org/docs/get-started/hello/vscode.html) for more information on how to use Quarto with VS Code.
+
+# Creating a `.bib` file
+
+If you are using citations in your document, you will need to create a `.bib` file with your references. A `.bib` file is a BibTeX database that contains bibliographic information about your sources. You can create a `.bib` file using a text editor or reference management software like [Zotero](https://www.zotero.org/), [Mendeley](https://www.mendeley.com/), or [JabRef](https://www.jabref.org/).
+
+One of the easiest (and my favourite) ways to create a `.bib` file is to use [Google Scholar](https://scholar.google.com/). Just search for the paper you want to cite, click on the quotation marks below the title, and select BibTeX. It will give you the BibTeX entry for that paper, which you can copy and paste into your `.bib` file.
+
+For instance, to cite Paul Holland's paper ["Statistics and Causal Inference"](https://www.jstor.org/stable/2283131), click on the quotation marks below the title, and you will see the BibTeX entry:
+
+```bibtex
+@article{holland1986statistics,
+  title={Statistics and causal inference},
+  author={Holland, Paul W},
+  journal={Journal of the American statistical Association},
+  volume={81},
+  number={396},
+  pages={945--960},
+  year={1986},
+  publisher={Taylor \& Francis}
+}
+```
+
+Then you just need to copy and paste this entry into your `.bib` file. When you cite this paper in your Quarto document (e.g., `This is a paper by @holland1986statistics`), Quarto will automatically generate the bibliography for you.
+
+# Additional resources
+
+Quarto has a lot of features and capabilities that are not covered in this guide. It also has hundreds of templates that you can use, as well as a great community that is always willing to help. Here are some resources that you may find useful:
+
+- [Quarto official website](https://quarto.org/).
+- Awesome Quarto: <https://github.com/mcanouil/awesome-quarto>. This repository contains dozens of tutorials, examples, and resources. 
+- Çetinkaya-Rundel, M. & Lowndes, J. S. (2022) [Keynote talk: Hello Quarto: Share • Collaborate • Teach • Reimagine](https://www.youtube.com/watch?v=p7Hxu4coDl8). [Slides](https://mine.quarto.pub/hello-quarto/#/hello-quarto-title) and [source code](https://github.com/mine-cetinkaya-rundel/hello-quarto). This is one of the nicest Quarto presentations I have seen.
+- [Getting Started with Quarto (YouTube)](https://www.youtube.com/watch?v=_f3latmOhew&t=2s). Posit (formerly RStudio) has a series of tutorials on Quarto on their YouTube channel. You can find their playlist [here](https://www.youtube.com/playlist?list=PL9HYL-VRX0oQI8fVioFxMTBrViFnRX_Df).
+- [Quarto extensions](https://quarto.org/docs/extensions/). Several extensions are available to enhance the functionality of Quarto, such as manuscript templates, citations, and cross-references.
+
+I think that is all you need to know for now! If you have any questions, or would like me to expand this guide, please let me know. All the best!
+
+

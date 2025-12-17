@@ -1,0 +1,555 @@
+[
+  {
+    "objectID": "LICENSE.html",
+    "href": "LICENSE.html",
+    "title": "MIT License",
+    "section": "",
+    "text": "Copyright (c) 2025 Danilo Freire\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\nTHE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "syllabus.html",
+    "href": "syllabus.html",
+    "title": "Syllabus",
+    "section": "",
+    "text": "Experimental methods have become increasingly important in social and life sciences, offering reliable ways to test theories and produce generalisable findings. This course covers the essential principles of experimental design, with emphasis on testing causal relationships. Students will learn about causal inference, experimental design techniques, and methods for addressing common challenges in experimental research, such as non-compliance and participant attrition. The course also explores blocking and covariate adjustment, heterogeneous treatment effects, and proper interpretation of results. Special attention will be given to reproducible research practices and ethical considerations in experimental studies.\nThis course is designed to be both applied and interactive, featuring lectures and hands-on sessions. Students will learn how to design and implement experiments and critically evaluate existing experimental research in their areas of interest. Moreover, students will have the opportunity to develop their writing and presentation skills by drafting an experimental research project and presenting their findings.\n\nCourse Information\nWe will meet on Mondays and Wednesdays from 5:30pm to 6:45pm in the Psychology Building 220. The course will be a mix of lectures, discussions, and hands-on activities. Therefore, it is important that you read the assigned readings before class. Students are encouraged to participate and are most welcome to express their views openly and freely. I would suggest you to bring some notes to the class so that we can discuss together the topics you find most interesting.\nAll information about the course will be available at http://danilofreire.github.io/datasci385. The syllabus will be updated periodically according to the progress of the class. Please remember to visit the website regularly.\n\n\nLearning Objectives\nBy the end of this course, students will be able to:\n\nDesign rigorous experiments with proper randomisation procedures and sample sizing calculations\nCreate pre-analysis plans (PAP) and apply appropriate statistical methods for experimental analysis\nProduce reproducible reports using Quarto\nEvaluate experimental designs, identifying potential limitations\nManage unexpected data challenges, such as attrition and non-compliance\nUnderstand ethical considerations in experimental design\nDevelop analytical skills through practical problem sets and discussion sessions\n\n\n\nPrerequisites\nThis course is designed for students who have taken or are currently taking an introductory course in statistics. Some understanding of hypothesis testing, confidence intervals, and regression analysis is beneficial. However, if you have not taken such courses, that is also fine. The course is not math-heavy, and all concepts will be explained in detail in class. Some familiarity with R or Python is required, as we will use these tools for data analysis. We can adjust the course accordingly if you need assistance. If you are unsure whether you meet the prerequisites, please contact me to discuss your background.\n\n\nSoftware\nWe will use R for all data analysis in this course. R is a free and open-source software environment for statistical computing and graphics. You can download R from the Comprehensive R Archive Network (CRAN). You are free to use any text editor to write your R code, but I recommend using RStudio, VSCode, or Jupyter Notebooks with the R kernel. If you are feeling brave or want to learn some new skills, you can also use Neovim with the Nvim-R plugin. That is, if you can exit the editor. :)\nWe will also use Quarto to write the reports. Quarto is a new document format that combines the best features of Markdown, , and R Markdown. It is easy to use, very versatile, and allows you to write reports, slides, books, and even websites in a single document. You can install Quarto from the Quarto website. We will have a hands-on session on how to use Quarto in the course, and I have prepared templates for your pre-analysis plan and presentation. However, you are free to use any other template you prefer or even write your own.\n\n\nOffice Hours\nI am very flexible with office hours, but it is easier to contact me via email. Feel free to send me a message any time at danilo.freire@emory.edu, and I will likely reply within a few hours. My office address is in the Psychology and Interdisciplinary Sciences Building, 36 Eagle Row, 4th Floor, room 480. Please email me a couple of days in advance to ensure that no two students book the same time slot.\n\n\nAcademic Integrity\nUpon every individual who is a part of Emory University falls the responsibility for maintaining in the life of Emory a standard of unimpeachable honour in all academic work. The Honour Code of Emory College is based on the fundamental assumption that every loyal person of the University not only will conduct his or her own life according to the dictates of the highest honor, but will also refuse to tolerate in others action which would sully the good name of the institution. Academic misconduct is an offense generally defined as any action or inaction which is offensive to the integrity and honesty of the members of the academic community. The typical sanction for a violation of the Emory Honor Code is an F in the course. Any suspected case of academic misconduct will be referred to the Emory Honour Council.\n\n\nArtificial Intelligence\nStudents have to submit a series of problem sets and complete two group projects. You are encouraged to use AI to assist with your assignments, as learning to use AI is a valuable and emerging skill. I am available to provide support and assistance with these tools during office hours or by appointment. However, please note that any errors or omissions resulting from the use of AI tools are your responsibility. Do not rely solely on AI to complete your assignments; you must always double-check your work. Remember to cite all sources used in your problem sets and projects, including AI tools. Please include a note at the end of any document indicating that AI was used in its development.\n\n\nSpecial Needs and Accessibility Services\nI am fully committed to providing the necessary accommodations to ensure that all students have an equal opportunity to succeed in this course. Students with medical/health conditions that might impact academic success should visit the Department of Accessibility Services (DAS) to determine eligibility for appropriate accommodations. Students who receive accommodations should contact me with an Accommodation Letter from the DAS at the beginning of the semester, or as soon as the accommodation is granted. If you wish to do so, feel free to request an individual meeting to further discuss the specific accommodations.\n\n\nEnglish Language Learners\nEmory University welcomes students from around the country and the world, and the unique perspectives international and multilingual students bring enrich the campus community. To empower multilingual learners, an array of support is available including language and culture workshops and individual appointments. For more information about English Language Learning support at Emory, please contact the ELLP Specialists at https://writingcenter.emory.edu. No student will be penalised for their command of the English language.\n\n\nAssignments and Grading Policy\nProblem Sets: 50%. There will be ten problem sets throughout the course, each focusing on different aspects of experimental design and analysis. These assignments are designed to reinforce concepts covered in lectures and readings, and to provide hands-on practice with experimental design techniques. Problem sets will include a mix of theoretical questions and practical applications. They will be assigned regularly and must be completed individually. You may discuss your work with other colleagues as long as you do not copy entire sentences, just changing a few words. If you worked with other students, please write down their names on your problem set. Please also acknowledge any sources you used in your work, including textbooks, articles, and AI resources.\nPre-Analysis Plan (PAP): 20%. Students will work in groups to develop a pre-analysis plan for an experimental study. The PAP should be written in Quarto and include the following components:\n\nResearch question and hypotheses\nExperimental design and randomisation procedure\nSample size and power calculations\nPrimary and secondary outcome measures\nDetailed analysis plan, including statistical models and robustness checks\nPlan for handling issues such as missing data, non-compliance issues, and attrition\n\nA guide for writing the PAP will be available in the course GitHub repository and webpage. This assignment will help students develop skills in planning and pre-registering experiments, a crucial practice in modern experimental research.\nFinal Project: 30%. The final project will consist of a short presentation, created using Quarto, based on the pre-analysis plans developed earlier in the course. For this assignment, I will simulate data based on each group’s PAP, intentionally introducing challenges such as missing data on covariates and non-compliance. Students will need to analyse this simulated data as if it were the true results of their proposed experiments, addressing any issues that arise in light of their original PAP. The presentation should include:\n\nA brief overview of the experimental design.\nResults of the primary and secondary analyses.\nDiscussion of how deviations from the PAP were handled.\nInterpretation of results and their implications.\nReflections on the challenges encountered and lessons learned.\n\nThis project will assess students’ ability to apply their knowledge of experimental design in a realistic scenario, adapting to unexpected challenges that often arise in real-world research.\nPlease submit all assignments in PDF format via Canvas before class (include your code). Work submitted late will be penalised by one letter grade every 24 hours unless discussed with the instructor.\n\n\nGrading Scale\nEach student’s final grade will be based on the following after rounding up to the nearest point:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGrade\nA\nA-\nB+\nB\nB-\nC\nD\nF\n\n\n\n\nRange\n91%–100%\n86%–90%\n81%–85%\n76%–80%\n71%–75%\n66%–70%\n60%–65%\n&lt;60%\n\n\n\n\n\nMaterials\nThe main textbook for this course is:\n\nGerber, Alan S., and Donald P. Green. 2012. Field Experiments: Design, Analysis, and Interpretation. New York: W.W. Norton. (Referred to as FEDAI in the syllabus)\n\nStudents should closely read the assigned chapters and papers prior to the course date for which they are assigned. FEDAI will serve as our primary reference throughout the course.\nThis book is available:\n\nOn course reserves at Robert W. Woodruff Library\nFor purchase at the campus bookstore\nOnline through retailers like Amazon\n\nAdditional readings will be provided through the course website or the library’s electronic resources.\nStudents are encouraged to make use of the library’s resources, including its research guides and citation tools, to support their work in this course.\n\n\nSubject to Change Policy\nWhile I will try to adhere to the course schedule as much as possible, I also want to adapt to your learning pace and style. The syllabus and course plan may change in the semester. Again, please visit the course website regularly to check for updates. I will also announce any changes in class and via email.\n\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "guides.html",
+    "href": "guides.html",
+    "title": "Course Guides",
+    "section": "",
+    "text": "Below you will find a list of available guides for DATASCI 385. These guides are designed to help you prepare your pre-analysis plans and use Quarto to create reproducible research documents and presentations. If you have any questions or suggestions for new guides, please feel free to reach out to the course instructor."
+  },
+  {
+    "objectID": "guides.html#available-guides",
+    "href": "guides.html#available-guides",
+    "title": "Course Guides",
+    "section": "Available Guides",
+    "text": "Available Guides\n\nMarkdown Guide: An introduction to Markdown, a lightweight markup language with plain text formatting syntax.\nQuarto Guide: An introduction to Quarto, a document authoring system that supports Markdown, LaTeX, R, Python, and more.\nPAP Guide: A guide to creating pre-analysis plans (PAPs) for experimental research.\nEGAP Research Design Form: A guide to help you think through the key components of your research design. Source: EGAP."
+  },
+  {
+    "objectID": "guides.html#additional-resources",
+    "href": "guides.html#additional-resources",
+    "title": "Course Guides",
+    "section": "Additional Resources",
+    "text": "Additional Resources\n\nMarkdown\n\nMarkdown Cheatsheet: A quick reference guide to Markdown syntax.\nMarkdown Guide: A comprehensive guide to Markdown syntax and features.\nGitHub Markdown Guide: A guide to using Markdown on GitHub.\nMarkdown Tutorial: An interactive tutorial to learn Markdown.\n\n\n\nQuarto\n\nQuarto Documentation: The official documentation for Quarto, including installation instructions and usage guides.\nAwesome Quarto: https://github.com/mcanouil/awesome-quarto. This repository contains dozens of tutorials, examples, and resources.\nÇetinkaya-Rundel, M. & Lowndes, J. S. (2022) Keynote talk: Hello Quarto: Share • Collaborate • Teach • Reimagine. Slides and source code. This is one of the nicest Quarto presentations I have seen.\nGetting Started with Quarto (YouTube). Posit (formerly RStudio) has a series of tutorials on Quarto on their YouTube channel. You can find their playlist here.\nQuarto extensions. Several extensions are available to enhance the functionality of Quarto, such as manuscript templates, citations, and cross-references.\n\n\n\nPre-Analysis Plans\n\nBITSS Resource Library: The Berkeley Initiative for Transparency in the Social Sciences (BITSS) provides a collection of resources on research transparency and reproducibility. It has a section on pre-analysis plans and many other useful materials.\n10 Things to Know About Pre-Analysis Plans: A comprehensive guide by EGAP that best practices for creating pre-analysis plans.\nPre-Analysis Plans by J-PAL: The Abdul Latif Jameel Poverty Action Lab (J-PAL) also provides resources and guidelines for developing pre-analysis plans.\nHow Good Are Pre-Analysis Plans?: A blog post by the World Bank discussing the effectiveness of pre-analysis plans and offering lessons for writing and reviewing them."
+  },
+  {
+    "objectID": "guides.html#feedback-and-questions",
+    "href": "guides.html#feedback-and-questions",
+    "title": "Course Guides",
+    "section": "Feedback and Questions",
+    "text": "Feedback and Questions\nFor any questions or issues regarding these tutorials, please open a GitHub issue, submit a pull request, or create a discussion post.\nPlease do not forget that, in addition to the guides, the course syllabus also contains a list of recommended weekly readings and additional resources.\nI hope you like the guides and find them useful!"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "DATASCI 385 - Experimental Methods",
+    "section": "",
+    "text": "Welcome to DATASCI 385! Experimental methods are gaining popularity in social and biological sciences, providing a more reliable approach to evidence-based research. This course introduces the essentials of experimental design, focusing on testing causal hypotheses. You will learn about causal inference, blocking, covariate adjustment, non-compliance, attrition, heterogeneous treatment effects, reproducible presentation, and research ethics. Through lectures and hands-on sessions, you will design and implement experiments, critically evaluate existing research, and improve your writing and presentation skills by creating your own experimental research project.\nWe will meet every Monday and Wednesday from 17:30 to 18:45 in the Psychology Building 220. It is important to read the assigned readings before class, and make sure to check this website for updates and additional resources. If you have any questions, please feel free to contact me or the course TA. I am here to help you succeed in this course and beyond."
+  },
+  {
+    "objectID": "index.html#contact-information",
+    "href": "index.html#contact-information",
+    "title": "DATASCI 385 - Experimental Methods",
+    "section": "Contact Information",
+    "text": "Contact Information\n\nName: Danilo Freire\nEmail: danilo.freire@emory.edu\nOffice Hours: By appointment at your convenience, please email me to schedule a meeting"
+  },
+  {
+    "objectID": "index.html#learning-outcomes",
+    "href": "index.html#learning-outcomes",
+    "title": "DATASCI 385 - Experimental Methods",
+    "section": "Learning Outcomes",
+    "text": "Learning Outcomes\nBy the end of this course, students will be able to:\n\nDesign rigorous experimental studies, including appropriate randomisation procedures and sample size calculations.\nDevelop comprehensive pre-analysis plans (PAPs) for experimental research, demonstrating an understanding of best practices in pre-registration.\nApply statistical techniques to analyse experimental data.\nUse Quarto to create reproducible research documents and presentations.\nCritically evaluate experimental designs and results, identifying potential issues and limitations.\nAdapt analysis strategies to address unexpected challenges in experimental data.\nUnderstand and apply ethical considerations in experimental design and analysis.\nDevelop problem-solving skills through regular problem sets covering various aspects of experimental design and analysis."
+  },
+  {
+    "objectID": "index.html#website-structure",
+    "href": "index.html#website-structure",
+    "title": "DATASCI 385 - Experimental Methods",
+    "section": "Website Structure",
+    "text": "Website Structure\nThis website contains the course syllabus, lecture materials, guides, and assignments for the course. The course repository at https://github.com/danilofreire/datasci385 is similarly structured. Feel free to explore the materials and use them as needed."
+  },
+  {
+    "objectID": "index.html#getting-help",
+    "href": "index.html#getting-help",
+    "title": "DATASCI 385 - Experimental Methods",
+    "section": "Getting Help",
+    "text": "Getting Help\nIf you encounter any issues with the course materials or have questions about the content, please:\n\nCheck the course syllabus and this README for relevant information\nReview the lecture materials and guides in the repository\nConsult with your classmates or post in the course discussion forum\nAttend office hours or schedule an appointment with the instructor"
+  },
+  {
+    "objectID": "index.html#contributing-to-the-repository",
+    "href": "index.html#contributing-to-the-repository",
+    "title": "DATASCI 385 - Experimental Methods",
+    "section": "Contributing to the Repository",
+    "text": "Contributing to the Repository\nWhile this repository is primarily maintained by the course instructor, everyone is welcome to contribute. Please feel free to suggest improvements or report issues by opening a GitHub issue, submitting a pull request, creating a discussion post, or contacting the instructor directly."
+  },
+  {
+    "objectID": "index.html#license",
+    "href": "index.html#license",
+    "title": "DATASCI 385 - Experimental Methods",
+    "section": "License",
+    "text": "License\nThis repository is licensed under the MIT License. You are free to use, modify, and distribute the materials as needed, with appropriate attribution to the original source.\n\nWe look forward to an engaging and productive semester! Happy coding!"
+  },
+  {
+    "objectID": "pap.html",
+    "href": "pap.html",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "",
+    "text": "Pre-Analysis Plans (PAPs) are detailed documents that researchers create before collecting or analysing data, outlining their intended research methodology, hypotheses, and analytical approach. These plans have become increasingly important in social and biological sciences as a tool to enhance research transparency, credibility, and reproducibility. PAPs serve as a roadmap for researchers, helping them think through their study design and analysis strategy in advance, while also providing a public record of their intentions.\nThe use of PAPs has grown significantly in recent years, particularly in fields such as economics, political science, and psychology. According to the American Economic Association’s website, as of 2024, the AEA RCT Registry currently lists about 10,000 studies with locations in 169 countries. This trend reflects a growing recognition of the importance of research transparency and the need to address issues such as publication bias and p-hacking."
+  },
+  {
+    "objectID": "pap.html#enhancing-research-transparency",
+    "href": "pap.html#enhancing-research-transparency",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Enhancing Research Transparency",
+    "text": "Enhancing Research Transparency\nPAPs provide a clear record of the researcher’s intentions before data collection or analysis, reducing concerns about data mining or selective reporting. By specifying analyses in advance, researchers demonstrate their commitment to transparent and unbiased research practices. This transparency allows other researchers and stakeholders to distinguish between pre-planned analyses and exploratory findings, increasing confidence in the reported results.\nFor example, in a study on the effects of a cash transfer program on educational outcomes, researchers might specify in their PAP that they will analyse the impact on primary school enrollment rates, test scores, and dropout rates. By doing so, they commit to reporting these outcomes regardless of whether the results are statistically significant or align with their hypotheses. This approach prevents the temptation to selectively report only positive or interesting findings after seeing the data."
+  },
+  {
+    "objectID": "pap.html#improving-research-quality",
+    "href": "pap.html#improving-research-quality",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Improving Research Quality",
+    "text": "Improving Research Quality\nBy forcing researchers to think through their analysis in advance, PAPs can lead to better-designed studies and more robust analytical approaches. This process often reveals potential issues or oversights that can be addressed before data collection begins. For instance, when drafting a PAP, researchers might realise they need to include additional control variables or consider potential confounding factors they had not initially thought of.\nConsider a medical study examining the effectiveness of a new drug. In developing the PAP, researchers might recognise the need to stratify their sample based on age groups or pre-existing conditions, leading to a more nuanced and informative analysis. They might also identify potential interaction effects between the drug and other medications, prompting them to collect data on participants’ full medical histories."
+  },
+  {
+    "objectID": "pap.html#addressing-publication-bias",
+    "href": "pap.html#addressing-publication-bias",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Addressing Publication Bias",
+    "text": "Addressing Publication Bias\nPAPs can help combat publication bias by encouraging the reporting of all pre-specified analyses, regardless of their results. This approach ensures that null or unexpected findings are not selectively omitted from publication. Publication bias is a significant issue in many fields, where studies with positive or novel results are more likely to be published than those with null or negative findings.\nFor example, in psychology, the “file drawer problem” refers to the tendency for studies with non-significant results to remain unpublished. By pre-registering their analyses, researchers commit to reporting all findings, which can help provide a more balanced view of the evidence. In a meta-analysis of psychological interventions, for instance, including pre-registered studies might reveal that the overall effect size is smaller than what would be estimated based solely on published literature."
+  },
+  {
+    "objectID": "pap.html#increasing-credibility",
+    "href": "pap.html#increasing-credibility",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Increasing Credibility",
+    "text": "Increasing Credibility\nPre-registering analyses can increase the credibility of research findings, as it demonstrates that the results were not cherry-picked or manipulated to achieve desired outcomes. This is particularly important in fields where research findings can influence policy decisions or clinical practices.\nFor instance, in a study on the effectiveness of a new educational intervention, pre-registering the primary outcome measures (e.g., standardised test scores) and analysis methods prevents researchers from selectively reporting only the most favorable results. If the intervention shows mixed effects – perhaps improving math scores but not reading scores – the PAP ensures that both outcomes are reported, providing a more accurate picture of the intervention’s impact."
+  },
+  {
+    "objectID": "pap.html#facilitating-replication",
+    "href": "pap.html#facilitating-replication",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Facilitating Replication",
+    "text": "Facilitating Replication\nDetailed PAPs make it easier for other researchers to replicate studies, as they provide a clear roadmap of the intended analyses and methodologies. Replication is crucial for scientific progress, but it often fails due to insufficient information about the original study’s methods.\nFor example, in a complex econometric analysis of labor market policies, a well-written PAP would specify not only the data sources and variables used but also the exact statistical models, including any transformations or coding of variables. This level of detail allows other researchers to reproduce the analysis, even if they do not have access to the original data, by following the same procedures with similar datasets."
+  },
+  {
+    "objectID": "pap.html#research-questions-and-hypotheses",
+    "href": "pap.html#research-questions-and-hypotheses",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Research Questions and Hypotheses",
+    "text": "Research Questions and Hypotheses\nClearly state the primary research questions and hypotheses to be tested. Be specific about what you expect to find and why. This section should provide a theoretical framework for the study and explain how the hypotheses relate to existing literature. For instance:\nResearch Question: “Does providing microfinance loans to women in rural areas increase their household income and empowerment?”\nHypotheses:\n\nWomen who receive microfinance loans will show a 20% increase in household income after one year compared to the control group.\nLoan recipients will report higher scores on a standardised empowerment index, with an expected effect size of 0.5 standard deviations.\nThe impact of loans on income will be moderated by the recipient’s level of education, with more educated women showing larger income gains."
+  },
+  {
+    "objectID": "pap.html#sample-and-data-collection",
+    "href": "pap.html#sample-and-data-collection",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Sample and Data Collection",
+    "text": "Sample and Data Collection\nDescribe the sample size, sampling method, and data collection procedures in detail. Include information on:\n\nTarget population\nInclusion and exclusion criteria\nRecruitment methods\nSample size calculations and power analysis\n\nFor instance, in a study on the effectiveness of a new teaching method:\n“We will recruit 1000 students from 50 public high schools in urban areas of California. Schools will be randomly selected from a list of all eligible schools (defined as those with at least 500 students and a 30% or higher free lunch program participation rate). Within each school, we will randomly select 20 students from the 10th grade. Power calculations indicate that this sample size will allow us to detect an effect size of 0.2 standard deviations with 80% power at a 5% significance level, accounting for potential clustering at the school level.”"
+  },
+  {
+    "objectID": "pap.html#outcome-measures",
+    "href": "pap.html#outcome-measures",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Outcome Measures",
+    "text": "Outcome Measures\nDefine primary and secondary outcome measures, including how they will be constructed from raw data. Provide detailed information on:\n\nVariable definitions\nMeasurement scales\nData sources\nAny planned data transformations\n\nExample for a health intervention study: “Primary outcome: Body Mass Index (BMI), calculated as weight in kilograms divided by height in meters squared. Weight will be measured using a calibrated digital scale, and height will be measured using a stadiometer. Both measurements will be taken twice and averaged.\nSecondary outcomes:\n\nPhysical activity level: Measured using the International Physical Activity Questionnaire (IPAQ), scored according to the official IPAQ scoring protocol.\nDietary quality: Assessed using a 7-day food diary, which will be analysed to create a Healthy Eating Index (HEI) score ranging from 0-100.\nSelf-efficacy for health behaviors: Measured using the Health-Specific Self-Efficacy Scale, a 10-item Likert scale questionnaire.”"
+  },
+  {
+    "objectID": "pap.html#statistical-models-and-analyses",
+    "href": "pap.html#statistical-models-and-analyses",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Statistical Models and Analyses",
+    "text": "Statistical Models and Analyses\nSpecify the statistical models and analyses to be used, including:\n\nType of statistical tests (e.g., t-tests, ANOVA, regression)\nModel specifications\nHandling of missing data\nTreatment of outliers\nPlanned subgroup analyses or robustness checks\n\nFor example, in an economic study on the impact of a job training program:\n“Main analysis: We will use an OLS regression model to estimate the effect of the job training program on annual income:\n\\[ Income_i = \\beta_0 + \\beta_1 Treatment_i + \\beta_2 BaselineIncome_i + \\beta_3 Education_i + \\beta_4 Age_i + \\beta_5 Gender_i + \\varepsilon_i \\]\nWhere \\(Treatment_i\\) is a dummy variable indicating assignment to the job training program.\nMissing data: We will use multiple imputation with chained equations (MICE) to handle missing data, creating 20 imputed datasets.\nOutliers: Income values above the 99th percentile will be winsorised to reduce the influence of extreme outliers.\nSubgroup analysis: We will examine heterogeneous treatment effects by gender and by baseline income quartiles, adding interaction terms to the main regression model.\nRobustness checks: We will re-run the main analysis using a difference-in-differences approach and a propensity score matching method to ensure our results are not sensitive to the choice of analytical approach.”"
+  },
+  {
+    "objectID": "pap.html#multiple-hypothesis-testing",
+    "href": "pap.html#multiple-hypothesis-testing",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Multiple Hypothesis Testing",
+    "text": "Multiple Hypothesis Testing\nAddress how multiple hypothesis testing will be handled to control for false positives. Describe methods such as:\n\nBonferroni correction\nFalse Discovery Rate (FDR) control\nFamily-wise error rate (FWER) control\n\nExample: “To address multiple hypothesis testing, we will use the following approach:\n\nFor our three primary outcomes, we will use the Bonferroni correction, adjusting the significance level to \\(\\alpha = 0.05 / 3 = 0.0167\\).\nFor secondary outcomes, we will control the False Discovery Rate using the Benjamini-Hochberg procedure with a q-value of 0.10.\nFor exploratory analyses, we will report unadjusted p-values but clearly label these findings as exploratory and interpret them cautiously.”"
+  },
+  {
+    "objectID": "pap.html#covariates-and-control-variables",
+    "href": "pap.html#covariates-and-control-variables",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Covariates and Control Variables",
+    "text": "Covariates and Control Variables\nList all covariates and control variables to be included in the analyses, explaining their relevance to the research questions. For instance:\n“We will include the following control variables in our main regression analyses:\n\nAge: Continuous variable, measured in years\nGender: Binary variable (0 = male, 1 = female)\nEducation level: Categorical variable with four levels (less than high school, high school graduate, some college, college graduate or higher)\nBaseline income: Continuous variable, measured in dollars\nEmployment status at baseline: Binary variable (0 = unemployed, 1 = employed)\n\nThese variables are included because previous research has shown they are strong predictors of labor market outcomes and may influence the effectiveness of job training programs.”"
+  },
+  {
+    "objectID": "pap.html#heterogeneous-effects",
+    "href": "pap.html#heterogeneous-effects",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Heterogeneous Effects",
+    "text": "Heterogeneous Effects\nIf applicable, describe any planned analyses of heterogeneous effects or subgroup analyses. For example:\n“We will examine heterogeneous treatment effects for the following subgroups:\n\nGender: We hypothesise that the job training program may have differential effects for men and women due to differences in labor market discrimination and occupational segregation.\nAge groups: We will analyse treatment effects separately for participants under 30, 30-50, and over 50 years old, as the effectiveness of job training may vary across career stages.\nEducation level: We will examine whether the program’s impact differs based on participants’ educational attainment.\n\nFor each subgroup analysis, we will add interaction terms between the treatment indicator and the subgroup variable to our main regression model.”"
+  },
+  {
+    "objectID": "pap.html#power-calculations",
+    "href": "pap.html#power-calculations",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Power Calculations",
+    "text": "Power Calculations\nInclude power calculations to justify the chosen sample size and demonstrate the ability to detect meaningful effects. For instance:\n“We conducted power calculations using R and the DeclareDesign package. Assuming a two-tailed test with \\(\\alpha = 0.05\\) and 80% power, our sample size of 1000 participants (500 per group) allows us to detect a minimum effect size of \\(d = 0.18\\) for our primary outcome of annual income. This effect size is considered small to medium and is in line with previous studies on similar job training interventions. For our subgroup analyses, the minimum detectable effect size increases to \\(d = 0.28\\), which we consider acceptable for these secondary analyses.”"
+  },
+  {
+    "objectID": "pap.html#constraining-exploratory-analysis",
+    "href": "pap.html#constraining-exploratory-analysis",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Constraining Exploratory Analysis",
+    "text": "Constraining Exploratory Analysis\nPAPs may limit researchers’ ability to explore unexpected findings in the data. To address this, consider including a section for planned exploratory analyses. For example:\n“While our primary analyses will focus on the pre-specified outcomes and methods outlined above, we recognise the potential for unexpected findings. We will include a clearly labeled exploratory analysis section in our final report, where we may investigate:\n\nNon-linear relationships between continuous predictors and outcomes\nPotential mediating factors in the relationship between the intervention and primary outcomes\nUnexpected patterns or clusters in the data identified through data visualization techniques\n\nAny findings from these exploratory analyses will be clearly labeled as such and interpreted cautiously, with an emphasis on generating hypotheses for future research rather than drawing definitive conclusions.”"
+  },
+  {
+    "objectID": "pap.html#incomplete-specification",
+    "href": "pap.html#incomplete-specification",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Incomplete Specification",
+    "text": "Incomplete Specification\nIt is challenging to anticipate all possible analyses or issues that may arise during the research process. Be as comprehensive as possible while allowing for some flexibility. For instance:\n“While we have attempted to be as comprehensive as possible in this PAP, we acknowledge that unforeseen circumstances may necessitate deviations from the plan. Any such deviations will be clearly documented and justified in the final report. Potential scenarios that might require flexibility include:\n\nLower than expected recruitment rates, which may necessitate adjustments to the power calculations and potentially the analytical approach\nUnexpected data quality issues that may require additional data cleaning or imputation methods\nExternal events (e.g., policy changes, economic shocks) that may impact the interpretation of our results\n\nIn such cases, we will strive to adhere as closely as possible to the spirit of the original plan while making necessary adjustments to ensure the validity and relevance of our analyses.”"
+  },
+  {
+    "objectID": "pap.html#time-and-resource-intensive",
+    "href": "pap.html#time-and-resource-intensive",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Time and Resource Intensive",
+    "text": "Time and Resource Intensive\nCreating a detailed PAP can be time-consuming and may require additional resources. However, this upfront investment often leads to more efficient and robust research in the long run. Researchers should budget time and resources for developing a comprehensive PAP, potentially including:\n\nLiterature review to inform hypotheses and analytical approaches\nConsultation with statisticians or methodologists to refine the analytical plan\nPilot studies or simulations to inform power calculations and test data collection instruments\nTeam meetings to discuss and refine the PAP\nExternal review of the PAP by colleagues or experts in the field\n\nWhile this process may seem daunting, it can ultimately save time and resources by identifying potential issues early and providing a clear roadmap for the research project."
+  },
+  {
+    "objectID": "pap.html#balancing-specificity-and-flexibility",
+    "href": "pap.html#balancing-specificity-and-flexibility",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Balancing Specificity and Flexibility",
+    "text": "Balancing Specificity and Flexibility\nFinding the right balance between being specific enough to prevent p-hacking and flexible enough to address unforeseen circumstances can be challenging. One approach is to specify decision rules for potential deviations from the plan. For example:\n“We will adhere to the following decision rules for potential deviations from the PAP:\n\nIf recruitment falls below 80% of the target sample size, we will recalculate power analyses and may adjust our primary outcome to a composite measure to maintain adequate statistical power.\nIf attrition exceeds 20%, we will conduct sensitivity analyses using multiple imputation and inverse probability weighting in addition to our planned complete case analysis.\nIf we discover strong violations of model assumptions (e.g., non-normality, heteroscedasticity), we will employ appropriate transformations or alternative modeling approaches (e.g., generalised linear models, non-parametric tests) and report both the original and alternative analyses.”"
+  },
+  {
+    "objectID": "pap.html#be-specific-but-allow-for-flexibility",
+    "href": "pap.html#be-specific-but-allow-for-flexibility",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Be Specific but Allow for Flexibility",
+    "text": "Be Specific but Allow for Flexibility\nProvide detailed plans while allowing for some flexibility to address unforeseen circumstances. Consider including decision rules for potential deviations from the plan. For example:\n“This PAP outlines our primary analytical strategy, but we acknowledge that unforeseen circumstances may necessitate adjustments. We will adhere to the following principles when considering deviations from the plan:\n\nAny deviation must be justified based on methodological grounds or unforeseen data characteristics, not on the results of preliminary analyses.\nAll deviations will be clearly documented and reported in the final manuscript, including the rationale for the change and any implications for the interpretation of results.\nWe will consult with independent experts or our advisory board before implementing major changes to the analysis plan.\nIf substantial deviations are required, we will consider publishing an addendum to the original PAP, clearly stating the changes and their justifications.”"
+  },
+  {
+    "objectID": "pap.html#register-your-pap",
+    "href": "pap.html#register-your-pap",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Register Your PAP",
+    "text": "Register Your PAP\nRegister your PAP with a recognised registry, such as:\n\nOpen Science Framework (OSF)\nEGAP Pre-Analysis Plan Registry\nAEA RCT Registry\nClinicalTrials.gov (for medical research)\n\nRegistration provides a time-stamped, publicly accessible version of your plan, enhancing transparency and credibility."
+  },
+  {
+    "objectID": "pap.html#update-as-necessary",
+    "href": "pap.html#update-as-necessary",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Update as Necessary",
+    "text": "Update as Necessary\nIf changes to the plan are required, document and justify these changes transparently. Consider using version control to track modifications. For example:\n“Any updates to this PAP will be logged in a change document, which will include:\n\nDate of the change\nDescription of the modification\nRationale for the change\nPotential impact on the interpretation of results\n\nThis change log will be made publicly available alongside the original PAP.”"
+  },
+  {
+    "objectID": "pap.html#use-clear-and-precise-language",
+    "href": "pap.html#use-clear-and-precise-language",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Use Clear and Precise Language",
+    "text": "Use Clear and Precise Language\nWrite your PAP in clear, unambiguous language to ensure that other researchers can understand and potentially replicate your planned analyses. Avoid jargon where possible, and define technical terms when they are necessary."
+  },
+  {
+    "objectID": "pap.html#include-code-and-syntax",
+    "href": "pap.html#include-code-and-syntax",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Include Code and Syntax",
+    "text": "Include Code and Syntax\nWhen possible, include example code or syntax for planned analyses to further enhance reproducibility. This could be done by:\n\nProviding annotated code snippets in an appendix\nLinking to a public repository (e.g., GitHub) with full analysis scripts\nIncluding pseudo-code for complex analytical procedures"
+  },
+  {
+    "objectID": "pap.html#seek-feedback",
+    "href": "pap.html#seek-feedback",
+    "title": "A Guide to Pre-Analysis Plans (PAPs)",
+    "section": "Seek Feedback",
+    "text": "Seek Feedback\nShare your PAP with colleagues or mentors for feedback before finalising and registering it. Consider:\n\nOrganising a pre-registration workshop with your research team\nRequesting review from methodologists or subject matter experts\nPresenting your PAP at a departmental seminar for broader input"
+  },
+  {
+    "objectID": "assignments.html",
+    "href": "assignments.html",
+    "title": "Assignments",
+    "section": "",
+    "text": "Here you will find information about the assignments for QTM 385. There are ten of them, each worth 5% of your final grade. The assignments are designed to help you practice the concepts covered in class and to develop your data science skills.\nAssignment submissions are typically due on Wednesdays at 11:59pm in the week following their publication. You may submit via Canvas (preferred) or email (danilo.freire@emory.edu).\nI encourage you to complete assignments in Quarto or Jupyter Notebooks and submit them in html or PDF format (just because they are easier to read on Canvas). You can also submit them as a Word document, provided that code and results are included in the same document. The assignment folders contain the questions in many formats, including .qmd, .ipynb, and .docx, so you can use them as templates.\nYou will find the questions in the assignments folder on the course repository. You can also access them through the links below."
+  },
+  {
+    "objectID": "assignments.html#assignment-timeline",
+    "href": "assignments.html#assignment-timeline",
+    "title": "Assignments",
+    "section": "Assignment Timeline",
+    "text": "Assignment Timeline\n\n\n\nAssignment\nTopic\nDue Date\nLink\n\n\n\n\n1\nTheory\n10 September\nAssignment 01\n\n\n2\nPotential Outcomes\n17 September\nAssignment 02\n\n\n3\nSampling Distributions\n24 September\nAssignment 03\n\n\n4\nRI, Blocking, Clustering, and Power\n1 October\nAssignment 04\n\n\n5\nNon-Compliance\n8 October\nAssignment 05\n\n\n6\nAttrition\n15 October\nAssignment 06\n\n\n7\nQuarto, DeclareDesign, and Natural Experiments\n22 October\nAssignment 07\n\n\n8\nInterference and Spillovers\n29 October\nAssignment 08\n\n\n9\nHeterogeneous Effects\n12 November\nAssignment 09\n\n\n10\nSensitive Topics\n19 November\nAssignment 10"
+  },
+  {
+    "objectID": "assignments.html#pre-analysis-plan",
+    "href": "assignments.html#pre-analysis-plan",
+    "title": "Assignments",
+    "section": "Pre-Analysis Plan",
+    "text": "Pre-Analysis Plan\nThe pre-analysis plan (PAP) is a document that outlines the research design, hypotheses, and analysis plan before the data are collected. It is a very important step in the research process, as it helps to prevent data mining and p-hacking. The PAP will be worth 20% of your final grade. Further instructions will be provided in the coming weeks."
+  },
+  {
+    "objectID": "assignments.html#final-project",
+    "href": "assignments.html#final-project",
+    "title": "Assignments",
+    "section": "Final Project",
+    "text": "Final Project\nThe final project will be a group effort. Detailed instructions will be discussed in class. The project will be worth 30% of your final grade."
+  },
+  {
+    "objectID": "markdown.html",
+    "href": "markdown.html",
+    "title": "Markdown Guide",
+    "section": "",
+    "text": "This guide is written in Markdown and uses the Quarto document format. Quarto is a powerful tool that allows you to write in Markdown and convert your document to a variety of formats, including PDF, HTML, and Word.\nFor you to use this template, you need to have R, Pandoc and Quarto installed on your computer. You can install Pandoc by following the instructions on the Pandoc website. To install the Quarto package, run the following command in R:\ninstall.packages(c(\"quarto\", \"rmarkdown\", \"tidyverse\"))\nYou also need to install a distribution on your computer to convert your Markdown document to a PDF. I recommend you install TinyTeX, a lightweight distribution of . You can install TinyTeX by running the following command in R:\ninstall.packages(\"tinytex\")\ntinytex::install_tinytex()\nFor those who prefer a more comprehensive distribution, you can install MiKTeX on Windows or MacTeX on macOS.\nFinally, you should also install the Libertine and Inconsolata fonts on your computer to use this template. You can download the Libertine font from the Linux Libertine website and the Inconsolata font from the Google Fonts website. However, you can use any other font you prefer by changing the fontfamily and monofont options in the YAML header of this document. More information on how to change the font in your document can be found in the Quarto documentation.\nYou can then use the Quarto package to convert your Markdown document to a PDF. To convert your document to a PDF, run the following command in R:\nquarto::quarto_render(\"pre-analysis-plan.qmd\", output_format = \"pdf\")\nThis command will convert your Markdown document to a PDF and save it in the same directory as your Markdown file."
+  },
+  {
+    "objectID": "markdown.html#headings",
+    "href": "markdown.html#headings",
+    "title": "Markdown Guide",
+    "section": "Headings",
+    "text": "Headings\nYou can create headings using the # symbol. For example, # Heading 1 creates a first-level heading, ## Heading 2 creates a second-level heading, and so on. You can create up to six levels of headings using the # symbol."
+  },
+  {
+    "objectID": "markdown.html#lists",
+    "href": "markdown.html#lists",
+    "title": "Markdown Guide",
+    "section": "Lists",
+    "text": "Lists\nTo create an ordered list with nested unordered sub-items in Quarto, you can write the following code:\n1. This is an ordered list.\n2. This is the second item in the ordered list.\n  - This is a sub-item in the unordered list.\n    - This is a sub-sub-item in the unordered list.\n\nThis is an ordered list.\nThis is the second item in the ordered list.\n\nThis is a sub-item in the unordered list.\n\nThis is a sub-sub-item in the unordered list.\n\n\n\nYou can also create unordered lists:\n- This is an unordered list.\n- This is the second item in the unordered list.\n    - This is a sub-item in the unordered list.\n\nThis is an unordered list.\nThis is the second item in the unordered list.\n\nThis is a sub-item in the unordered list."
+  },
+  {
+    "objectID": "markdown.html#tables",
+    "href": "markdown.html#tables",
+    "title": "Markdown Guide",
+    "section": "Tables",
+    "text": "Tables\nYou can create tables using the | symbol. For example:\nTable: Your Caption {#tbl-markdown}\n\n| A            | New              | Table          |\n|:-------------|:----------------:|---------------:|\n|left-aligned  |centre-aligned    |right-aligned   |\n|*italics*     |~~strikethrough~~ |**boldface**    |\n\n\n\nTable 1: Your Caption\n\n\n\n\n\nA\nNew\nTable\n\n\n\n\nleft-aligned\ncentre-aligned\nright-aligned\n\n\nitalics\nstrikethrough\nboldface\n\n\n\n\n\n\nThe : symbols in the second row of the table determine the alignment of the text in each column. You can use left, center, or right to align the text.\nTo use the kable and kableExtra packages in R for creating and customising tables, you first need to install these packages if you have not already. You can do this by running install.packages(\"knitr\") and install.packages(\"kableExtra) in R. Below is an example. Please check the pre-analysis-plan.qmd file for the code.\n\nlibrary(kableExtra)\ndf &lt;- mtcars[1:5, 1:6]\nkable(df, \"latex\", booktabs = T) %&gt;%\n  kable_styling(position = \"center\", font_size = 12) %&gt;%\n  add_header_above(c(\" \" = 1, \"Group 1\" = 2, \"Group 2\" = 2,\n                     \"Group 3\" = 1, \"Group 4\" = 1)) %&gt;%\n  add_header_above(c(\" \", \"Group 5\" = 4, \"Group 6\" = 2), bold = T) %&gt;%\n  footnote(general = \"Your comments go here.\")\n\n\n\nTable 2: A table created with kable and kableExtra.\n\n\n\n\n\n\n\n\n\nThis will create a table with the mtcars dataset from the datasets package in R. You can customise the table using the kableExtra package to add a caption, change the font size, and add headers above the columns. You can also add footnotes to the table using the footnote function."
+  },
+  {
+    "objectID": "markdown.html#equations",
+    "href": "markdown.html#equations",
+    "title": "Markdown Guide",
+    "section": "Equations",
+    "text": "Equations\nYou can create equations using the $$ symbol. For example in Equation 1, we have the formula for the standard deviation of a population:\n$$\n\\sigma = \\sqrt{\\frac{\\sum_{i=1}^{N} (x_i - \\mu)^2}{N}}\n$$ {#eq-stddev}\n\\[\n\\sigma = \\sqrt{\\frac{\\sum_{i=1}^{N} (x_i - \\mu)^2}{N}}\n\\tag{1}\\]\nYou can also create equations inline by using the $ symbol. For example, $\\alpha = \\beta + \\gamma$ will render as \\(\\alpha = \\beta + \\gamma\\). To learn more about how to write equations in using Markdown, you can refer to the Overleaf documentation."
+  },
+  {
+    "objectID": "markdown.html#figures",
+    "href": "markdown.html#figures",
+    "title": "Markdown Guide",
+    "section": "Figures",
+    "text": "Figures\nYou can include figures in your document using the ![Caption](path/to/image.png){#fig-label} syntax. For example:\n![This is a figure caption.](path/to/image.png){#fig-label}\nThis will include the image path/to/image.png in your document with the caption “This is a figure caption.” You can refer to the figure using the label fig-label.\nYou can also use the knitr package in R to create figures. This gives you more control over the appearance of the figure and allows you to include the code used to create the figure in your document. To include the same figure, you can use the following code:\n\nlibrary(knitr)\nknitr::include_graphics(\"path/to/image.png\")\n\nThere are many options you can use to customise the appearance of your figures, such as changing the width of the figure, adding a border, or changing the alignment. You can find more information on how to customise figures in the Quarto documentation."
+  },
+  {
+    "objectID": "markdown.html#code-blocks-and-syntax-highlighting",
+    "href": "markdown.html#code-blocks-and-syntax-highlighting",
+    "title": "Markdown Guide",
+    "section": "Code Blocks and Syntax Highlighting",
+    "text": "Code Blocks and Syntax Highlighting\nYou can include code blocks in your document using triple backticks (```). For example, if you would like to include an R code block in your document, you can write ```{r}, and close it with another set of triple backticks (```). You can also add chunk options to the code block to control the output of the code block with #|. For example:\n#| label: fig-airquality\n#| fig-cap: \"Temperature and ozone level.\"\n#| warning: false\n\nlibrary(ggplot2)\nggplot(airquality, aes(Temp, Ozone)) + \n  geom_point() + \n  geom_smooth(method = \"loess\", se = FALSE)\n\n\n\n\n\n\n\n\nFigure 1: Temperature and ozone level.\n\n\n\n\n\nQuarto will run the code in the code block and include the output in the final document, as you can see in Figure 1. To learn more about code cell options, you can refer to the Quarto documentation."
+  },
+  {
+    "objectID": "markdown.html#citations",
+    "href": "markdown.html#citations",
+    "title": "Markdown Guide",
+    "section": "Citations",
+    "text": "Citations\nYou can include citations in your document using the @ symbol followed by the citation key. For example, @freire2018evaluating will create a citation to the reference with the key freire2018evaluating. You can also include page numbers in your citation by writing @freire2018evaluating [10--15]. The result will be: Freire (2018, 10–15). To include multiple citations in one bracket, you can write [@freire2018evaluating 10; @mignozzetti2022legislature 15]. This will create a citation like this: (Freire 2018, 10; Mignozzetti, Cepaluni, and Freire 2022, 15).\nTo include a bibliography in your document, you need to create a .bib file with your references and include it in the YAML header of your document. As you can find in the YAML header of this document:\nbibliography: references.bib\nWhen searching for academic references, Google Scholar is an excellent tool for finding BibTeX citations. Here is a quick guide:\n\nSearch for your desired reference on Google Scholar\nLook for the “Cite” button below the reference\nClick on “Cite” and then select “BibTeX” from the options\nCopy the generated BibTeX citation\nPaste it into your .bib file\n\nThis method makes it easy to maintain consistent and accurate citations in your academic work. Plus, it saves you the hassle of manually formatting each reference."
+  },
+  {
+    "objectID": "markdown.html#footnotes",
+    "href": "markdown.html#footnotes",
+    "title": "Markdown Guide",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nThis is an inline footnote.↩︎\nYou can also include multiple paragraphs in a footnote by indenting the subsequent paragraphs.↩︎"
+  },
+  {
+    "objectID": "quarto.html",
+    "href": "quarto.html",
+    "title": "Quarto Guide",
+    "section": "",
+    "text": "Welcome to the Quarto guide for DATASCI 385! This guide provides an introduction to Quarto, a document authoring system that supports Markdown, LaTeX, R, Python, and more. Quarto is designed to help you create reproducible research documents and presentations, making it a great tool for academic writing and data analysis.\nQuarto is very versatile and easy to use. If you are familiar with Jupyter Notebooks, you will be right at home with Quarto. R Markdown users will find Quarto even easier, as it is only a more powerful version of R Markdown, which supports multiple programming languages (such as Python) and output formats.\nIn this guide, you will learn how to install Quarto, create a new Quarto project, write content in Markdown, and generate output formats such as HTML, PDF, and slides. You will also explore advanced features of Quarto, such as code execution, citations, and cross-references. By the end of this guide, you will be able to use Quarto effectively for your research projects and presentations.\n\nWhy is reproducing research important?\nReproducibility is the ability of an entire experiment or study to be duplicated, either by the same researcher or by someone else working independently. Reproducing research is important for several reasons:\n\nTransparency: Reproducible research allows others to verify the results of a study and build upon them. It promotes transparency and trust in the scientific process.\nError detection: Reproducing research can help identify errors or inconsistencies in the original study. It allows researchers to correct mistakes and improve the quality of their work.\nKnowledge dissemination: Reproducible research makes it easier to share knowledge and findings with the broader scientific community. It enables others to learn from and build on existing research.\nResearch integrity: Reproducible research is essential for maintaining the integrity of the scientific process. It helps prevent fraud, bias, and other unethical practices.\n\nCurrently, there is a reproducibility crisis in many scientific fields, including psychology, medicine, and economics. Many studies are not reproducible due to factors such as poor experimental design, publication bias, and the use of p-values. By adopting reproducible practices and tools like Quarto, researchers can help address this crisis and improve the reliability of scientific research.\n\n\nInstalling Quarto\nTo get started with Quarto, you need to install the Quarto CLI (Command Line Interface) on your computer. Quarto is available for Windows, macOS, and Linux. Follow the instructions below to install Quarto on your operating system:\n\nGo to the https://quarto.org/docs/download/ and select the appropriate download link for your operating system.\nRun the installer and follow the on-screen instructions to complete the installation.\nIf you use macOS, you can also install Quarto using Homebrew. Run the following commands in your terminal to install Homebrew and Quarto:\n\n# Install Homebrew\n/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"\n\n# Install Quarto\nbrew install quarto\nIf you use VS Code (which I recommend), you can also install the Quarto extension to work with Quarto projects directly in the editor. It makes things easier and more convenient.\nFor more detailed installation instructions, refer to the Quarto documentation.\n\n\nCreating a new Quarto document\nQuarto uses the .qmd file extension for Quarto Markdown files. These files can be converted into various output formats, such as HTML, PDF, Word documents, slides, and even websites. This website, the syllabus, and all class slides were created using Quarto!\nHere you will not need to use Quarto for anything other than your pre-analysis plans (and slides if you are feeling adventurous). So you can simply use the PAP Template to create your PAPs. But you will need to install a few things to make sure you can compile your PAPs into PDFs.\nFirst, you need to install Pandoc, a universal document converter that Quarto uses to generate output formats. Pandoc is available for Windows, macOS, and Linux. You can download the installer from the Pandoc website or install it using Homebrew on macOS:\nbrew install pandoc\nNext, you need to install a LaTeX distribution to generate PDF output. I recommend using TinyTeX, a lightweight LaTeX distribution that works well with Pandoc. The easiest way to install TinyTeX is through Quarto itself:\nquarto install tinytex\nFor a more complete LaTeX distribution, you can install TeX Live, which includes additional packages and tools. Please refer to the TeX Live website for installation instructions.\nWith these tools, you should be good to go!\n\n\nWriting content in Quarto\nQuarto supports Markdown, a lightweight markup language with plain text formatting syntax. Markdown is easy to read and write, making it a great choice for creating content quickly and efficiently. In Quarto, you can use Markdown to format text, add images, create lists, and more. The Markdown Guide provides a detailed overview of Markdown syntax and features.\nBut before you start writing the document, you need to include a header with metadata about the document. This metadata includes the title, author, date, and other information that Quarto uses to generate the output. It should be placed at the beginning of the document between two sets of three dashes (---). Here is an example of a document header in Quarto:\n---\ntitle: \"My Quarto Document\"\nauthor: \"John Doe\"\ndate: \"2022-01-01\"\nformat:\n  pdf:\n    toc: false\n    toc-depth: 2\n    number-sections: true\n    colorlinks: true\n    mainfont: \"Times New Roman\"\n    geometry: \n      - top=2cm \n      - bottom=2cm \n      - left=2cm \n      - right=2cm\n    cite-method: natbib\n    biblio-style: apalike\n    bibliography: references.bib\neditor:\n  render-on-save: false\n---\nThe header above uses knitr as the default code engine (R). You can also use Jupyter as your code engine, just add jupyter: python3 to the header.\nIf you would like to use a more complex header, you can refer to my PDF template: https://github.com/danilofreire/quarto-templates/tree/main/article.\nAfter the header, you can start writing the content of your document using Markdown syntax.\n\n\nGenerating output formats\nOnce you have written your Quarto document, you can generate output formats using the Quarto CLI or the VS Code extension. To generate an output format, run the following command in your terminal:\nquarto render my-document.qmd --to pdf\nThis command tells Quarto to render the my-document.qmd file into a PDF format. You can replace pdf with other output formats such as html, docx, slides, etc. Quarto will generate the output file in the same directory as the input file.\nYou can also simply use the VS Code extension to render the document. Just open the .qmd file in VS Code and click on the “Preview” button in the top right corner.\n\nIt will open a preview of the document in your editor, like this:\n\nBoth pictures are from the Quarto documentation. Please have a look at this page for more information on how to use Quarto with VS Code.\n\n\nCreating a .bib file\nIf you are using citations in your document, you will need to create a .bib file with your references. A .bib file is a BibTeX database that contains bibliographic information about your sources. You can create a .bib file using a text editor or reference management software like Zotero, Mendeley, or JabRef.\nOne of the easiest (and my favourite) ways to create a .bib file is to use Google Scholar. Just search for the paper you want to cite, click on the quotation marks below the title, and select BibTeX. It will give you the BibTeX entry for that paper, which you can copy and paste into your .bib file.\nFor instance, to cite Paul Holland’s paper “Statistics and Causal Inference”, click on the quotation marks below the title, and you will see the BibTeX entry:\n@article{holland1986statistics,\n  title={Statistics and causal inference},\n  author={Holland, Paul W},\n  journal={Journal of the American statistical Association},\n  volume={81},\n  number={396},\n  pages={945--960},\n  year={1986},\n  publisher={Taylor \\& Francis}\n}\nThen you just need to copy and paste this entry into your .bib file. When you cite this paper in your Quarto document (e.g., This is a paper by @holland1986statistics), Quarto will automatically generate the bibliography for you.\n\n\nAdditional resources\nQuarto has a lot of features and capabilities that are not covered in this guide. It also has hundreds of templates that you can use, as well as a great community that is always willing to help. Here are some resources that you may find useful:\n\nQuarto official website.\nAwesome Quarto: https://github.com/mcanouil/awesome-quarto. This repository contains dozens of tutorials, examples, and resources.\nÇetinkaya-Rundel, M. & Lowndes, J. S. (2022) Keynote talk: Hello Quarto: Share • Collaborate • Teach • Reimagine. Slides and source code. This is one of the nicest Quarto presentations I have seen.\nGetting Started with Quarto (YouTube). Posit (formerly RStudio) has a series of tutorials on Quarto on their YouTube channel. You can find their playlist here.\nQuarto extensions. Several extensions are available to enhance the functionality of Quarto, such as manuscript templates, citations, and cross-references.\n\nI think that is all you need to know for now! If you have any questions, or would like me to expand this guide, please let me know. All the best!\n\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "lectures.html",
+    "href": "lectures.html",
+    "title": "Lectures",
+    "section": "",
+    "text": "Please find below the schedule of our lectures. Each lecture includes a brief description, required readings, and suggested readings for further exploration. The lecture slides and additional resources will be posted on the course website and GitHub repository. Please remember that the schedule may change during the course. If you have any questions or need further assistance, please let me know!"
+  },
+  {
+    "objectID": "lectures.html#lecture-01-introduction-to-experimental-design-august-27-2025",
+    "href": "lectures.html#lecture-01-introduction-to-experimental-design-august-27-2025",
+    "title": "Lectures",
+    "section": "Lecture 01: Introduction to Experimental Design (August 27, 2025)",
+    "text": "Lecture 01: Introduction to Experimental Design (August 27, 2025)\nRequired readings:\n\nSyllabus and course website: http://danilofreire.github.io/datasci385.\nGitHub repository: https://github.com/danilofreire/datasci385.\nLecture slides: Welcome to QTM 385: Introduction / Why Experiments?\nFEDAI: Chapter 01: Introduction.\n\nSuggested readings:\n\nHumphreys, M. (2021). I saw your RCT and I have some worries! FAQs. An informal collection of questions and answers about RCTs.\nMize, T. D., & Manago, B. (2022). The Past, Present, and Future of Experimental Methods in the Social Sciences. Social Science Research, 108, 1-24.\nJackson, M., & Cox, D. R. (2013). The Principles of Experimental Design and Their Application in Sociology. Annual Review of Sociology, 39(1), 27-49.\nHernán, M. A. (2018). The C-Word: Scientific Euphemisms Do Not Improve Causal Inference from Observational Data. American Journal of Public Health, 108(5), 616-619.\nBothwell, L. E., Greene, J. A., Podolsky, S. H., & Jones, D. S. (2016). Assessing the Gold Standard — Lessons from the History of RCTs. New England Journal of Medicine, 374(22), 2175-2181\nde Kadt, D. & Grzysmala-Busse, A. (2025). Good Description. Working paper..\nDeaton, A., & Cartwright, N. (2018). Understanding and Misunderstanding Randomized Controlled Trials. Social Science & Medicine 210, 2-21."
+  },
+  {
+    "objectID": "lectures.html#lecture-02-theories-and-experiments-september-3-2025",
+    "href": "lectures.html#lecture-02-theories-and-experiments-september-3-2025",
+    "title": "Lectures",
+    "section": "Lecture 02: Theories and Experiments (September 3, 2025)",
+    "text": "Lecture 02: Theories and Experiments (September 3, 2025)\nRequired readings:\n\nLecture slides: The Research Design Process: Testing Theories with Experiments.\nCard, D., DellaVigna, S., & Malmendier, U. (2011). The Role of Theory in Field Experiments. Journal of Economic Perspectives, 25(3), 39-62.\nBlair, G., Cooper, J., Coppock, A., & Humphreys, M. (2019). Declaring and Diagnosing Research Designs. American Political Science Review, 113(3), 838-859.\nProblem Set 01 assigned.\n\nSuggested readings:\n\nBrutger, R., Kertzer, J. D., Renshon, J., Tingley, D., & Weiss, C. M. (2023). Abstraction and Detail in Experimental Design. American Journal of Political Science, 67(4), 979-995.\nPeterson, J. C., Bourgin, D. D., Agrawal, M., Reichman, D., & Griffiths, T. L. (2021). Using Large-Scale Experiments and Machine Learning to Discover Theories of Human Decision-Making. Science, 372(6547), 1209-1214.\nSmith, V. L. (2010). Theory and Experiment: What Are the Questions?. Journal of Economic Behavior & Organization, 73(1), 3-15.\nvan Rooij, I., & Baggio, G. (2021). Theory Before the Test: How to Build High-Verisimilitude Explanatory Theories in Psychological Science. Perspectives on Psychological Science, 16(4), 682-697."
+  },
+  {
+    "objectID": "lectures.html#lecture-03-causal-inference-and-potential-outcomes-september-8-2025",
+    "href": "lectures.html#lecture-03-causal-inference-and-potential-outcomes-september-8-2025",
+    "title": "Lectures",
+    "section": "Lecture 03: Causal Inference and Potential Outcomes (September 8, 2025)",
+    "text": "Lecture 03: Causal Inference and Potential Outcomes (September 8, 2025)\nRequired readings:\n\nLecture slides: Potential Outcomes Framework.\nFEDAI: Chapter 02: Causal Inference and Experimentation.\nRubin, D. B. (2005). Causal Inference using Potential Outcomes: Design, Modeling, Decisions. Journal of the American Statistical Association, 100(469), 322-331.\nKahoot Quiz"
+  },
+  {
+    "objectID": "lectures.html#lecture-04-selection-bias-and-randomisation-september-10-2025",
+    "href": "lectures.html#lecture-04-selection-bias-and-randomisation-september-10-2025",
+    "title": "Lectures",
+    "section": "Lecture 04: Selection Bias and Randomisation (September 10, 2025)",
+    "text": "Lecture 04: Selection Bias and Randomisation (September 10, 2025)\nRequired readings:\n\nLecture slides: Potential Outcomes Continued and Regression Analysis.\nAngrist, J. D., & Pischke, J. S. (2014). Mastering ’Metrics: The Path from Cause to Effect. Princeton University Press. Chapter 01: Randomized Trials. The appendix is also worth reading.\nKahoot Quiz\nProblem Set 01 due.\nProblem Set 02 assigned.\n\nSuggested readings:\n\nImbens, G. W., & Rubin, D. B. (2015). Causal Inference for Statistics, Social, and Biomedical Sciences: An Introduction. Cambridge University Press. Part I - Introduction.\nHernán, M. A., Hernández-Díaz, S., & Robins, J. M. (2004). A Structural Approach to Selection Bias. Epidemiology, 15(5), 615-625.\nHernán M.A. & Robins J.M. (2020). Causal Inference: What If. Boca Raton: Chapman & Hall/CRC. Chapters 6-10. Maths-heavy but very insightful.\nMorgan, S. L., & Winship, C. (2015). Counterfactuals and Causal Inference: Methods and Principles for Social Research. Cambridge University Press. Chapter 02: Counterfactuals and Potential Outcomes Model."
+  },
+  {
+    "objectID": "lectures.html#lecture-05-statistical-inference-for-randomised-experiments-september-15-2025",
+    "href": "lectures.html#lecture-05-statistical-inference-for-randomised-experiments-september-15-2025",
+    "title": "Lectures",
+    "section": "Lecture 05: Statistical Inference for Randomised Experiments (September 15, 2025)",
+    "text": "Lecture 05: Statistical Inference for Randomised Experiments (September 15, 2025)\n\nLecture slides: Sampling Distributions, Statistical Inference, and Hypothesis Testing.\nFEDAI: Chapter 03: Sampling Distributions, Statistical Inference, and Hypothesis Testing (up to section 3.5).\nEGAP Methods Guides: Hypothesis Testing, Randomisation Inference, and Cluster Randomisation. These short guides provide a good overview of the topics we will cover in class, as well as example code in R.\nKahoot Quiz.\n\nSuggested readings:\n\nImbens, G. W., & Rubin, D. B. (2015). Causal Inference for Statistics, Social, and Biomedical Sciences: An Introduction. Cambridge University Press. Part II - Randomised Experiments.\nAthey, S., & Imbens, G. W. (2017). The Econometrics of Randomized Experiments. In Handbook of economic field experiments (Vol. 1, pp. 73-140). North-Holland. Read section 4, although the entire chapter is worth reading.\nBerry, C. R., & Fowler, A. (2021). Leadership or Luck? Randomization Inference for Leader Effects in Politics, Business, and Sports. Science Advances, 7(4), eabe3404.\nCaughey, D., Dafoe, A., Li, X., & Miratrix, L. (2023). Randomisation Inference Beyond the Sharp Null: Bounded Null Hypotheses and Quantiles of Individual Treatment Effects. Journal of the Royal Statistical Society Series B: Statistical Methodology, 85(5), 1471-1491.\nRitzwoller, D. M., Romano, J. P., & Shaikh, A. M. (2025). Randomization Inference: Theory and Applications. arXiv preprint arXiv:2406.09521. Very technical, recommended for maths or statistics enthusiasts.\n\n\nLecture 06: Texts for discussion (September 17, 2025)\n\nLecture slides: Texts for Discussion.\nKalla, J. & D. Broockman. 2016. Campaign Contributions Facilitate Access to Congressional Officials: A Randomized Field Experiment. American Journal of Political Science, 60(3): 545–558\nBertrand, M., & Mullainathan, S. (2004). Are Emily and Greg More Employable than Lakisha and Jamal? A Field Experiment on Labor Market Discrimination. American Economic Review, 94(4), 991-1013.\nChattopadhyay, R., & Duflo, E. (2004). Women as Policy Makers: Evidence from a Randomized Policy Experiment in India. Econometrica, 72(5), 1409-1443. (if time allows)\nProblem Set 02 due.\nProblem Set 03 assigned."
+  },
+  {
+    "objectID": "lectures.html#lecture-07-blocking-clustering-and-covariate-adjustment-september-22-2025",
+    "href": "lectures.html#lecture-07-blocking-clustering-and-covariate-adjustment-september-22-2025",
+    "title": "Lectures",
+    "section": "Lecture 07: Blocking, Clustering, and Covariate Adjustment (September 22, 2025)",
+    "text": "Lecture 07: Blocking, Clustering, and Covariate Adjustment (September 22, 2025)\n\nLecture slides: Blocking and Clustering.\nFEDAI: Section 3.6: Sampling Distributions for Experiments That Use Block or Cluster Random Assignment.\nFEDAI: Chapter 04: Using Covariates in Experimental Design and Analysis."
+  },
+  {
+    "objectID": "lectures.html#lecture-08-blocking-and-clustering-cont.-statistical-power-and-sample-calculations-september-24-2025",
+    "href": "lectures.html#lecture-08-blocking-and-clustering-cont.-statistical-power-and-sample-calculations-september-24-2025",
+    "title": "Lectures",
+    "section": "Lecture 08: Blocking and Clustering (Cont.), Statistical Power, and Sample Calculations (September 24, 2025)",
+    "text": "Lecture 08: Blocking and Clustering (Cont.), Statistical Power, and Sample Calculations (September 24, 2025)\n\nLecture slides: Blocking and Clustering (Cont.), Statistical Power, and Sample Calculations.\nFEDAI Appendix 3.1 on Power\nEGAP Methods Guide on Power Calculations.\nProblem Set 03 due.\nProblem Set 04 assigned.\n\nSuggested readings:\n\nBlair, G., Coppock, A., & Humphreys, M. (2023). Research Design in the Social Sciences. Princeton University Press. Sections 18.2 and 18.3.\nRainey, C. (2025). Power Rules: Practical Advice for Computing Power (and Automating with Pilot Data). OSF Preprints. Note: This is a useful guide for power calculations without the need for complex maths. Not peer-reviewed yet.\nZhang, X. & Hartmann, P. (2023). How to Calculate Sample Size in Animal and Human Studies. Frontiers in Medicine, 10.\nBowers, J. 10 Things to Know About Cluster Randomization.\nKaltenbach, H-M. (2021). Statistical Design and Analysis of Biological Experiments. Chapter 7: Improving Precision and Power: Blocked Designs.\nImai, K., King, G., & Nall, C. (2009). The Essential Role of Pair Matching in Cluster-Randomized Experiments, with Application to the Mexican Universal Health Insurance Evaluation. Statistical Science, 29-53.\nR Psychology. (2023). Understanding Statistical Power and Significance Testing. A comprehensive guide to power analysis in R.\nEGAP: Power Calculator. An interactive tool to calculate power for your experiments.\nPek, J., Hoisington-Shaw, K. J., & Wegener, D. T. (2024). Uses of Uncertain Statistical Power: Designing Future Studies, Not Evaluating Completed Studies. Psychological Methods.\nLi, X., & Ding, P. (2020). Rerandomization and Regression Adjustment. Journal of the Royal Statistical Society Series B: Statistical Methodology, 82(1), 241-268."
+  },
+  {
+    "objectID": "lectures.html#lecture-09-non-compliance-i-september-29-2025",
+    "href": "lectures.html#lecture-09-non-compliance-i-september-29-2025",
+    "title": "Lectures",
+    "section": "Lecture 09: Non-Compliance I (September 29, 2025)",
+    "text": "Lecture 09: Non-Compliance I (September 29, 2025)\n\nLecture slides: Non-Compliance I.\nFEDAI: Chapter 05: One-Sided Non-Compliance.\nKahoot Quiz"
+  },
+  {
+    "objectID": "lectures.html#lecture-10-non-compliance-ii-october-1-2025",
+    "href": "lectures.html#lecture-10-non-compliance-ii-october-1-2025",
+    "title": "Lectures",
+    "section": "Lecture 10: Non-Compliance II (October 1, 2025)",
+    "text": "Lecture 10: Non-Compliance II (October 1, 2025)\n\nLecture slides: Non-Compliance II.\nFEDAI: Chapter 06: Two-Sided Non-Compliance.\nKaHoot Quiz\nProblem Set 04 due.\nProblem Set 05 assigned.\nTwo paragraphs (maximum) summarising an experiment that you wish to develop in this course. At a minimum, your summary should include a research question, why the question is important, and a rough outline of how you plan to answer the question. Please send me an email by Wednesday with this information.\n\nSuggested readings:\n\nAngrist, J. D., & Pischke, J. S. (2009). Mostly Harmless Econometrics: An Empiricist’s Companion. Princeton University Press. Chapter 4: Instrumental Variables Estimation.\nBaryakova, T.H., Pogostin, B.H., Langer, R. et al. Overcoming Barriers to Patient Adherence: The Case for Developing Innovative Drug Delivery Systems. Nature Reviews Drug Discovery 22, 387–409 (2023).\nKane, J. V. (2025). More than Meets the ITT: A Guide for Anticipating and Investigating Nonsignificant Results in Survey Experiments. Journal of Experimental Political Science, 12(1), 110–125.\nHartman, E., & Huang, M. (2024). Improving Precision through Design and Analysis in Experiments with Noncompliance. Political Science Research and Methods, 12(3), 557-572.\nGerber, A. S., Green, D. P., Kaplan, E. H., & Kern, H. L. (2010). Baseline, Placebo, and Treatment: Efficient Estimation for Three-Group Experiments. Political Analysis, 18(3), 297-315."
+  },
+  {
+    "objectID": "lectures.html#lecture-11-attrition-and-missing-outcomes-october-6-2025",
+    "href": "lectures.html#lecture-11-attrition-and-missing-outcomes-october-6-2025",
+    "title": "Lectures",
+    "section": "Lecture 11: Attrition and Missing Outcomes (October 6, 2025)",
+    "text": "Lecture 11: Attrition and Missing Outcomes (October 6, 2025)\n\nLecture slides: Attrition.\nFEDAI: Chapter 07: Attrition.\nLo, A., Renshon, J., & Bassan-Nygate, L. (2024). A Practical Guide to Dealing with Attrition in Political Science Experiments. Journal of Experimental Political Science, 11(2), 147-161.\nKahoot quiz\n\nSuggested readings:\n\nZhou, H., & Fishbach, A. (2016). The Pitfall of Experimenting on the Web: How Unattended Selective Attrition Leads to Surprising (Yet False) Research Conclusions. Journal of Personality and Social Psychology, 111(4), 493.\nCoppock, A., Gerber, A. S., Green, D. P., & Kern, H. L. (2017). Combining Double Sampling and Bounds to Address Nonignorable Missing Outcomes in Randomized Experiments. Political Analysis, 25(2), 188-206.\nGhanem, D., Hirshleifer, S., & Ortiz-Becerra, K. (2019). Testing Attrition Bias in Field Experiments. UC Berkeley: Center for Effective Global Action.\nPallmann, P., Bedding, A.W., Choodari-Oskooei, B. et al. (2018). Adaptive Designs in Clinical Trials: Why Use Them, and How to Run and Report Them. BMC Med 16(29)."
+  },
+  {
+    "objectID": "lectures.html#lecture-12-ethical-considerations-in-experimental-research-october-8-2025",
+    "href": "lectures.html#lecture-12-ethical-considerations-in-experimental-research-october-8-2025",
+    "title": "Lectures",
+    "section": "Lecture 12: Ethical Considerations in Experimental Research (October 8, 2025)",
+    "text": "Lecture 12: Ethical Considerations in Experimental Research (October 8, 2025)\n\nLecture slides: Ethical Considerations in Experimental Research.\nHumphreys, M. (2015). Reflections on the Ethics of Social Experimentation. Journal of Globalization and Development, 6(1), 87-112.\nCronin-Furman, K., & Lake, M. (2018). Ethics Abroad: Fieldwork in Fragile and Violent Contexts. PS: Political Science & Politics, 51(3), 607-614.\nPoverty Action Lab (2022). Ethical Conduct of Randomized Evaluations. J-PAL.\nProblem Set 05 due.\nProblem Set 06 assigned\n\nSuggested readings:\n\nAsiedu, E., Dean, E., Karlan, D., & Osei, R. (2021). Ethics and Society Review: Ethics Reflection as a Precondition to Research Funding. Proceedings of the National Academy of Sciences, 118(52), e2117261118.\nASAB Ethical Committee/ABS Animal Care Committee. (2024). Guidelines for the Ethical Treatment of Nonhuman Animals in Behavioural Research and Teaching. Animal Behaviour, 207, I-XI."
+  },
+  {
+    "objectID": "lectures.html#lecture-13-introduction-to-quarto-and-declaredesign-october-15-2025",
+    "href": "lectures.html#lecture-13-introduction-to-quarto-and-declaredesign-october-15-2025",
+    "title": "Lectures",
+    "section": "Lecture 13: Introduction to Quarto and DeclareDesign (October 15, 2025)",
+    "text": "Lecture 13: Introduction to Quarto and DeclareDesign (October 15, 2025)\n\nLecture slides: Introduction to Quarto and DeclareDesign.\nQuarto official website: https://quarto.org/.\nDeclareDesign official website: https://declaredesign.org/.\nProblem Set 06 due.\n\nSuggested readings:\n\nQuarto official website.\nAwesome Quarto: https://github.com/mcanouil/awesome-quarto. Note: this repository contains dozens of tutorials, examples, and resources.\nÇetinkaya-Rundel, M. & Lowndes, J. S. (2022) Keynote talk: Hello Quarto: Share • Collaborate • Teach • Reimagine. Slides and source code. This is one of the nicest Quarto presentations I have seen.\nGetting Started with Quarto (YouTube). Note: Posit (formerly RStudio) has a series of tutorials on Quarto on their YouTube channel. You can find their playlist here.\nBlair, G., Coppock, A., & Humphreys, M. (2023). Introduction to Design Declaration with DeclareDesign. A series of presentation slides on DeclareDesign by the authors of the book. Strongly recommended.\nDeclareDesign official website.\nNosek, B.A., Alter, G., Banks, G.C., Borsboom, D., Bowman, S.D., Breckler, S.J., Buck, S., Chambers, C.D., Chin, G., Christensen, G. and Contestabile, M., 2015. Promoting an Open Research Culture. Science, 348(6242), pp.1422-1425.\nA Gentle Introduction to DeclareDesign (YouTube). Video tutorial by the authors of the book."
+  },
+  {
+    "objectID": "lectures.html#lecture-14-writing-pre-analysis-plans-october-20-2025",
+    "href": "lectures.html#lecture-14-writing-pre-analysis-plans-october-20-2025",
+    "title": "Lectures",
+    "section": "Lecture 14: Writing Pre-Analysis Plans (October 20, 2025)",
+    "text": "Lecture 14: Writing Pre-Analysis Plans (October 20, 2025)\n\nLecture slides: How to Write a Pre-Analysis Plan.\nEGAP: Pre-Analysis Plans.\nOlken, B. A. (2015). Promises and perils of pre-analysis plans. Journal of Economic Perspectives, 29(3), 61-80.\nKahoot Quiz\n\nSuggested readings:\n\nOfosu, G. K., & Posner, D. N. (2023). Pre-Analysis Plans: An Early Stocktaking. Perspectives on Politics, 21(1), 174-190.\nRubenson, D. (2021). Tie My Hands Loosely: Pre-Analysis Plans in Political Science. Politics and the Life Sciences, 40(2), 142-151.\nCoffman, L. C., & Niederle, M. (2015). Pre-Analysis Plans Have Limited Upside, Especially where Replications Are Feasible. Journal of Economic Perspectives, 29(3), 81-98.\nEven-Tov, Omri and Valentine, K. (2025). The Research Paper Playbook: A PhD Student’s Guide to Writing and Presenting."
+  },
+  {
+    "objectID": "lectures.html#lecture-15-when-experiments-are-not-possible-october-22-2025",
+    "href": "lectures.html#lecture-15-when-experiments-are-not-possible-october-22-2025",
+    "title": "Lectures",
+    "section": "Lecture 15: When Experiments are Not Possible (October 22, 2025)",
+    "text": "Lecture 15: When Experiments are Not Possible (October 22, 2025)\n\nLecture slides: Natural and Quasi-Experiments.\nKahoot Quiz.\nDunning, T. (2012). Natural Experiments in the Social Sciences: A Design-Based Approach. Cambridge University Press. Chapter 01: Introduction.\nProblem Set 07 assigned.\n\nSuggested readings:\n\nDiener, E., Northcott, R., Zyphur, M. J., & West, S. G. (2022). Beyond Experiments. Perspectives on Psychological Science, 17(4), 1101-1119.\nDunning, T. (2016). Transparency, Replication, and Cumulative Learning: What Experiments Alone Cannot Achieve. Annual Review of Political Science, 19(1), 541-563.\nPetticrew, M., Cummins, S., Ferrell, C., Findlay, A., Higgins, C., Hoy, C., … & Sparks, L. (2005). Natural Experiments: An Underused Tool for Public Health?. Public Health, 119(9), 751-757.\nGrosz, M. P., Ayaita, A., Arslan, R. C., Buecker, S., Ebert, T., Hünermund, P., … & Rohrer, J. M. (2024). Natural Experiments: Missed Opportunities for Causal Inference in Psychology. Advances in Methods and Practices in Psychological Science, 7(1), 25152459231218610."
+  },
+  {
+    "objectID": "lectures.html#lecture-16-interference-in-experiments-october-27-2025",
+    "href": "lectures.html#lecture-16-interference-in-experiments-october-27-2025",
+    "title": "Lectures",
+    "section": "Lecture 16: Interference in Experiments (October 27, 2025)",
+    "text": "Lecture 16: Interference in Experiments (October 27, 2025)\n\nLecture slides: Interference in Experiments.\nFEDAI: Chapter 08: Interference between Experimental Units.\nEGAP: Spillovers.\nKahoot Quiz.\n\nSuggested readings:\n\nAronow, P. M., Eckles, D., Samii, C., & Zonszein, S. (2020). Spillover Effects in Experimental Data. arXiv preprint arXiv:2001.05444. Quite technical too.\nBaird, S., Bohren, J. A., McIntosh, C., & Ozler, B. (2014). Designing Experiments to Measure Spillover Effects.\nBenjamin-Chung, J., Arnold, B. F., Berger, D., Luby, S. P., Miguel, E., Colford Jr, J. M., & Hubbard, A. E. (2018). Spillover Effects in Epidemiology: Parameters, Study Designs and Methodological Considerations. International Journal of Epidemiology, 47(1), 332-347.\nImbens, G. (2024). Interference and Spillovers in Randomized Experiments (Video). A short lecture on recent advances and new designs to deal with interference in experiments. A little technical."
+  },
+  {
+    "objectID": "lectures.html#lecture-17-texts-for-discussion-october-29-2025",
+    "href": "lectures.html#lecture-17-texts-for-discussion-october-29-2025",
+    "title": "Lectures",
+    "section": "Lecture 17: Texts for Discussion (October 29, 2025)",
+    "text": "Lecture 17: Texts for Discussion (October 29, 2025)\n\nLecture slides: Texts for Discussion.\nKahoot Quiz.\nCentola, D. (2010). The spread of behavior in an online social network experiment. Science, 329(5996), 1194-1197.\nPaluck, B. L., Shepherd, H., and Aronow, P. 2016. Changing climates of conflict: A social network experiment in 56 schools. Proceedings of the National Academy of Sciences, 113(3): 566-571\nGerber, A. S., & Green, D. P. (2000). The effects of canvassing, telephone calls, and direct mail on voter turnout: A field experiment. American Political Science Review, 94(3), 653-663.\nProblem Set 07 due.\nProblem Set 08 assigned."
+  },
+  {
+    "objectID": "lectures.html#lecture-18-heterogeneous-treatment-effects-november-3-2025",
+    "href": "lectures.html#lecture-18-heterogeneous-treatment-effects-november-3-2025",
+    "title": "Lectures",
+    "section": "Lecture 18: Heterogeneous Treatment Effects (November 3, 2025)",
+    "text": "Lecture 18: Heterogeneous Treatment Effects (November 3, 2025)\n\nLecture slides: Heterogeneous Treatment Effects.\nFEDAI: Chapter 09: Heterogeneous Treatment Effects.\n\nSuggested readings:\n\nHolzmeister, F., Johannesson, M., Böhm, R., Dreber, A., Huber, J., & Kirchler, M. (2024). Heterogeneity in Effect Size Estimates. Proceedings of the National Academy of Sciences, 121(32), e2403490121.\nDing, P., Feller, A., & Miratrix, L. (2016). Randomization Inference for Treatment Effect Variation. Journal of the Royal Statistical Society Series B: Statistical Methodology, 78(3), 655-671.\nWager, S., & Athey, S. (2018). Estimation and Inference of Heterogeneous Treatment Effects using Random Forests. Journal of the American Statistical Association, 113(523), 1228-1242.\nSusan Athey and Stefan Wager: Estimating Heterogeneous Treatment Effects in R. A one-hour video on how to use the grf package in R to estimate heterogeneous treatment effects.\nGeneralised Random Forests (R package).\nCoppock, A. (2015). 10 Things to Know about Multiple Comparisons. EGAP Methods Guide.\nFrandsen, B. (2025). Machine Learning and Heterogeneous Treatment Effects. Slides and coding labs from a workshop on this topic. Available on GitHub."
+  },
+  {
+    "objectID": "lectures.html#lecture-19-texts-for-discussion-november-5-2025",
+    "href": "lectures.html#lecture-19-texts-for-discussion-november-5-2025",
+    "title": "Lectures",
+    "section": "Lecture 19: Texts for Discussion (November 5, 2025)",
+    "text": "Lecture 19: Texts for Discussion (November 5, 2025)\n\nLecture slides: Texts for Discussion.\nMunshi, K. (2003). Networks in the modern economy: Mexican migrants in the US labor market. The Quarterly Journal of Economics, 118(2), 549-599.\nMiguel, E., & Kremer, M. (2004). Worms: identifying impacts on education and health in the presence of treatment externalities. Econometrica, 72(1), 159-217.\nKahoot Quiz.\nPre-Analysis Plan due.\nProblem Set 08 due.\nProblem Set 09 assigned.."
+  },
+  {
+    "objectID": "lectures.html#lecture-20-mediation-analysis-november-10-2025",
+    "href": "lectures.html#lecture-20-mediation-analysis-november-10-2025",
+    "title": "Lectures",
+    "section": "Lecture 20: Mediation Analysis (November 10, 2025)",
+    "text": "Lecture 20: Mediation Analysis (November 10, 2025)\n\nLecture slides: Mediation Analysis.\nFEDAI: Chapter 10: Mediation.\nKaHoot Quiz\n\nSuggested readings:\n\nBullock, J. G., & Green, D. P. (2021). The Failings of Conventional Mediation Analysis and a Design-Based Alternative. Advances in Methods and Practices in Psychological Science, 4(4), 25152459211047227.\nVanderWeele, T. J. (2016). Mediation Analysis: A Practitioner’s Guide. Annual Review of Public Health, 37(1), 17-32.\nAcharya, A., Blackwell, M., & Sen, M. (2018). Analyzing Causal Mechanisms in Survey Experiments. Political Analysis, 26(4), 357–378.\nMacKinnon, D. P., Fairchild, A. J., & Fritz, M. S. (2007). Mediation Analysis. Annual Review of Psychology, 58(1), 593-614.\nRighetti, N. (2023). Mediation, Moderation, and Conditional Process Analysis with R. A comprehensive online book with R code examples."
+  },
+  {
+    "objectID": "lectures.html#lecture-21-survey-experiments-november-12-2025",
+    "href": "lectures.html#lecture-21-survey-experiments-november-12-2025",
+    "title": "Lectures",
+    "section": "Lecture 21: Survey Experiments (November 12, 2025)",
+    "text": "Lecture 21: Survey Experiments (November 12, 2025)\n\nLecture slides: Survey Experiments.\nEGAP: Survey Experiments.\nStantcheva, S. (2023). How to run surveys: A guide to creating your own identifying variation and revealing the invisible. Annual Review of Economics, 15(1), 205-234.\nProblem Set 09 due.\nProblem Set 10 assigned.\n\nSuggested readings:\n\nSniderman, P. M. (2018). Some Advances in the Design of Survey Experiments. Annual Review of Political Science, 21(1), 259-275.\nSchneider, D., & Harknett, K. (2022). What’s to Like? Facebook as a Tool for Survey Data Collection. Sociological Methods & Research, 51(1), 108-140.\nClifford, S., Sheagley, G., & Piston, S. (2021). Increasing Precision Without Altering Treatment Effects: Repeated Measures Designs in Survey Experiments. American Political Science Review, 115(3), 1048-1065.\nKane, J. V. (2024). More Than Meets the ITT: A Guide for Anticipating and Investigating Nonsignificant Results in Survey Experiments. Journal of Experimental Political Science, 1-16."
+  },
+  {
+    "objectID": "lectures.html#lecture-22-survey-methods-for-sensitive-topics-november-17-2025",
+    "href": "lectures.html#lecture-22-survey-methods-for-sensitive-topics-november-17-2025",
+    "title": "Lectures",
+    "section": "Lecture 22: Survey Methods for Sensitive Topics (November 17, 2025)",
+    "text": "Lecture 22: Survey Methods for Sensitive Topics (November 17, 2025)\n\nLecture slides: Survey Methods for Sensitive Topics.\nBursztyn, L., Haaland, I. K., Röver, N., & Roth, C. (2025). The Social Desirability Atlas. NBER Working Paper No. 33920.\n\nSuggested readings:\n\nBlair, G., Imai, K., & Zhou, Y. Y. (2015). Design and Analysis of the Randomized Response Technique. Journal of the American Statistical Association, 110(511), 1304-1319.\nBlair, G., & Imai, K. (2012). Statistical Analysis of List Experiments. Political Analysis, 20(1), 47-77.\nRiambau, G., & Ostwald, K. (2021). Placebo Statements in List Experiments: Evidence from a Face-to-Face Survey in Singapore. Political Science Research and Methods, 9(1), 172-179.\nGosciak, J., Molitor, D., & Lundberg, I. (2025). Adaptive Randomization in Conjoint Survey Experiments. Retrieved from https://osf.io/preprints/socarxiv/69y2j_v1."
+  },
+  {
+    "objectID": "lectures.html#lecture-23-texts-for-discussion-related-to-survey-experiments-november-19-2025",
+    "href": "lectures.html#lecture-23-texts-for-discussion-related-to-survey-experiments-november-19-2025",
+    "title": "Lectures",
+    "section": "Lecture 23: Texts for Discussion (Related to Survey Experiments) (November 19, 2025)",
+    "text": "Lecture 23: Texts for Discussion (Related to Survey Experiments) (November 19, 2025)\n\nLecture slides: Texts for Discussion.\nDruckman, J. N., Gilli, M., Klar, S., & Robison, J. (2015). Measuring drug and alcohol use among college student‐athletes. Social Science Quarterly, 96(2), 369-380.\nBlair, G., Imai, K., & Lyall, J. (2014). Comparing and Combining List and Endorsement Experiments: Evidence from Afghanistan. American Journal of Political Science, Vol. 58, No. 4 (October), pp. 1043-1063.\nRosenfeld, B, Imai, K., & Shapiro, J. (2016). An Empirical Validation Study of Popular Survey Methodologies for Sensitive Questions. American Journal of Political Science, 60(3), 783-802.\nFreire, D., & Skarbek, D. (2023). Vigilantism and Institutions: Understanding Attitudes Toward Lynching in Brazil. Research & Politics, 10(1), 1-8.\nProblem Set 10 due."
+  },
+  {
+    "objectID": "lectures.html#lecture-24-meta-analysis-and-integration-of-research-findings-november-24-2025",
+    "href": "lectures.html#lecture-24-meta-analysis-and-integration-of-research-findings-november-24-2025",
+    "title": "Lectures",
+    "section": "Lecture 24: Meta-Analysis and Integration of Research Findings (November 24, 2025)",
+    "text": "Lecture 24: Meta-Analysis and Integration of Research Findings (November 24, 2025)\n\nLecture slides: Meta-Analysis and Integration of Research Findings.\nFEDAI: Chapter 11: Integration of Research Findings.\n\nSuggested readings:\n\nBorenstein, M., Hedges, L. V., Higgins, J. P., & Rothstein, H. R. (2011). Introduction to Meta-analysis. John Wiley & Sons. A whole book dedicated to the topic. A bit technical but very good.\nHarrer, M., Cuijpers, P., Furukawa, T., & Ebert, D. (2021). Doing Meta-Analysis with R: A Hands-On Guide. Chapman and Hall/CRC.\nHansen, C., Steinmetz, H., & Block, J. (2022). How to Conduct a Meta-Analysis in Eight Steps: A Practical Guide. Management Review Quarterly, 1-19.\nPage, M. J., McKenzie, J. E., Bossuyt, P. M., Boutron, I., Hoffmann, T. C., Mulrow, C. D., … & Moher, D. (2021). The PRISMA 2020 Statement: An Updated Guideline for Reporting Systematic Reviews. BMJ, 372."
+  },
+  {
+    "objectID": "lectures.html#lecture-25-course-revision-december-1-2025",
+    "href": "lectures.html#lecture-25-course-revision-december-1-2025",
+    "title": "Lectures",
+    "section": "Lecture 25: Course Revision (December 1, 2025)",
+    "text": "Lecture 25: Course Revision (December 1, 2025)\n\nLecture slides: Course Revision."
+  },
+  {
+    "objectID": "lectures.html#lecture-26-presentations-december-3-2025",
+    "href": "lectures.html#lecture-26-presentations-december-3-2025",
+    "title": "Lectures",
+    "section": "Lecture 26: Presentations (December 3, 2025)",
+    "text": "Lecture 26: Presentations (December 3, 2025)\n\nPresentations of final projects."
+  },
+  {
+    "objectID": "lectures.html#lecture-27-presentations-december-8-2025",
+    "href": "lectures.html#lecture-27-presentations-december-8-2025",
+    "title": "Lectures",
+    "section": "Lecture 27: Presentations (December 8, 2025)",
+    "text": "Lecture 27: Presentations (December 8, 2025)\n\nPresentations of final projects."
+  },
+  {
+    "objectID": "design-form.html",
+    "href": "design-form.html",
+    "title": "EGAP Learning Days Research Design Form",
+    "section": "",
+    "text": "Section 1: Introduction\n\n\n\n\n\n\nResearcher name\n\n\n\n\n\nResearch project title\n\n\n\n\n\nOne sentence summary of your specific research question\n\n\n\n\n\nGeneral motivation\n\n\nWhy should someone who is not an academic care care about the results of this research? [1 paragraph]\nWhat policy decision(s) will your research help inform? [1 paragraph] |\n\n\n\n\nTheoretical motivation\n\n\nWhat theoretical questions can this research shed light on? [1 paragraph]\nKey debate(s)/literature(s) that will be informed by the answer to your research question [1 paragraph]\n\n\n\n\nPrimary hypotheses\n\n\nWhat are the key parameter/estimands the research design seeks to estimate? What sign and/or magnitude is predicted by primary hypotheses for each parameter/estimand? [1-2 paragraphs]\nWhat is the logic or theory of change behind the primary hypotheses [1-2 paragraphs]\nWhat are the key pieces in the relevant academic literature that inform your hypotheses? [2-3 pieces]\n\n\n\n\nSecondary hypotheses\n\n\nWhat are the secondary paramater/estimands the research design seeks to estimate? What sign and/or magnitude is predicted by the secondary hypotheses for each parameter/estimand [These may be conditional effects for subgroups or hypotheses about additional outcomes or cross- randomized treatments.]\nWhat is the logic or theory of change behind each secondary hypothesis? [Explain what effects we should expect if the theory behind your primary hypothesis is correct.]\n\n\n\n\nAlternative explanations if results are consistent with hypotheses\n\n\nWhat alternative theories could explain the results?\nHypothesis for an alternative outcome (or other subgroups) that would be consistent only with the alternative explanation and not the logic behind your primary hypothesis.\n\n\n\n\nAlternative explanations if results are inconsistent with hypotheses\n\n\nWhat alternative theories could explain the results?\n\n\n\n\n\n\n\n\n\n\n\nSection 2: Population and Sample\n\n\n\n\n\n\nPopulation of interest\n\n\n\n\n\nWhere and when will your study take place?\n\n\nDoes this match up to your population of interest, or are there conditions that make this study context different?\n\n\n\n\nSample size\n\n\nHow is this sample selected? Be specific about the procedure.\n\n\n\n\nConsent\n\n\nHow will you obtain informed consent? If you will not, what is the justification?\nIs this population vulnerable to being coerced into participating in the study?\n\n\n\n\nEthics\n\n\nIs the sample size large enough that you have sufficient power for your research conclusions to be credible and useful?\nIs the sample size no larger than necessary for the research?\nCan the research (results) be used to target people or make people more vulnerable?\n\n\n\n\n\n\n\n\n\n\n\nSection 3: Intervention\n\n\n\n\n\n\nStatus Quo\n\n\nDescribe the status quo–what are the current conditions in terms of the outcomes you hope to change? What aspects of the intervention already exist, if any?\n\n\n\n\nIntervention\n\n\nDescribe your intervention(s)\nWhat is already known about the effect of the proposed intervention relative to the status quo? Is there credible evidence on the question?\n\n\n\n\nControl\n\n\nDescribe the control condition\nIs the control condition a pure control (no intervention at all) or a placebo? What is the placebo contition designed to control for?\n\n\n\n\nUnits\n\n\nTo what units (level) will the intervention be applied? Individual, classroom, school, village, municipality, etc.\nIs this the same level at which outcomes will be measured? If not, how will you address the different levels if they do not perfectly overlap?\n\n\n\n\nCompliance\n\n\nWhat does it mean to “take” (comply with) the the intervention?\nIf the intervention is a prgram, how much someone need to attend (showing up once? finishing the program?) in order to count as having attended?\n\n\n\n\nNon- Compliance\n\n\nIs there any concern with non-compliance (either taking the intervention if assigned to control/placebo or failing to take the intervention if assigned to treatment)?\n\n\n\n\nEthics\n\n\nIs the control condition no worse than the status quo, according to the best evidence available?\nAre there concerns that participants may be forced to comply wiht the intervention?\nWhat are the risks and magnitude of potentially negative effects of the treatment? Are such risks concentrated on a particular subset of your population?\n\n\n\n\n\n\n\n\n\n\n\nSection 4: Outcome and Covariates\n\n\n\n\n\n\nPrimary Outcome\n\n\nWhat is your primary outcome?\n\n\n\n\nMeasurement\n\n\nHow will it be measured? (Give the actual text of the survey question and response options, if using a survey measure. Is the outcome continuous, binary, etc.?)\n\n\n\n\nPriors\n\n\nWhat is the expected distribution of the primary outcome? (This may come from a prior study on a similar population or you may have to make an educated guess).\n\n\n\n\nValidity and measurement error\n\n\nIs there any concern with untruthful reporting? If so, how will you address it?\n\n\n\n\nStages\n\n\nWill you collect a baseline?\nWill you collect a midline?\nWill you collect multiple waves of endline measurement?\nIf you will collect a baseline or midline, how will you find the same respondents (minimize attrition?)\n\n\n\n\nCovariates\n\n\nWhat covariate data do you need, including for subgroup analysis? How will covariates be measured?\nWhat addtional covariates (if any) will you measure?\nWhat additional outcomes or covariates will you collect to distinguish between your explanation and alternatives if your findings are consistent with your hypothesis?\n\n\n\n\nEthics\n\n\nWill data collection be onerous (time, effort) or painful (physically, emotionally) for any respondents?\nAre these costs necessary? Have they been minimized?\nAre they outweighed by the potential benefits of the research to society?\n\n\n\n\n\n\n\n\n\n\n\nSection 5: Randomization\n\n\n\n\n\n\nRandomization strategy\n\n\nComplete/simple, block, cluster, factorial etc.\n\n\n\n\nBlocks\n\n\nWhat are they, how many blocks, how many units per block?\n\n\n\n\nClusters\n\n\nWhat are they, how many clusters, how many units per cluster?\nIf you have clusters, what is the intra-class correlation (ICC)?\nIs clustering strictly necessary, or could you randomize at the individual level?\n\n\n\n\n\n\n\n\n\n\n\nSection 6: Analysis\n\n\n\n\n\n\nEstimator\n\n\nWhat is your estimator?\n\n\n\n\nStandard Errors\n\n\nWhat kind of standard errors will you use?\n\n\n\n\nTest\n\n\nIf you plan to report a p-value, what kind of test will you use?\n\n\n\n\nMissing Data\n\n\nHow will you handle missing data?\n\n\n\n\nEffect size\n\n\nWhat is the expected effect size? What is the minimum effect size that would make the study worth running? what effect sizes have similar studies found?\n\n\n\n\nWhat is your power?\n\n\n\n\n\n\n\n\n\n\n\n\nSection 7: Implementation\n\n\n\n\n\n\nRandomization\n\n\nHow will you conduct the randomization? (on a computer in advance, drawing from an urn in public, etc.)\n\n\n\n\nImplementation\n\n\nWho will implement the intervention?\nAre there any dangers to your research team, including enumerators? How will you minimize them?\nHow will you track the quality of the implementation of the intervention?\n\n\n\n\nCompliance\n\n\nWho will measure compliance?\n\n\n\n\nData management\n\n\nHow will you manage the data? (security, anonymity, etc.)\n\n\n\n\n\n\n\n Back to top"
+  }
+]

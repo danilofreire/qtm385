@@ -1,0 +1,34 @@
+---
+title: Assignments
+---
+
+Here you will find information about the assignments for QTM 385. There are ten of them, each worth 5% of your final grade. The assignments are designed to help you practice the concepts covered in class and to develop your data science skills.
+
+Assignment submissions are typically due on Wednesdays at 11:59pm in the week following their publication. You may submit via Canvas (preferred) or email (<danilo.freire@emory.edu>).
+
+I encourage you to complete assignments in Quarto or Jupyter Notebooks and submit them in html or PDF format (just because they are easier to read on Canvas). You can also submit them as a Word document, provided that code and results are included in the same document. The assignment folders contain the questions in many formats, including `.qmd`, `.ipynb`, and `.docx`, so you can use them as templates.
+
+You will find the questions in the `assignments` folder on [the course repository](https://github.com/danilofreire/qtm385/tree/main/assignments). You can also access them through the links below.
+
+## Assignment Timeline
+
+| Assignment | Topic | Due Date | Link |
+|------------|-------|----------|------|
+| 1          | Theory | 10 September | [Assignment 01](https://github.com/danilofreire/qtm385/blob/main/assignments/01-assignment) |
+| 2          | Potential Outcomes | 17 September | [Assignment 02](https://github.com/danilofreire/qtm385/blob/main/assignments/02-assignment) |
+| 3          | Sampling Distributions | 24 September | [Assignment 03](https://github.com/danilofreire/qtm385/blob/main/assignments/03-assignment) |
+| 4          | RI, Blocking, Clustering, and Power | 1 October | [Assignment 04](https://github.com/danilofreire/qtm385/blob/main/assignments/04-assignment) |
+| 5          | Non-Compliance | 8 October | [Assignment 05](https://github.com/danilofreire/qtm385/blob/main/assignments/05-assignment) |
+| 6          | Attrition | 15 October | [Assignment 06](https://github.com/danilofreire/qtm385/blob/main/assignments/06-assignment) |
+| 7          | Quarto, DeclareDesign, and Natural Experiments | 22 October | [Assignment 07](https://github.com/danilofreire/qtm385/blob/main/assignments/07-assignment) |
+| 8          | Interference and Spillovers | 29 October | [Assignment 08](https://github.com/danilofreire/qtm385/blob/main/assignments/08-assignment) |
+| 9          | Heterogeneous Effects | 12 November | [Assignment 09](https://github.com/danilofreire/qtm385/blob/main/assignments/09-assignment) |
+| 10         | Sensitive Topics | 19 November | [Assignment 10](https://github.com/danilofreire/qtm385/blob/main/assignments/10-assignment) |
+
+## Pre-Analysis Plan
+
+The pre-analysis plan (PAP) is a document that outlines the research design, hypotheses, and analysis plan before the data are collected. It is a very important step in the research process, as it helps to prevent data mining and p-hacking. The PAP will be worth 20% of your final grade. Further instructions will be provided in the coming weeks.
+
+## Final Project
+
+The final project will be a group effort. Detailed instructions will be discussed in class. The project will be worth 30% of your final grade.

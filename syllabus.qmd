@@ -1,0 +1,112 @@
+---
+title: "Syllabus"
+---
+
+Experimental methods have become increasingly important in social and life sciences, offering reliable ways to test theories and produce generalisable findings. This course covers the essential principles of experimental design, with emphasis on testing causal relationships. Students will learn about causal inference, experimental design techniques, and methods for addressing common challenges in experimental research, such as non-compliance and participant attrition. The course also explores blocking and covariate adjustment, heterogeneous treatment effects, and proper interpretation of results. Special attention will be given to reproducible research practices and ethical considerations in experimental studies.
+
+This course is designed to be both applied and interactive, featuring lectures and hands-on sessions. Students will learn how to design and implement experiments and critically evaluate existing experimental research in their areas of interest. Moreover, students will have the opportunity to develop their writing and presentation skills by drafting an experimental research project and presenting their findings.
+
+# Course Information
+
+We will meet on Mondays and Wednesdays from 5:30pm to 6:45pm in the [Psychology Building 220](https://maps.app.goo.gl/DNg6qa2APjBj8E5MA). The course will be a mix of lectures, discussions, and hands-on activities. Therefore, it is important that you read the assigned readings before class. Students are encouraged to participate and are most welcome to express their views openly and freely. I would suggest you to bring some notes to the class so that we can discuss together the topics you find most interesting.
+
+All information about the course will be available at <http://danilofreire.github.io/datasci385>. The syllabus will be updated periodically according to the progress of the class. Please remember to visit the website regularly.
+
+# Learning Objectives
+
+By the end of this course, students will be able to:
+
+1. Design rigorous experiments with proper randomisation procedures and sample sizing calculations
+2. Create pre-analysis plans (PAP) and apply appropriate statistical methods for experimental analysis
+3. Produce reproducible reports using [Quarto](https://quarto.org/)
+4. Evaluate experimental designs, identifying potential limitations 
+5. Manage unexpected data challenges, such as attrition and non-compliance
+6. Understand ethical considerations in experimental design
+7. Develop analytical skills through practical problem sets and discussion sessions
+
+# Prerequisites
+
+This course is designed for students who have taken or are currently taking an introductory course in statistics. Some understanding of hypothesis testing, confidence intervals, and regression analysis is beneficial. However, if you have not taken such courses, that is also fine. The course is not math-heavy, and all concepts will be explained in detail in class. Some familiarity with `R` or `Python` is required, as we will use these tools for data analysis. We can adjust the course accordingly if you need assistance. If you are unsure whether you meet the prerequisites, please contact me to discuss your background.
+
+# Software
+
+We will use `R` for all data analysis in this course. `R` is a free and open-source software environment for statistical computing and graphics. You can download `R` from the [Comprehensive R Archive Network (CRAN)](https://cran.r-project.org/). You are free to use any text editor to write your `R` code, but I recommend using [RStudio](https://www.rstudio.com/products/rstudio/download/), [VSCode](https://code.visualstudio.com/), or [Jupyter Notebooks](https://jupyter.org/) with the `R` kernel. If you are feeling brave or want to learn some new skills, you can also use [Neovim](https://neovim.io/) with the [Nvim-R](https://github.com/jalvesaq/Nvim-R) plugin. That is, if [you can exit the editor](https://stackoverflow.blog/2017/05/23/stack-overflow-helping-one-million-developers-exit-vim/). :)
+
+We will also use [Quarto](https://quarto.org/) to write the reports. Quarto is a new document format that combines the best features of [Markdown](https://www.markdownguide.org/), [\LaTeX](https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes), and [R Markdown](https://rmarkdown.rstudio.com). It is easy to use, very versatile, and allows you to write reports, slides, books, and even websites in a single document. You can install Quarto from the [Quarto website](https://quarto.org/). We will have a hands-on session on how to use Quarto in the course, and I have prepared templates for your [pre-analysis plan](https://github.com/danilofreire/datasci385/pre-analysis-plan-template) and [presentation](https://github.com/danilofreire/quarto-presentation). However, you are free to use any other template you prefer or even write your own.
+
+# Office Hours
+
+I am very flexible with office hours, but it is easier to contact me via email. Feel free to send me a message any time at [danilo.freire@emory.edu](mailto:danilo.freire@emory.edu), and I will likely reply within a few hours. My office address is in the [Psychology and Interdisciplinary Sciences Building, 36 Eagle Row, 4th Floor, room 480](https://maps.app.goo.gl/bGHKwasQyp5MnQND6). Please email me a couple of days in advance to ensure that no two students book the same time slot.
+
+# Academic Integrity
+
+Upon every individual who is a part of Emory University falls the responsibility for maintaining in the life of Emory a standard of unimpeachable honour in all academic work. The [Honour Code of Emory College](http://catalog.college.emory.edu/academic/policies-regulations/honor-code.html) is based on the fundamental assumption that every loyal person of the University not only will conduct his or her own life according to the dictates of the highest honor, but will also refuse to tolerate in others action which would sully the good name of the institution. Academic misconduct is an offense generally defined as any action or inaction which is offensive to the integrity and honesty of the members of the academic community. The typical sanction for a violation of the Emory Honor Code is an F in the course. Any suspected case of academic misconduct will be referred to the Emory Honour Council.
+
+# Artificial Intelligence
+
+Students have to submit a series of problem sets and complete two group projects. You are encouraged to use AI to assist with your assignments, as learning to use AI is a valuable and emerging skill. I am available to provide support and assistance with these tools during office hours or by appointment. However, please note that any errors or omissions resulting from the use of AI tools are your responsibility. Do not rely solely on AI to complete your assignments; you must always double-check your work. Remember to cite all sources used in your problem sets and projects, including AI tools. Please include a note at the end of any document indicating that AI was used in its development.
+
+# Special Needs and Accessibility Services
+
+I am fully committed to providing the necessary accommodations to ensure that all students have an equal opportunity to succeed in this course. Students with medical/health conditions that might impact academic success should visit the [Department of Accessibility Services (DAS)](http://accessibility.emory.edu/) to determine eligibility for appropriate accommodations. Students who receive accommodations should contact me with an Accommodation Letter from the DAS at the beginning of the semester, or as soon as the accommodation is granted. If you wish to do so, feel free to request an individual meeting to further discuss the specific accommodations. 
+
+# English Language Learners
+
+Emory University welcomes students from around the country and the world, and the unique perspectives international and multilingual students bring enrich the campus community. To empower multilingual learners, an array of support is available including language and culture workshops and individual appointments. For more information about English Language Learning support at Emory, please contact the ELLP Specialists at <https://writingcenter.emory.edu>. No student will be penalised for their command of the English language.
+
+# Assignments and Grading Policy
+
+**Problem Sets: 50%.** There will be ten problem sets throughout the course, each focusing on different aspects of experimental design and analysis. These assignments are designed to reinforce concepts covered in lectures and readings, and to provide hands-on practice with experimental design techniques. Problem sets will include a mix of theoretical questions and practical applications. They will be assigned regularly and must be completed individually. You may discuss your work with other colleagues as long as you do not copy entire sentences, just changing a few words. If you worked with other students, please write down their names on your problem set. Please also acknowledge any sources you used in your work, including textbooks, articles, and AI resources.
+
+**Pre-Analysis Plan (PAP): 20%.** Students will work in groups to develop a pre-analysis plan for an experimental study. The PAP should be written in Quarto and include the following components:
+
+- Research question and hypotheses
+- Experimental design and randomisation procedure
+- Sample size and power calculations
+- Primary and secondary outcome measures
+- Detailed analysis plan, including statistical models and robustness checks
+- Plan for handling issues such as missing data, non-compliance issues, and attrition
+
+A guide for writing the PAP will be available in the course GitHub repository and webpage. This assignment will help students develop skills in planning and pre-registering experiments, a crucial practice in modern experimental research. 
+
+**Final Project: 30%.** The final project will consist of a short presentation, created using Quarto, based on the pre-analysis plans developed earlier in the course. For this assignment, I will simulate data based on each group's PAP, intentionally introducing challenges such as missing data on covariates and non-compliance. Students will need to analyse this simulated data as if it were the true results of their proposed experiments, addressing any issues that arise in light of their original PAP. The presentation should include:
+
+- A brief overview of the experimental design.
+- Results of the primary and secondary analyses.
+- Discussion of how deviations from the PAP were handled.
+- Interpretation of results and their implications.
+- Reflections on the challenges encountered and lessons learned.
+
+This project will assess students' ability to apply their knowledge of experimental design in a realistic scenario, adapting to unexpected challenges that often arise in real-world research.
+
+Please submit all assignments in PDF format via Canvas before class (include your code). Work submitted late will be penalised by one letter grade every 24 hours unless discussed with the instructor.
+
+# Grading Scale
+
+Each student's final grade will be based on the following after rounding up to the nearest point:
+
+| Grade | A       | A-      | B+      | B       | B-      | C       | D       | F    |
+|-------|---------|---------|---------|---------|---------|---------|---------|------|
+| Range | 91%–100%| 86%–90% | 81%–85% | 76%–80% | 71%–75% | 66%–70% | 60%–65% | <60% |
+
+# Materials
+
+The main textbook for this course is:
+
+- Gerber, Alan S., and Donald P. Green. 2012. *Field Experiments: Design, Analysis, and Interpretation*. New York: W.W. Norton. (Referred to as FEDAI in the syllabus)
+
+Students should closely read the assigned chapters and papers prior to the course date for which they are assigned. FEDAI will serve as our primary reference throughout the course.
+
+This book is available:
+
+- On course reserves at [Robert W. Woodruff Library](https://www.auctr.edu/)
+- For purchase at the [campus bookstore](https://emory.bncollege.com/shop/emory/home)
+- Online through retailers like [Amazon](https://www.amazon.com/Field-Experiments-Analysis-Interpretation-Paperback/dp/0393979954)
+
+Additional readings will be provided through the course website or the library's electronic resources.
+
+Students are encouraged to make use of the library's resources, including its [research guides](https://guides.libraries.emory.edu/) and [citation tools](https://guides.libraries.emory.edu/oxford/citation), to support their work in this course.
+
+# Subject to Change Policy
+
+While I will try to adhere to the course schedule as much as possible, I also want to adapt to your learning pace and style. The syllabus and course plan may change in the semester. Again, please visit [the course website](https://danilofreire.github.io/datasci385) regularly to check for updates. I will also announce any changes in class and via email.
